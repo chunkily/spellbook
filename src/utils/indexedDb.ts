@@ -55,8 +55,16 @@ export function readAllFromStore<T>(
 export function readFromStore<T>(
 	db: IDBDatabase,
 	storeName: string,
-	key: string | number,
-): Promise<T> {
+	key: string | number | undefined,
+): Promise<T | undefined> {
+	if (!key) {
+		return Promise.resolve(undefined);
+	}
+
+	if (typeof key === "string") {
+		key = parseInt(key, 10);
+	}
+
 	const transaction = db.transaction(storeName, "readonly");
 	const store = transaction.objectStore(storeName);
 	const request = store.get(key);

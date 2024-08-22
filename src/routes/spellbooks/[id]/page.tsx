@@ -7,7 +7,13 @@ export default function SpellbookPage() {
 
 	return (
 		<div>
-			<h1>{spellbook.name}</h1>
+			<h1>Spellbook name: {spellbook.name}</h1>
+			<h2>Spell List</h2>
+			<ul>
+				<li>Spell 1</li>
+				<li>Spell 2</li>
+				<li>Spell 3</li>
+			</ul>
 		</div>
 	);
 }
