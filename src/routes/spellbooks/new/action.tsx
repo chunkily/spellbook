@@ -12,7 +12,8 @@ export default async function action({ request }: LoaderFunctionArgs) {
 	const create = await spellbookCreate(fields);
 
 	if (create.isSuccess) {
-		return redirect("/spellbooks");
+		const newId = create.getResult();
+		return redirect(`/spellbooks/${newId}`);
 	} else {
 		return json({
 			fields,

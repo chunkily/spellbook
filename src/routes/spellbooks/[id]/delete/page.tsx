@@ -1,3 +1,5 @@
+import Button from "@/components/Button";
+import ButtonLink from "@/components/ButtonLink";
 import { Form, useActionData, useLoaderData } from "react-router-dom";
 
 export default function SpellbookDeletePage() {
@@ -10,13 +12,21 @@ export default function SpellbookDeletePage() {
 
 	return (
 		<div>
-			<p>
-				Are you sure you want to delete the spellbook{" "}
-				<strong>{spellbook.name}</strong>? This action cannot be undone.
+			<p className="mb-3">
+				Are you sure you want to cast the spellbook of{" "}
+				<strong>{spellbook.name}</strong> into the void? This action cannot be
+				undone!
 			</p>
 			<Form method="post">
 				{error && <p className="text-red-500">{error.message}</p>}
-				<button type="submit">Delete</button>
+				<div className="flex gap-2">
+					<Button type="submit" variant="danger">
+						Yes, I'm sure
+					</Button>
+					<ButtonLink to={`/spellbooks/${spellbook.id}`} variant="secondary">
+						Wait I've changed my mind
+					</ButtonLink>
+				</div>
 			</Form>
 		</div>
 	);
