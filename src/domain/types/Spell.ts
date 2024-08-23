@@ -1,4 +1,6 @@
 export interface Spell {
+	id: number;
+	name: string;
 	traditions: string[];
 	traits: string[];
 	level: number;

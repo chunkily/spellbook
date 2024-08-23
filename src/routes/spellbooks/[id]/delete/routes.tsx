@@ -1,19 +1,14 @@
 import Page from "./page";
 import loader from "./loader";
 import { RouteObject } from "react-router-dom";
-import Layout from "./layout";
+import action from "./action";
 
 const routes: RouteObject[] = [
 	{
-		path: "spells/",
-		element: <Layout />,
-		children: [
-			{
-				path: "",
-				element: <Page />,
-				loader,
-			},
-		],
+		path: "/spellbooks/:id/delete",
+		element: <Page />,
+		loader: loader,
+		action: action,
 	},
 ];
 

@@ -43,7 +43,7 @@ export default async function spellbookCreate({
 
 	let newId;
 	try {
-		newId = await writeToStore(db, "spellbook", spellbook);
+		newId = await writeToStore(db, "spellbooks", spellbook);
 	} catch (error) {
 		console.error(error);
 		return ErrorResult({
