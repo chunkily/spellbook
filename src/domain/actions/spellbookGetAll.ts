@@ -1,4 +1,4 @@
-import { openDb, readAllFromStore } from "../../utils/indexedDb";
+import { openDb, readAllFromStore } from "@/utils/indexedDb";
 import Spellbook from "../types/Spellbook";
 
 export default async function spellbookGetAll() {

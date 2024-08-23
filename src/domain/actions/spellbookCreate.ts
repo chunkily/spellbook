@@ -1,4 +1,4 @@
-import { openDb, writeToStore } from "../../utils/indexedDb";
+import { openDb, writeToStore } from "@/utils/indexedDb";
 import SuccessOrError, { ErrorResult, SuccessResult } from "../SuccessOrError";
 
 interface SpellbookCreate {
