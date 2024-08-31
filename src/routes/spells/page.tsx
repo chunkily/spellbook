@@ -14,6 +14,7 @@ export default function SpellsPage() {
 
 	return (
 		<div>
+			<h1 className="text-xl">Spell List</h1>
 			<Form
 				method="get"
 				onChange={(e) => {

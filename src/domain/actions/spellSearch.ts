@@ -18,5 +18,5 @@ export default async function spellSearch({
 		);
 	}
 
-	return spells;
+	return spells.sort((a, b) => a.name.localeCompare(b.name));
 }

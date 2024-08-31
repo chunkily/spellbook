@@ -11,6 +11,9 @@ export default function SpellPage() {
 				<ButtonLink to="/spells" variant="secondary">
 					Back
 				</ButtonLink>
+				<ButtonLink to={`/spells/${spell.id}/delete`} variant="danger">
+					Delete
+				</ButtonLink>
 				<ButtonLink to={`/spells/${spell.id}/edit`}>Edit</ButtonLink>
 			</div>
 			<div>
