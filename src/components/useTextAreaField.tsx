@@ -1,7 +1,7 @@
 import useServerState, { useServerStateArray } from "@/utils/useServerState";
 import { useCallback } from "react";
 
-export function useTextAreaField({
+export default function useTextAreaField({
 	serverValue,
 	serverErrors,
 	validationMode = "none",

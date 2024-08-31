@@ -1,6 +1,6 @@
 import ButtonLink from "@/components/ButtonLink";
 import TextField from "@/components/TextField";
-import { useTextField } from "@/components/useTextField";
+import useTextField from "@/components/useTextField";
 import { Spell } from "@/domain/types/Spell";
 import { Plus } from "lucide-react";
 import { Form, Link, useLoaderData, useSubmit } from "react-router-dom";

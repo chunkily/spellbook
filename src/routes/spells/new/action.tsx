@@ -1,4 +1,5 @@
 import spellCreate from "@/domain/actions/spellCreate";
+import getFormStringArray from "@/utils/getFormStringArray";
 import getFormStringValue from "@/utils/getFormStringValue";
 import { triggerSuccessToast } from "@/utils/toasts";
 import { ActionFunctionArgs, json, redirect } from "react-router-dom";
@@ -6,8 +7,6 @@ import { ActionFunctionArgs, json, redirect } from "react-router-dom";
 export default async function action({ request }: ActionFunctionArgs) {
 	const formData = await request.formData();
 
-	const traditionsValue = getFormStringValue(formData, "traditions");
-	const traitsValue = getFormStringValue(formData, "traits");
 	const heightenedEffectsValue = getFormStringValue(
 		formData,
 		"heightenedEffects",
@@ -15,11 +14,24 @@ export default async function action({ request }: ActionFunctionArgs) {
 
 	const fields = {
 		name: getFormStringValue(formData, "name"),
-		description: getFormStringValue(formData, "description"),
 		level: getFormStringValue(formData, "level"),
-		traditions: JSON.parse(traditionsValue ?? "[]"),
-		traits: JSON.parse(traitsValue ?? "[]"),
+		traditions: getFormStringArray(formData, "traditions"),
+		traits: getFormStringArray(formData, "traits"),
 		source: getFormStringValue(formData, "source"),
+		castAction: getFormStringValue(formData, "castAction"),
+		castActionOther: getFormStringValue(formData, "castActionOther"),
+		castCost: {
+			somatic: formData.get("castCost.somatic") === "true",
+			material: formData.get("castCost.material") === "true",
+			verbal: formData.get("castCost.verbal") === "true",
+			other: getFormStringValue(formData, "castCost.other"),
+		},
+		range: getFormStringValue(formData, "range"),
+		area: getFormStringValue(formData, "area"),
+		targets: getFormStringValue(formData, "targets"),
+		savingThrow: getFormStringValue(formData, "savingThrow"),
+		duration: getFormStringValue(formData, "duration"),
+		description: getFormStringValue(formData, "description"),
 		heightenedEffects: JSON.parse(heightenedEffectsValue ?? "[]"),
 	};
 

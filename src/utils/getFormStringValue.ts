@@ -8,10 +8,10 @@ export default function getFormStringValue(
 		return undefined;
 	}
 
-	if (typeof value === "string") {
-		return value;
+	if (typeof value !== "string") {
+		// value is a file
+		return undefined;
 	}
 
-	// value is a file
-	return undefined;
+	return value;
 }

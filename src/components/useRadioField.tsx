@@ -1,7 +1,7 @@
 import useServerState, { useServerStateArray } from "@/utils/useServerState";
 import { useCallback } from "react";
 
-export default function useSelectField({
+export default function useRadioField({
 	serverValue,
 	serverErrors,
 	validationMode = "none",

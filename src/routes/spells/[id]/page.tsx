@@ -14,14 +14,44 @@ export default function SpellPage() {
 				<ButtonLink to={`/spells/${spell.id}/delete`} variant="danger">
 					Delete
 				</ButtonLink>
-				<ButtonLink to={`/spells/${spell.id}/edit`}>Edit</ButtonLink>
+				<ButtonLink to={`/spells/${spell.id}/edit`} variant="success">
+					Edit
+				</ButtonLink>
 			</div>
 			<div>
 				<h1>{spell.name}</h1>
 				<h2>{spellLevelToString(spell.level)}</h2>
-				<p className="max-w-prose">{spell.description}</p>
+				<h3>{spell.traits.join(", ")}</h3>
+				<p>Traditions: {spell.traditions.join(", ")}</p>
+				<SpellCast spell={spell} />
+				{spell.range ? <p>Range: {spell.range}</p> : null}
+				{spell.area ? <p>Area: {spell.area}</p> : null}
+				{spell.targets ? <p>Targets: {spell.targets}</p> : null}
+				{spell.savingThrow ? <p>Saving Throw: {spell.savingThrow}</p> : null}
+				{spell.duration ? <p>Duration: {spell.duration}</p> : null}
+				<p className="max-w-prose whitespace-pre-wrap">{spell.description}</p>
 			</div>
 		</div>
+	);
+}
+
+function SpellCast({ spell }: { spell: Spell }) {
+	const msv = [];
+	if (spell.castCost.material) {
+		msv.push("Material");
+	}
+	if (spell.castCost.somatic) {
+		msv.push("Somatic");
+	}
+	if (spell.castCost.verbal) {
+		msv.push("Verbal");
+	}
+
+	return (
+		<p>
+			Cast: {spell.castAction}
+			{msv.length > 0 ? ` (${msv.join(", ")})` : ""}
+		</p>
 	);
 }
 

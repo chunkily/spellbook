@@ -2,7 +2,7 @@ import Page from "./page";
 import loader from "./loader";
 import { RouteObject } from "react-router-dom";
 import Layout from "./layout";
-import idroutes from "./[id]/routes";
+import idRoutes from "./[id]/routes";
 import newRoutes from "./new/routes";
 
 const routes: RouteObject[] = [
@@ -15,7 +15,7 @@ const routes: RouteObject[] = [
 				element: <Page />,
 				loader,
 			},
-			...idroutes,
+			...idRoutes,
 			...newRoutes,
 		],
 	},

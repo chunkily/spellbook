@@ -1,5 +1,6 @@
 import { openDb, writeToStore } from "@/utils/indexedDb";
 import ResultOrError, { ErrorResult, SuccessResult } from "../ResultOrError";
+import { Spell } from "../types/Spell";
 import spellGetByName from "./spellGetByName";
 
 interface SpellCreateError {
@@ -9,26 +10,55 @@ interface SpellCreateError {
 
 interface SpellCreateParams {
 	name: string | undefined;
-	description: string | undefined;
 	level: string | undefined;
+	traits?: string[];
+	traditions?: string[];
+	castAction: string | undefined;
+	castActionOther: string | undefined;
+	castCost: {
+		somatic: boolean;
+		material: boolean;
+		verbal: boolean;
+		other?: string;
+	};
+	range: string | undefined;
+	area: string | undefined;
+	targets: string | undefined;
+	savingThrow: string | undefined;
+	duration: string | undefined;
+	description: string | undefined;
 }
 
 export default async function spellCreate(
-	newSpell: SpellCreateParams,
+	fields: SpellCreateParams,
 ): Promise<ResultOrError<number, SpellCreateError>> {
 	const errors: Record<string, string[]> = {};
-	if (!newSpell.name) {
+	if (!fields.name) {
 		errors.name = ["Name is required"];
 	}
-	if (!newSpell.description) {
+	if (!fields.description) {
 		errors.description = ["Description is required"];
 	}
-	if (!newSpell.level) {
+	if (!fields.level) {
 		errors.level = ["Level is required"];
 	}
+	const level = parseInt(fields.level || "-1", 10);
+	if (isNaN(level)) {
+		errors.level = ["Level must be a number"];
+	} else if (level < 0 || level > 10) {
+		errors.level = ["Level is invalid"];
+	}
 
-	// TODO: Check for duplicates
-	const duplicateSpell = await spellGetByName(newSpell.name);
+	const castAction =
+		fields.castAction === "other" ? fields.castActionOther : fields.castAction;
+
+	if (!castAction) {
+		errors.castAction = ["Cast action is required"];
+		errors.castActionOther = ["Cast action is required"];
+	}
+
+	// Check for duplicate name
+	const duplicateSpell = await spellGetByName(fields.name);
 	if (duplicateSpell) {
 		errors.name = ["Spell with this name already exists"];
 	}
@@ -39,6 +69,23 @@ export default async function spellCreate(
 			errorDescription: "There are some validation errors",
 		});
 	}
+
+	const newSpell: Omit<Spell, "id"> = {
+		name: fields.name ?? "",
+		level,
+		traits: fields.traits || [],
+		traditions: fields.traditions || [],
+		castAction: castAction ?? "",
+		castCost: fields.castCost,
+		range: fields.range ?? "",
+		area: fields.area ?? "",
+		targets: fields.targets ?? "",
+		savingThrow: fields.savingThrow ?? "",
+		duration: fields.duration ?? "",
+		description: fields.description ?? "",
+		heightenedEffects: [],
+		source: "",
+	};
 
 	const db = await openDb();
 	let newId;

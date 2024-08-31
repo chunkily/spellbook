@@ -1,20 +1,26 @@
 export interface Spell {
 	id: number;
 	name: string;
-	traditions: string[];
-	traits: string[];
 	level: number;
+	traits: string[];
+	traditions: string[];
+	castAction: string;
+	castCost: {
+		somatic: boolean;
+		material: boolean;
+		verbal: boolean;
+	};
+	range: string;
+	area: string;
+	targets: string;
+	savingThrow: string;
+	duration: string;
 	description: string;
 	heightenedEffects: HeightenedEffect[];
-	actions?: number;
-	range?: string;
-	area?: string;
-	defense?: string;
-	castingTime?: string;
 	source: string;
 }
 
 export interface HeightenedEffect {
-	level: number;
+	heightened: string; // +1, +2 OR 3rd, 4th
 	description: string;
 }
