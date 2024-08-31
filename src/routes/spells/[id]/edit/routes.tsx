@@ -1,15 +1,15 @@
 import Page from "./page";
 import loader from "./loader";
+import action from "./action";
 import { RouteObject } from "react-router-dom";
-import editRoutes from "./edit/routes";
 
 const routes: RouteObject[] = [
 	{
-		path: ":id",
+		path: ":id/edit",
 		element: <Page />,
 		loader: loader,
+		action: action,
 	},
-	...editRoutes,
 ];
 
 export default routes;

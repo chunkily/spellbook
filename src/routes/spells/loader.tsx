@@ -12,5 +12,8 @@ export default async function loader({ request }: LoaderFunctionArgs) {
 
 	return json({
 		spells,
+		searchFields: {
+			q,
+		},
 	});
 }

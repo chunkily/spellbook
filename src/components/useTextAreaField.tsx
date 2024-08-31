@@ -1,10 +1,11 @@
-import useServerState from "@/utils/useServerState";
+import useServerState, { useServerStateArray } from "@/utils/useServerState";
 import { useCallback } from "react";
 
 export function useTextAreaField({
 	serverValue,
 	serverErrors,
 	validationMode = "none",
+	required,
 }: {
 	serverValue: string | undefined;
 	serverErrors?: string[];
@@ -13,7 +14,7 @@ export function useTextAreaField({
 	validationMode?: "none" | "onChange";
 }) {
 	const [value, setValue] = useServerState(serverValue ?? "");
-	const [errors, setErrors] = useServerState(serverErrors ?? []);
+	const [errors, setErrors] = useServerStateArray(serverErrors ?? []);
 
 	const onValueChange = useCallback(
 		(newValue: string) => {
@@ -30,5 +31,6 @@ export function useTextAreaField({
 		errors,
 		onValueChange,
 		charCount: value.length,
+		required,
 	};
 }

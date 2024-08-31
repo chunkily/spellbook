@@ -6,9 +6,11 @@ import TextField from "@/components/TextField";
 import { useSelectField } from "@/components/useSelectField";
 import { useTextAreaField } from "@/components/useTextAreaField";
 import { useTextField } from "@/components/useTextField";
-import { Form, useActionData } from "react-router-dom";
+import { Spell } from "@/domain/types/Spell";
+import { Form, useActionData, useLoaderData } from "react-router-dom";
 
-export default function Page() {
+export default function SpellEditPage() {
+	const { spell } = useLoaderData() as { spell: Spell };
 	const actionData = useActionData() as
 		| {
 				error: string;
@@ -25,7 +27,7 @@ export default function Page() {
 					label="Name"
 					name="name"
 					{...useTextField({
-						serverValue: actionData?.fields.name,
+						serverValue: actionData?.fields.name ?? spell.name,
 						serverErrors: actionData?.errors?.name,
 						required: true,
 					})}
@@ -34,7 +36,7 @@ export default function Page() {
 					label="Spell Level"
 					name="level"
 					{...useSelectField({
-						serverValue: actionData?.fields.level,
+						serverValue: actionData?.fields.level ?? spell.level.toString(),
 						serverErrors: actionData?.errors?.level,
 					})}
 				>
@@ -56,14 +58,14 @@ export default function Page() {
 					maxLength={500}
 					rows={8}
 					{...useTextAreaField({
-						serverValue: actionData?.fields.description,
+						serverValue: actionData?.fields.description ?? spell.description,
 						serverErrors: actionData?.errors?.description,
 						required: true,
 					})}
 				/>
 				<div className="flex flex-row-reverse gap-2 max-w-lg">
-					<Button type="submit">Add Spell To Global List</Button>
-					<ButtonLink to={`/spells/`} variant="secondary">
+					<Button type="submit">Edit</Button>
+					<ButtonLink to={`/spells/${spell.id}`} variant="secondary">
 						Cancel
 					</ButtonLink>
 				</div>

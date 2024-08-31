@@ -20,7 +20,7 @@ export default async function spellbookCreate({
 			errors: {
 				name: ["Name is required"],
 			},
-			errorDescription: "",
+			errorDescription: "There are some validation errors",
 		});
 	}
 

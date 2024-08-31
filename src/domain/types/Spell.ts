@@ -4,7 +4,6 @@ export interface Spell {
 	traditions: string[];
 	traits: string[];
 	level: number;
-	isCantrip: boolean;
 	description: string;
 	heightenedEffects: HeightenedEffect[];
 	actions?: number;

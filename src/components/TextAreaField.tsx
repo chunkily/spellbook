@@ -23,10 +23,12 @@ export default function TextAreaField({
 	id,
 	errors,
 	disabled,
+	required,
 	charCount,
 	maxLength,
 	rows = 3,
 	onValueChange,
+	onChange: propsOnChange,
 	...rest
 }: TextAreaFieldProps) {
 	const fallbackId = useId();
@@ -55,13 +57,17 @@ export default function TextAreaField({
 
 	const onChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
 		onValueChange(e.target.value);
+
+		if (propsOnChange) {
+			propsOnChange(e);
+		}
 	};
 
 	return (
 		<div className={className}>
 			<div className="flex flex-row justify-between">
 				<label className="block" htmlFor={id}>
-					{label}
+					{label} {required ? <span title="Required">*</span> : null}
 				</label>
 				{charCount !== undefined && maxLength ? (
 					<div className="text-right">
@@ -78,6 +84,7 @@ export default function TextAreaField({
 				aria-invalid={hasErrors}
 				aria-describedby={hasErrors ? errorId : undefined}
 				disabled={disabled}
+				required={required}
 				rows={rows}
 				maxLength={maxLength}
 				onChange={onChange}

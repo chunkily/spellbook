@@ -1,6 +1,5 @@
 import { openDb, writeToStore } from "@/utils/indexedDb";
 import ResultOrError, { ErrorResult, SuccessResult } from "../ResultOrError";
-import { Spell } from "../types/Spell";
 import spellGetByName from "./spellGetByName";
 
 interface SpellCreateError {
@@ -8,8 +7,14 @@ interface SpellCreateError {
 	errorDescription: string;
 }
 
+interface SpellCreateParams {
+	name: string | undefined;
+	description: string | undefined;
+	level: string | undefined;
+}
+
 export default async function spellCreate(
-	newSpell: Omit<Spell, "id">,
+	newSpell: SpellCreateParams,
 ): Promise<ResultOrError<number, SpellCreateError>> {
 	const errors: Record<string, string[]> = {};
 	if (!newSpell.name) {
@@ -17,6 +22,9 @@ export default async function spellCreate(
 	}
 	if (!newSpell.description) {
 		errors.description = ["Description is required"];
+	}
+	if (!newSpell.level) {
+		errors.level = ["Level is required"];
 	}
 
 	// TODO: Check for duplicates
@@ -28,7 +36,7 @@ export default async function spellCreate(
 	if (Object.keys(errors).length > 0) {
 		return ErrorResult({
 			errors,
-			errorDescription: "There are some validation error",
+			errorDescription: "There are some validation errors",
 		});
 	}
 

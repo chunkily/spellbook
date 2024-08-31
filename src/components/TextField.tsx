@@ -19,6 +19,8 @@ export default function TextField({
 	id,
 	errors,
 	disabled,
+	required,
+	onChange: propsOnChange,
 	onValueChange,
 	...rest
 }: TextFieldProps) {
@@ -48,12 +50,16 @@ export default function TextField({
 
 	const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		onValueChange(e.target.value);
+
+		if (propsOnChange) {
+			propsOnChange(e);
+		}
 	};
 
 	return (
 		<div className={className}>
 			<label className="block" htmlFor={id}>
-				{label}
+				{label} {required ? <span title="Required">*</span> : null}
 			</label>
 			<input
 				id={id}
@@ -61,6 +67,7 @@ export default function TextField({
 				aria-invalid={hasErrors}
 				aria-describedby={hasErrors ? errorId : undefined}
 				disabled={disabled}
+				required={required}
 				onChange={onChange}
 				{...rest}
 			/>

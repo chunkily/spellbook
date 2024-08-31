@@ -5,10 +5,13 @@ import Option, { OptionGroup } from "./Option";
 
 interface SelectFieldProps
 	extends React.SelectHTMLAttributes<HTMLSelectElement> {
+	name: string;
+	value: string;
+	onValueChange: (value: string) => void;
 	label: React.ReactNode;
 	errors?: string[];
 	selectClassName?: string;
-	items: (Option | OptionGroup)[];
+	items?: (Option | OptionGroup)[];
 }
 
 export default function SelectField({
@@ -20,6 +23,9 @@ export default function SelectField({
 	children,
 	items,
 	disabled,
+	required,
+	onChange: propsOnChange,
+	onValueChange,
 	...selectProps
 }: SelectFieldProps) {
 	const fallbackId = useId();
@@ -45,10 +51,18 @@ export default function SelectField({
 
 	const selectClassName = twMerge(baseSelectClassName, propSelectClassName);
 
+	const onChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+		onValueChange(e.target.value);
+
+		if (propsOnChange) {
+			propsOnChange(e);
+		}
+	};
+
 	return (
 		<div className={className}>
 			<label className="block" htmlFor={id}>
-				{label}
+				{label} {required ? <span title="Required">*</span> : null}
 			</label>
 			<select
 				id={id}
@@ -56,10 +70,12 @@ export default function SelectField({
 				aria-invalid={hasErrors}
 				aria-describedby={hasErrors ? errorId : undefined}
 				disabled={disabled}
+				required={required}
+				onChange={onChange}
 				{...selectProps}
 			>
 				{children}
-				{items.map((item) => {
+				{items?.map((item) => {
 					if ("options" in item) {
 						return (
 							<optgroup key={item.label} label={item.label}>

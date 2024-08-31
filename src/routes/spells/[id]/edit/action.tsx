@@ -1,9 +1,15 @@
-import spellCreate from "@/domain/actions/spellCreate";
+import spellEdit from "@/domain/actions/spellEdit";
 import getFormStringValue from "@/utils/getFormStringValue";
 import { triggerSuccessToast } from "@/utils/toasts";
 import { ActionFunctionArgs, json, redirect } from "react-router-dom";
 
-export default async function action({ request }: ActionFunctionArgs) {
+export default async function action({ request, params }: ActionFunctionArgs) {
+	const id = params.id;
+
+	if (!id) {
+		throw new Error("Missing id param");
+	}
+
 	const formData = await request.formData();
 
 	const traditionsValue = getFormStringValue(formData, "traditions");
@@ -15,20 +21,20 @@ export default async function action({ request }: ActionFunctionArgs) {
 
 	const fields = {
 		name: getFormStringValue(formData, "name"),
-		description: getFormStringValue(formData, "description"),
-		level: getFormStringValue(formData, "level"),
+		description: getFormStringValue(formData, "description") ?? "",
+		level: getFormStringValue(formData, "level") ?? "0",
 		traditions: JSON.parse(traditionsValue ?? "[]"),
 		traits: JSON.parse(traitsValue ?? "[]"),
-		source: getFormStringValue(formData, "source"),
+		isCantrip: getFormStringValue(formData, "isCantrip") === "true",
+		source: getFormStringValue(formData, "source") ?? "",
 		heightenedEffects: JSON.parse(heightenedEffectsValue ?? "[]"),
 	};
 
-	const cmd = await spellCreate(fields);
+	const cmd = await spellEdit(id, fields);
 
 	if (cmd.isSuccess) {
-		const newId = cmd.getResult();
-		triggerSuccessToast("Spell created successfully.");
-		return redirect(`/spells/${newId}`);
+		triggerSuccessToast("Spell edited successfully.");
+		return redirect(`/spells/${id}`);
 	}
 
 	return json(

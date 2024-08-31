@@ -1,7 +1,7 @@
 import useServerState, { useServerStateArray } from "@/utils/useServerState";
 import { useCallback } from "react";
 
-export function useTextField({
+export function useSelectField({
 	serverValue,
 	serverErrors,
 	validationMode = "none",
@@ -9,7 +9,6 @@ export function useTextField({
 }: {
 	serverValue: string | undefined;
 	serverErrors?: string[];
-	maxLength?: number;
 	required?: boolean;
 	validationMode?: "none" | "onChange";
 }) {
