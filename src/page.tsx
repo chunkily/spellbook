@@ -1,5 +1,7 @@
 import { Outlet } from "react-router-dom";
 import Navbar from "./components/Navbar";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
 	return (
@@ -14,6 +16,7 @@ function App() {
 			<footer className="container mx-auto px-2">
 				&copy; 2024 Lee Chengkai
 			</footer>
+			<ToastContainer />
 		</div>
 	);
 }

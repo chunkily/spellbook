@@ -11,12 +11,12 @@ export default function SpellbooksIndex() {
 		<div>
 			<ul className="mb-3 max-w-lg">
 				{spellbooks.map((spellbook) => (
-					<li key={spellbook.id} className="">
+					<li key={spellbook.id} className="my-2">
 						<Link
-							className="bg-primary-300 rounded inline-block w-full hover:bg-primary-400 active:bg-primary-600 px-3 py-2"
+							className="bg-slate-300 rounded inline-block w-full hover:bg-slate-400 active:bg-slate-600 px-3 py-2"
 							to={`/spellbooks/${spellbook.id}`}
 						>
-							{spellbook.name}
+							{spellbook.name}'s Spellbook
 						</Link>
 					</li>
 				))}

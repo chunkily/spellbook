@@ -1,7 +1,6 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import App from "./page.tsx";
-import rootLoader from "./loader.tsx";
 import "./index.css";
 import { createHashRouter, RouterProvider } from "react-router-dom";
 import routes from "./routes/routes.tsx";
@@ -10,7 +9,6 @@ const router = createHashRouter([
 	{
 		path: "/",
 		element: <App />,
-		loader: rootLoader,
 		children: routes,
 	},
 ]);

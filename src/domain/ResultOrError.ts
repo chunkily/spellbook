@@ -1,6 +1,6 @@
 import IError from "./IError";
 
-export default interface SuccessOrError<TResult, TError extends IError> {
+export default interface ResultOrError<TResult, TError extends IError> {
 	error: TError | null;
 	getResult(): TResult;
 	getError(): TError;
@@ -10,7 +10,7 @@ export default interface SuccessOrError<TResult, TError extends IError> {
 
 export function ErrorResult<TResult, TError extends IError>(
 	error: TError,
-): SuccessOrError<TResult, TError> {
+): ResultOrError<TResult, TError> {
 	return {
 		error,
 		getResult: () => {
@@ -36,7 +36,7 @@ export function ErrorResult<TResult, TError extends IError>(
 
 export function SuccessResult<TResult, TError extends IError>(
 	result: TResult,
-): SuccessOrError<TResult, TError> {
+): ResultOrError<TResult, TError> {
 	return {
 		error: null,
 		getResult: () => {

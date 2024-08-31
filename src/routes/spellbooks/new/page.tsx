@@ -1,11 +1,16 @@
 import Button from "@/components/Button";
 import TextField from "@/components/TextField";
+import { useTextField } from "@/components/useTextField";
 import { Plus } from "lucide-react";
 import { Form, useActionData } from "react-router-dom";
 
 export default function NewSpellbook() {
 	const actionData = useActionData() as
-		| { error: string; errors?: Record<string, string[]> }
+		| {
+				error: string;
+				errors?: Record<string, string[]>;
+				fields: Record<string, string>;
+		  }
 		| undefined;
 
 	return (
@@ -16,8 +21,11 @@ export default function NewSpellbook() {
 					label="Name"
 					type="text"
 					name="name"
-					errors={actionData?.errors?.name}
 					placeholder="Enter the name of your character"
+					{...useTextField({
+						serverValue: actionData?.fields.name,
+						serverErrors: actionData?.errors?.name,
+					})}
 				/>
 				{actionData?.error ? (
 					<div className="text-red-500">{actionData.error}</div>

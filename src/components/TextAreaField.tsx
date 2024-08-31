@@ -2,26 +2,33 @@ import { useId } from "react";
 import { twMerge } from "tailwind-merge";
 import ErrorList from "./ErrorList";
 
-interface TextFieldProps
-	extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "defaultValue"> {
+interface TextAreaFieldProps
+	extends Omit<
+		React.TextareaHTMLAttributes<HTMLTextAreaElement>,
+		"defaultValue"
+	> {
 	name: string;
 	value: string;
 	onValueChange: (value: string) => void;
+	charCount?: number;
 	label: React.ReactNode;
 	errors?: string[];
-	inputClassName?: string;
+	textAreaClassName?: string;
 }
 
-export default function TextField({
+export default function TextAreaField({
 	className: propClassName,
-	inputClassName: propInputClassName,
+	textAreaClassName: propTextAreaClassName,
 	label,
 	id,
 	errors,
 	disabled,
+	charCount,
+	maxLength,
+	rows = 3,
 	onValueChange,
 	...rest
-}: TextFieldProps) {
+}: TextAreaFieldProps) {
 	const fallbackId = useId();
 	id = id || fallbackId;
 
@@ -44,23 +51,35 @@ export default function TextField({
 		baseInputClassName += " bg-gray-100";
 	}
 
-	const inputClassName = twMerge(baseInputClassName, propInputClassName);
+	const textAreaClassName = twMerge(baseInputClassName, propTextAreaClassName);
 
-	const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+	const onChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
 		onValueChange(e.target.value);
 	};
 
 	return (
 		<div className={className}>
-			<label className="block" htmlFor={id}>
-				{label}
-			</label>
-			<input
+			<div className="flex flex-row justify-between">
+				<label className="block" htmlFor={id}>
+					{label}
+				</label>
+				{charCount !== undefined && maxLength ? (
+					<div className="text-right">
+						<span className="text-gray-500 text-sm">
+							{charCount}/{maxLength}
+						</span>
+					</div>
+				) : null}
+			</div>
+
+			<textarea
 				id={id}
-				className={inputClassName}
+				className={textAreaClassName}
 				aria-invalid={hasErrors}
 				aria-describedby={hasErrors ? errorId : undefined}
 				disabled={disabled}
+				rows={rows}
+				maxLength={maxLength}
 				onChange={onChange}
 				{...rest}
 			/>
