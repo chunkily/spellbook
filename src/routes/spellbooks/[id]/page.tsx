@@ -1,4 +1,4 @@
-import ButtonLink from "@/components/ButtonLink";
+import ButtonLink from "@/components/ui/ButtonLink";
 import { Pen, Plus, Trash } from "lucide-react";
 import { useLoaderData } from "react-router-dom";
 

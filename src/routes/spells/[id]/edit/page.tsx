@@ -1,11 +1,11 @@
-import Button from "@/components/Button";
-import ButtonLink from "@/components/ButtonLink";
-import SelectField from "@/components/SelectField";
-import TextAreaField from "@/components/TextAreaField";
-import TextField from "@/components/TextField";
-import useSelectField from "@/components/useSelectField";
-import useTextAreaField from "@/components/useTextAreaField";
-import useTextField from "@/components/useTextField";
+import Button from "@/components/ui/Button";
+import ButtonLink from "@/components/ui/ButtonLink";
+import SelectField from "@/components/ui/SelectField";
+import TextAreaField from "@/components/ui/TextAreaField";
+import TextField from "@/components/ui/TextField";
+import useSelectField from "@/components/ui/useSelectField";
+import useTextAreaField from "@/components/ui/useTextAreaField";
+import useTextField from "@/components/ui/useTextField";
 import { Spell } from "@/domain/types/Spell";
 import { Form, useActionData, useLoaderData } from "react-router-dom";
 

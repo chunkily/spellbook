@@ -1,18 +1,18 @@
-import Button from "@/components/Button";
-import ButtonLink from "@/components/ButtonLink";
-import MultiSelectField from "@/components/MultiSelectField";
-import SelectField from "@/components/SelectField";
-import TextAreaField from "@/components/TextAreaField";
-import TextField from "@/components/TextField";
-import useSelectField from "@/components/useSelectField";
-import useMultiSelectField from "@/components/useMultiSelectField";
-import useTextAreaField from "@/components/useTextAreaField";
-import useTextField from "@/components/useTextField";
+import Button from "@/components/ui/Button";
+import ButtonLink from "@/components/ui/ButtonLink";
+import MultiSelectField from "@/components/ui/MultiSelectField";
+import SelectField from "@/components/ui/SelectField";
+import TextAreaField from "@/components/ui/TextAreaField";
+import TextField from "@/components/ui/TextField";
+import useSelectField from "@/components/ui/useSelectField";
+import useMultiSelectField from "@/components/ui/useMultiSelectField";
+import useTextAreaField from "@/components/ui/useTextAreaField";
+import useTextField from "@/components/ui/useTextField";
 import { Form, useActionData, useLoaderData } from "react-router-dom";
-import RadioField from "@/components/RadioField";
-import useRadioField from "@/components/useRadioField";
-import Checkbox from "@/components/Checkbox";
-import useCheckbox from "@/components/useCheckbox";
+import RadioField from "@/components/ui/RadioField";
+import useRadioField from "@/components/ui/useRadioField";
+import Checkbox from "@/components/ui/Checkbox";
+import useCheckbox from "@/components/ui/useCheckbox";
 
 interface FormFields {
 	name?: string;
@@ -67,6 +67,8 @@ export default function Page() {
 	const castActionField = useRadioField({
 		serverValue: actionData?.fields.castAction,
 		serverErrors: actionData?.errors?.castAction,
+		required: true,
+		validationMode: "onChange",
 	});
 
 	const isOtherCastAction = castActionField.value === "other";

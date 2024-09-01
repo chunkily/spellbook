@@ -1,4 +1,4 @@
-import ButtonLink from "@/components/ButtonLink";
+import ButtonLink from "@/components/ui/ButtonLink";
 import { Spell } from "@/domain/types/Spell";
 import { useLoaderData } from "react-router-dom";
 

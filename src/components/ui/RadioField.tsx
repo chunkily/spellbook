@@ -16,11 +16,13 @@ interface RadioFieldProps {
 	items?: Option[];
 	errors?: string[];
 	children?: React.ReactNode;
+	required?: boolean;
 }
 
 export default function RadioField({
 	name,
 	label,
+	required,
 	className: propClassName,
 	radioClassName,
 	fieldsetClassName: propsFieldsetClassName,
@@ -51,7 +53,9 @@ export default function RadioField({
 	return (
 		<div className={className}>
 			<fieldset className={fieldsetClassName}>
-				<legend>{label}</legend>
+				<legend>
+					{label} {required ? <span title="Required">*</span> : null}
+				</legend>
 				<div className="flex flex-wrap gap-2">
 					{children}
 					{items?.map((item) => (
