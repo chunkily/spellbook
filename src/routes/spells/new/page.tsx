@@ -13,6 +13,8 @@ import RadioField from "@/components/ui/RadioField";
 import useRadioField from "@/components/ui/useRadioField";
 import Checkbox from "@/components/ui/Checkbox";
 import useCheckbox from "@/components/ui/useCheckbox";
+import HeightenedEffectsField from "@/components/HeightenedEffectsField";
+import { HeightenedEffect } from "@/domain/types/Spell";
 
 interface FormFields {
 	name?: string;
@@ -24,6 +26,7 @@ interface FormFields {
 		somatic: boolean;
 		material: boolean;
 		verbal: boolean;
+		otherCheckbox: boolean;
 		other?: string;
 	};
 	range?: string;
@@ -32,6 +35,7 @@ interface FormFields {
 	savingThrow?: string;
 	duration?: string;
 	description?: string;
+	heightenedEffects?: HeightenedEffect[];
 }
 
 const TRADITIONS = [
@@ -79,6 +83,16 @@ export default function Page() {
 			: undefined,
 		validationMode: "onChange",
 		required: isOtherCastAction,
+	});
+
+	const castCostOtherTextField = useTextField({
+		serverValue: actionData?.fields.castCost?.other,
+		serverErrors: actionData?.errors?.castCost,
+	});
+
+	const castCostOtherCheckbox = useCheckbox({
+		serverValue: actionData?.fields.castCost?.otherCheckbox,
+		serverErrors: actionData?.errors?.castCost,
 	});
 
 	return (
@@ -170,14 +184,18 @@ export default function Page() {
 							serverErrors: actionData?.errors?.castCost,
 						})}
 					/>
-					<TextField
-						label="Extra Costs"
-						name="castCost.other"
-						{...useTextField({
-							serverValue: actionData?.fields.castCost?.other,
-							serverErrors: actionData?.errors?.castCost,
-						})}
+					<Checkbox
+						label="Other"
+						name="castCost.otherCheckbox"
+						{...castCostOtherCheckbox}
 					/>
+					{castCostOtherCheckbox.checked ? (
+						<TextField
+							label="Extra Costs"
+							name="castCost.other"
+							{...castCostOtherTextField}
+						/>
+					) : null}
 				</div>
 				<div className="max-w-lg flex gap-2">
 					<TextField
@@ -230,7 +248,6 @@ export default function Page() {
 						})}
 					/>
 				</div>
-
 				<TextAreaField
 					label="Description"
 					name="description"
@@ -240,6 +257,11 @@ export default function Page() {
 						serverErrors: actionData?.errors?.description,
 						required: true,
 					})}
+				/>
+				<HeightenedEffectsField
+					name="heightenedEffects"
+					serverValues={actionData?.fields.heightenedEffects}
+					serverErrors={actionData?.errors?.heightenedEffects}
 				/>
 				<div className="lg:col-span-2"></div>
 				<div className="flex flex-row-reverse gap-2 max-w-lg lg:col-start-2 lg:col-end-2">

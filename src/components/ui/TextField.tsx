@@ -1,6 +1,7 @@
 import { useId } from "react";
 import { twMerge } from "tailwind-merge";
 import ErrorList from "./ErrorList";
+import TextInput from "./TextInput";
 
 interface TextFieldProps
 	extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "defaultValue"> {
@@ -14,11 +15,10 @@ interface TextFieldProps
 
 export default function TextField({
 	className: propClassName,
-	inputClassName: propInputClassName,
+	inputClassName,
 	label,
 	id,
 	errors,
-	disabled,
 	required,
 	onChange: propsOnChange,
 	onValueChange,
@@ -34,20 +34,6 @@ export default function TextField({
 
 	const className = twMerge(baseClassName, propClassName);
 
-	let baseInputClassName = "w-full px-3 py-2 border rounded-md";
-
-	if (hasErrors) {
-		baseInputClassName += " border-red-500";
-	} else {
-		baseInputClassName += " border-gray-300";
-	}
-
-	if (disabled) {
-		baseInputClassName += " bg-gray-100";
-	}
-
-	const inputClassName = twMerge(baseInputClassName, propInputClassName);
-
 	const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		onValueChange(e.target.value);
 
@@ -61,14 +47,13 @@ export default function TextField({
 			<label className="block" htmlFor={id}>
 				{label} {required ? <span title="Required">*</span> : null}
 			</label>
-			<input
+			<TextInput
 				id={id}
 				className={inputClassName}
-				aria-invalid={hasErrors}
-				aria-describedby={hasErrors ? errorId : undefined}
-				disabled={disabled}
 				required={required}
 				onChange={onChange}
+				isInvalid={hasErrors}
+				errorId={errorId}
 				{...rest}
 			/>
 			{hasErrors ? <ErrorList id={errorId} errors={errors} /> : null}

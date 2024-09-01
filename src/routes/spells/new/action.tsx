@@ -24,6 +24,7 @@ export default async function action({ request }: ActionFunctionArgs) {
 			somatic: formData.get("castCost.somatic") === "true",
 			material: formData.get("castCost.material") === "true",
 			verbal: formData.get("castCost.verbal") === "true",
+			otherCheckbox: formData.get("castCost.otherCheckbox") === "true",
 			other: getFormStringValue(formData, "castCost.other"),
 		},
 		range: getFormStringValue(formData, "range"),

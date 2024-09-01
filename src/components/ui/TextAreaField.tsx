@@ -1,6 +1,7 @@
 import { useId } from "react";
 import { twMerge } from "tailwind-merge";
 import ErrorList from "./ErrorList";
+import TextArea from "./TextArea";
 
 interface TextAreaFieldProps
 	extends Omit<
@@ -18,11 +19,10 @@ interface TextAreaFieldProps
 
 export default function TextAreaField({
 	className: propClassName,
-	textAreaClassName: propTextAreaClassName,
+	textAreaClassName,
 	label,
 	id,
 	errors,
-	disabled,
 	required,
 	charCount,
 	maxLength,
@@ -40,20 +40,6 @@ export default function TextAreaField({
 	const baseClassName = "mb-3 max-w-lg";
 
 	const className = twMerge(baseClassName, propClassName);
-
-	let baseInputClassName = "w-full px-3 py-2 border rounded-md";
-
-	if (hasErrors) {
-		baseInputClassName += " border-red-500";
-	} else {
-		baseInputClassName += " border-gray-300";
-	}
-
-	if (disabled) {
-		baseInputClassName += " bg-gray-100";
-	}
-
-	const textAreaClassName = twMerge(baseInputClassName, propTextAreaClassName);
 
 	const onChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
 		onValueChange(e.target.value);
@@ -78,12 +64,11 @@ export default function TextAreaField({
 				) : null}
 			</div>
 
-			<textarea
+			<TextArea
 				id={id}
 				className={textAreaClassName}
-				aria-invalid={hasErrors}
-				aria-describedby={hasErrors ? errorId : undefined}
-				disabled={disabled}
+				isInvalid={hasErrors}
+				errorId={errorId}
 				required={required}
 				rows={rows}
 				maxLength={maxLength}

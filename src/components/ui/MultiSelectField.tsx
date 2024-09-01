@@ -35,7 +35,7 @@ export default function MultiSelectField({
 	getItemProps,
 }: MultiSelectFieldProps) {
 	return (
-		<div className="max-w-lg">
+		<div className="mb-3 max-w-lg">
 			<div className="flex flex-col gap-1">
 				<label className="w-fit" {...getLabelProps()}>
 					{label}

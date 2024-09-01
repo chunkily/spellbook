@@ -21,6 +21,7 @@ export interface Spell {
 }
 
 export interface HeightenedEffect {
-	heightened: string; // +1, +2 OR 3rd, 4th
-	description: string;
+	add: number; // +1, +2
+	level: number; // 3rd, 4th
+	effect: string;
 }

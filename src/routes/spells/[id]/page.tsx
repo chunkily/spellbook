@@ -30,6 +30,16 @@ export default function SpellPage() {
 				{spell.savingThrow ? <p>Saving Throw: {spell.savingThrow}</p> : null}
 				{spell.duration ? <p>Duration: {spell.duration}</p> : null}
 				<p className="max-w-prose whitespace-pre-wrap">{spell.description}</p>
+				{spell.heightenedEffects.length > 0
+					? spell.heightenedEffects.map((h) => (
+							<div key={`${h.add}${h.level}`}>
+								<h3>
+									Heightened ({heightenedEffectLevelDisplay(h.add, h.level)})
+								</h3>
+								<p>{h.effect}</p>
+							</div>
+						))
+					: null}
 			</div>
 		</div>
 	);
@@ -60,4 +70,20 @@ function spellLevelToString(level: number): string {
 		return "Cantrip 1";
 	}
 	return `Spell ${level}`;
+}
+
+function heightenedEffectLevelDisplay(add: number, level: number): string {
+	if (add > 0) {
+		return `+${add}`;
+	}
+	switch (level) {
+		case 1:
+			return "1st";
+		case 2:
+			return "2nd";
+		case 3:
+			return "3rd";
+		default:
+			return `${level}th`;
+	}
 }

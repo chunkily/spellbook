@@ -19,6 +19,7 @@ interface SpellCreateParams {
 		somatic: boolean;
 		material: boolean;
 		verbal: boolean;
+		otherCheckbox: boolean;
 		other?: string;
 	};
 	range: string | undefined;
@@ -27,6 +28,11 @@ interface SpellCreateParams {
 	savingThrow: string | undefined;
 	duration: string | undefined;
 	description: string | undefined;
+	heightenedEffects?: {
+		add: number;
+		level: number;
+		effect: string;
+	}[];
 }
 
 export default async function spellCreate(
@@ -57,6 +63,13 @@ export default async function spellCreate(
 		errors.castActionOther = ["Cast action is required"];
 	}
 
+	const castCost = {
+		somatic: fields.castCost.somatic,
+		material: fields.castCost.material,
+		verbal: fields.castCost.verbal,
+		other: fields.castCost.otherCheckbox ? fields.castCost.other : "",
+	};
+
 	// Check for duplicate name
 	const duplicateSpell = await spellGetByName(fields.name);
 	if (duplicateSpell) {
@@ -76,14 +89,14 @@ export default async function spellCreate(
 		traits: fields.traits || [],
 		traditions: fields.traditions || [],
 		castAction: castAction ?? "",
-		castCost: fields.castCost,
+		castCost: castCost,
 		range: fields.range ?? "",
 		area: fields.area ?? "",
 		targets: fields.targets ?? "",
 		savingThrow: fields.savingThrow ?? "",
 		duration: fields.duration ?? "",
 		description: fields.description ?? "",
-		heightenedEffects: [],
+		heightenedEffects: fields.heightenedEffects || [],
 		source: "",
 	};
 

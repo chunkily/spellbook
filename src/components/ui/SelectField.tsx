@@ -2,6 +2,7 @@ import { useId } from "react";
 import ErrorList from "./ErrorList";
 import { twMerge } from "tailwind-merge";
 import Option, { OptionGroup } from "./Option";
+import Select from "./Select";
 
 interface SelectFieldProps
 	extends React.SelectHTMLAttributes<HTMLSelectElement> {
@@ -19,14 +20,13 @@ export default function SelectField({
 	label,
 	errors,
 	className: propClassName,
-	selectClassName: propSelectClassName,
+	selectClassName,
 	children,
 	items,
-	disabled,
 	required,
 	onChange: propsOnChange,
 	onValueChange,
-	...selectProps
+	...rest
 }: SelectFieldProps) {
 	const fallbackId = useId();
 	id = id || fallbackId;
@@ -37,19 +37,6 @@ export default function SelectField({
 	const baseClassName = "mb-3 max-w-lg";
 
 	const className = twMerge(baseClassName, propClassName);
-
-	let baseSelectClassName =
-		"w-full px-3 py-2 border border-gray-300 rounded-md";
-
-	if (hasErrors) {
-		baseSelectClassName += " border-red-500";
-	}
-
-	if (disabled) {
-		baseSelectClassName += " bg-gray-100";
-	}
-
-	const selectClassName = twMerge(baseSelectClassName, propSelectClassName);
 
 	const onChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
 		onValueChange(e.target.value);
@@ -64,37 +51,16 @@ export default function SelectField({
 			<label className="block" htmlFor={id}>
 				{label} {required ? <span title="Required">*</span> : null}
 			</label>
-			<select
+			<Select
 				id={id}
 				className={selectClassName}
-				aria-invalid={hasErrors}
-				aria-describedby={hasErrors ? errorId : undefined}
-				disabled={disabled}
 				required={required}
 				onChange={onChange}
-				{...selectProps}
+				items={items}
+				{...rest}
 			>
 				{children}
-				{items?.map((item) => {
-					if ("options" in item) {
-						return (
-							<optgroup key={item.label} label={item.label}>
-								{item.options.map((option) => (
-									<option key={option.value} value={option.value}>
-										{option.label}
-									</option>
-								))}
-							</optgroup>
-						);
-					}
-
-					return (
-						<option key={item.value} value={item.value}>
-							{item.label}
-						</option>
-					);
-				})}
-			</select>
+			</Select>
 			{hasErrors ? <ErrorList id={errorId} errors={errors} /> : null}
 		</div>
 	);
