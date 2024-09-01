@@ -38,6 +38,27 @@ export function writeToStore(
 	});
 }
 
+export function updateInStore(
+	db: IDBDatabase,
+	storeName: string,
+	data: unknown,
+	key: string | number,
+): Promise<void> {
+	if (typeof key === "string") {
+		key = parseInt(key, 10);
+	}
+
+	const transaction = db.transaction(storeName, "readwrite");
+	const store = transaction.objectStore(storeName);
+
+	const request = store.put(data, key);
+
+	return new Promise((resolve, reject) => {
+		request.onsuccess = () => resolve();
+		request.onerror = () => reject();
+	});
+}
+
 export function deleteFromStore(
 	db: IDBDatabase,
 	storeName: string,

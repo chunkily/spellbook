@@ -9,6 +9,7 @@ export interface Spell {
 		somatic: boolean;
 		material: boolean;
 		verbal: boolean;
+		other: string;
 	};
 	range: string;
 	area: string;

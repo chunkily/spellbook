@@ -67,7 +67,7 @@ export default async function spellCreate(
 		somatic: fields.castCost.somatic,
 		material: fields.castCost.material,
 		verbal: fields.castCost.verbal,
-		other: fields.castCost.otherCheckbox ? fields.castCost.other : "",
+		other: (fields.castCost.otherCheckbox ? fields.castCost.other : "") ?? "",
 	};
 
 	// Check for duplicate name
