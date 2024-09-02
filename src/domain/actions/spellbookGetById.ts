@@ -1,12 +1,10 @@
-import { openDb, readFromStore } from "../../utils/indexedDb";
+import db from "@/utils/db";
 import Spellbook from "../types/Spellbook";
 
 export default async function spellbookGetById(
-	id: string,
+	id: number,
 ): Promise<Spellbook | null> {
-	const db = await openDb();
-
-	const spellbook = await readFromStore<Spellbook>(db, "spellbooks", id);
+	const spellbook = await db.spellbooks.get(id);
 
 	if (!spellbook) {
 		return null;

@@ -1,6 +1,6 @@
-import { openDb, writeToStore } from "@/utils/indexedDb";
+import db from "@/utils/db";
 import ResultOrError, { ErrorResult, SuccessResult } from "../ResultOrError";
-import { Spell } from "../types/Spell";
+import Spell from "../types/Spell";
 import spellGetByName from "./spellGetByName";
 
 interface SpellCreateError {
@@ -100,10 +100,9 @@ export default async function spellCreate(
 		source: "",
 	};
 
-	const db = await openDb();
 	let newId;
 	try {
-		newId = await writeToStore(db, "spells", newSpell);
+		newId = await db.spells.add(newSpell);
 	} catch (error) {
 		console.error(error);
 		return ErrorResult({

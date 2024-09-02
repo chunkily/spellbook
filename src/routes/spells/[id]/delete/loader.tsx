@@ -1,12 +1,9 @@
 import { json, LoaderFunctionArgs } from "react-router-dom";
 import spellGetById from "@/domain/actions/spellGetById";
+import parseId from "@/utils/parseId";
 
 export default async function loader({ params }: LoaderFunctionArgs) {
-	const spellId = params.id;
-
-	if (!spellId) {
-		throw new Error("Missing id param");
-	}
+	const spellId = parseId(params.id);
 
 	const spell = await spellGetById(spellId);
 

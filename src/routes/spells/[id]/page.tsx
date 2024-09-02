@@ -1,5 +1,5 @@
 import ButtonLink from "@/components/ui/ButtonLink";
-import { Spell } from "@/domain/types/Spell";
+import Spell from "@/domain/types/Spell";
 import { useLoaderData } from "react-router-dom";
 
 export default function SpellPage() {

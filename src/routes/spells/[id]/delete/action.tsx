@@ -1,13 +1,10 @@
 import spellDelete from "@/domain/actions/spellDelete";
+import parseId from "@/utils/parseId";
 import { triggerSuccessToast } from "@/utils/toasts";
 import { ActionFunctionArgs, json, redirect } from "react-router-dom";
 
 export default async function action({ params }: ActionFunctionArgs) {
-	const spellbookId = params.id;
-
-	if (!spellbookId) {
-		throw new Error("Missing id param");
-	}
+	const spellbookId = parseId(params.id);
 
 	const req = await spellDelete(spellbookId);
 

@@ -1,13 +1,11 @@
-import { deleteFromStore, openDb } from "@/utils/indexedDb";
+import db from "@/utils/db";
 import MaybeError, { ErrorResult, SuccessResult } from "../MaybeError";
 
 export default async function spellbookDelete(
-	id: string,
+	id: number,
 ): Promise<MaybeError<string>> {
-	const db = await openDb();
-
 	try {
-		await deleteFromStore(db, "spells", id);
+		await db.spells.delete(id);
 	} catch (error) {
 		console.error(error);
 		return ErrorResult("There was an error deleting the data");

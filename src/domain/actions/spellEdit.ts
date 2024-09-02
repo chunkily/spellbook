@@ -1,6 +1,6 @@
-import { openDb, updateInStore } from "@/utils/indexedDb";
+import db from "@/utils/db";
 import MaybeError, { ErrorResult, SuccessResult } from "../MaybeError";
-import { Spell } from "../types/Spell";
+import Spell from "../types/Spell";
 import spellGetByName from "./spellGetByName";
 
 interface SpellEditError {
@@ -36,7 +36,7 @@ interface SpellEditParams {
 }
 
 export default async function spellEdit(
-	id: string,
+	id: number,
 	fields: SpellEditParams,
 ): Promise<MaybeError<SpellEditError>> {
 	const errors: Record<string, string[]> = {};
@@ -73,7 +73,7 @@ export default async function spellEdit(
 
 	// Check for duplicate name
 	const duplicateSpell = await spellGetByName(fields.name);
-	if (duplicateSpell && duplicateSpell.id.toString() !== id) {
+	if (duplicateSpell && duplicateSpell.id !== id) {
 		errors.name = ["Spell with this name already exists"];
 	}
 
@@ -85,7 +85,7 @@ export default async function spellEdit(
 	}
 
 	const updatedSpell: Spell = {
-		id: parseInt(id, 10),
+		id,
 		name: fields.name ?? "",
 		level,
 		traits: fields.traits || [],
@@ -102,10 +102,8 @@ export default async function spellEdit(
 		source: "",
 	};
 
-	const db = await openDb();
-
 	try {
-		await updateInStore(db, "spells", updatedSpell, id);
+		await db.spells.put(updatedSpell);
 	} catch (error) {
 		console.error(error);
 		return ErrorResult({

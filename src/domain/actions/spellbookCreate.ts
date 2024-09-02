@@ -1,5 +1,6 @@
-import { openDb, writeToStore } from "@/utils/indexedDb";
+import db from "@/utils/db";
 import ResultOrError, { ErrorResult, SuccessResult } from "../ResultOrError";
+import Spellbook from "../types/Spellbook";
 
 interface SpellbookCreate {
 	name?: string;
@@ -13,8 +14,6 @@ interface SpellbookCreateErrors {
 export default async function spellbookCreate({
 	name,
 }: SpellbookCreate): Promise<ResultOrError<number, SpellbookCreateErrors>> {
-	const db = await openDb();
-
 	if (!name) {
 		return ErrorResult({
 			errors: {
@@ -24,7 +23,7 @@ export default async function spellbookCreate({
 		});
 	}
 
-	const spellbook = {
+	const spellbook: Omit<Spellbook, "id"> = {
 		name: name.trim(),
 		learnedSpells: [],
 		spellSlots: {
@@ -41,9 +40,9 @@ export default async function spellbookCreate({
 		},
 	};
 
-	let newId;
+	let newId: number;
 	try {
-		newId = await writeToStore(db, "spellbooks", spellbook);
+		newId = await db.spellbooks.add(spellbook);
 	} catch (error) {
 		console.error(error);
 		return ErrorResult({

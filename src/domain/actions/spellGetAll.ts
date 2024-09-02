@@ -1,10 +1,8 @@
-import { openDb, readAllFromStore } from "@/utils/indexedDb";
-import { Spell } from "../types/Spell";
+import db from "@/utils/db";
+import Spell from "../types/Spell";
 
 export default async function spellGetAll(): Promise<Spell[]> {
-	const db = await openDb();
-
-	const spells = await readAllFromStore<Spell>(db, "spells");
+	const spells = await db.spells.toArray();
 
 	return spells;
 }

@@ -1,5 +1,5 @@
 import spellSearch from "@/domain/actions/spellSearch";
-import { Spell } from "@/domain/types/Spell";
+import Spell from "@/domain/types/Spell";
 import { json, LoaderFunctionArgs } from "react-router-dom";
 
 export default async function loader({ request }: LoaderFunctionArgs) {

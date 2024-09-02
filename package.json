@@ -12,6 +12,7 @@
 		"preview": "vite preview"
 	},
 	"dependencies": {
+		"dexie": "^4.0.8",
 		"downshift": "^9.0.8",
 		"lucide-react": "^0.433.0",
 		"react": "^18.3.1",

@@ -13,7 +13,7 @@ import useRadioField from "@/components/ui/useRadioField";
 import useSelectField from "@/components/ui/useSelectField";
 import useTextAreaField from "@/components/ui/useTextAreaField";
 import useTextField from "@/components/ui/useTextField";
-import { HeightenedEffect, Spell } from "@/domain/types/Spell";
+import Spell, { HeightenedEffect } from "@/domain/types/Spell";
 import { Form, useActionData, useLoaderData } from "react-router-dom";
 
 interface FormFields {

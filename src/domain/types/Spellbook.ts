@@ -1,7 +1,7 @@
-import { Spell } from "./Spell";
+import Spell from "./Spell";
 
 export default interface Spellbook {
-	id: string;
+	id: number;
 	name: string;
 	learnedSpells: Spell[];
 	spellSlots: SpellSlots;
