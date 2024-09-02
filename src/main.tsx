@@ -4,6 +4,7 @@ import App from "./page.tsx";
 import "./index.css";
 import { createHashRouter, RouterProvider } from "react-router-dom";
 import routes from "./routes/routes.tsx";
+import { UserPrefsProvider } from "./userPrefs.tsx";
 
 const router = createHashRouter([
 	{
@@ -15,6 +16,8 @@ const router = createHashRouter([
 
 createRoot(document.getElementById("root")!).render(
 	<StrictMode>
-		<RouterProvider router={router} />
+		<UserPrefsProvider>
+			<RouterProvider router={router} />
+		</UserPrefsProvider>
 	</StrictMode>,
 );

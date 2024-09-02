@@ -1,11 +1,18 @@
 import ButtonLink from "@/components/ui/ButtonLink";
+import { useUserPrefs } from "@/useUserPrefs";
 import { Pen, Plus, Trash } from "lucide-react";
+import { useEffect } from "react";
 import { useLoaderData } from "react-router-dom";
 
 export default function SpellbookPage() {
 	const { spellbook } = useLoaderData() as {
-		spellbook: { id: string; name: string };
+		spellbook: { id: number; name: string };
 	};
+	const { setUserPrefs } = useUserPrefs();
+
+	useEffect(() => {
+		setUserPrefs({ activeCharacterId: spellbook.id });
+	}, [spellbook.id, setUserPrefs]);
 
 	return (
 		<div>
@@ -18,6 +25,9 @@ export default function SpellbookPage() {
 				<ButtonLink to={`/spellbooks/${spellbook.id}/delete`} variant="danger">
 					<Trash className="h-4 w-4 mr-2" />
 					Delete Spellbook
+				</ButtonLink>
+				<ButtonLink to={`/spellbooks/`} variant="warning">
+					Switch Character
 				</ButtonLink>
 			</div>
 

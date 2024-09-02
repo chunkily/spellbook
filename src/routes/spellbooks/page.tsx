@@ -9,6 +9,7 @@ export default function SpellbooksIndex() {
 
 	return (
 		<div>
+			<h1 className="text-xl font-bold mb-3">Select your spellbook</h1>
 			<ul className="mb-3 max-w-lg">
 				{spellbooks.map((spellbook) => (
 					<li key={spellbook.id} className="my-2">

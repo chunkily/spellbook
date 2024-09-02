@@ -9,7 +9,6 @@ function App() {
 			<header className="bg-primary-700 w-full sticky top-0 text-white">
 				<Navbar />
 			</header>
-
 			<main className="container mt-3 mx-auto p-3 bg-secondary-300 rounded">
 				<Outlet />
 			</main>
