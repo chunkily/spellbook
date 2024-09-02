@@ -20,6 +20,7 @@ export default async function action({ request }: ActionFunctionArgs) {
 		source: getFormStringValue(formData, "source"),
 		castAction: getFormStringValue(formData, "castAction"),
 		castActionOther: getFormStringValue(formData, "castActionOther"),
+		castTrigger: getFormStringValue(formData, "castTrigger"),
 		castCost: {
 			somatic: formData.get("castCost.somatic") === "true",
 			material: formData.get("castCost.material") === "true",

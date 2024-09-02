@@ -22,6 +22,7 @@ interface FormFields {
 	traditions?: string[];
 	traits?: string[];
 	castAction?: string;
+	castTrigger?: string;
 	castCost?: {
 		somatic: boolean;
 		material: boolean;
@@ -46,15 +47,15 @@ const TRADITIONS = [
 ];
 
 const CAST_ACTIONS = [
-	{ value: "◆", label: <span title="1 Action">◆</span> },
-	{ value: "◆◆", label: <span title="2 Actions">◆◆</span> },
-	{ value: "◆◆◆", label: <span title="3 Actions">◆◆◆</span> },
-	{ value: "⟳", label: <span title="Reaction">⟳</span> },
-	{ value: "◆ to ◆◆◆", label: <span title="1 to 3 Actions">◆ to ◆◆◆</span> },
-	{ value: "◆ to ◆◆", label: <span title="1 to 2 Actions">◆ to ◆◆</span> },
-	{ value: "1 Minute", label: <span title="1 Minute">1 Minute</span> },
-	{ value: "10 Minutes", label: <span title="10 Minutes">10 Minutes</span> },
-	{ value: "1 Hour", label: <span title="1 Hour">1 Hour</span> },
+	{ value: "1", label: <span title="1 Action">◆</span> },
+	{ value: "2", label: <span title="2 Actions">◆◆</span> },
+	{ value: "3", label: <span title="3 Actions">◆◆◆</span> },
+	{ value: "R", label: <span title="Reaction">⟳</span> },
+	{ value: "13", label: <span title="1 to 3 Actions">◆ to ◆◆◆</span> },
+	{ value: "12", label: <span title="1 to 2 Actions">◆ to ◆◆</span> },
+	{ value: "1M", label: <span title="1 Minute">1 Minute</span> },
+	{ value: "10M", label: <span title="10 Minutes">10 Minutes</span> },
+	{ value: "1H", label: <span title="1 Hour">1 Hour</span> },
 	{ value: "other", label: <span title="Other">Other</span> },
 ];
 
@@ -78,6 +79,7 @@ export default function SpellEditPage() {
 		traits: actionData?.fields.traits ?? spell.traits,
 		traditions: actionData?.fields.traditions ?? spell.traditions,
 		castAction: actionData?.fields.castAction ?? spell.castAction,
+		castTrigger: actionData?.fields.castTrigger ?? spell.castTrigger,
 		castCost: {
 			somatic: actionData?.fields.castCost?.somatic ?? spell.castCost.somatic,
 			material:
@@ -114,6 +116,16 @@ export default function SpellEditPage() {
 		serverErrors: isOtherCastAction ? errors?.castAction : undefined,
 		validationMode: "onChange",
 		required: isOtherCastAction,
+	});
+
+	const isReactionCastAction = castActionField.value === "R";
+	const castTriggerField = useTextField({
+		serverValue: isReactionCastAction ? fields.castTrigger : undefined,
+		serverErrors: isReactionCastAction
+			? actionData?.errors?.castTrigger
+			: undefined,
+		validationMode: "onChange",
+		required: isReactionCastAction,
 	});
 
 	const castCostOtherTextField = useTextField({
@@ -188,6 +200,13 @@ export default function SpellEditPage() {
 						label="Cast Action"
 						name="castActionOther"
 						{...otherCastActionField}
+					/>
+				) : null}
+				{isReactionCastAction ? (
+					<TextField
+						label="Cast Trigger"
+						name="castTrigger"
+						{...castTriggerField}
 					/>
 				) : null}
 				<div className="mb-3 flex gap-2">

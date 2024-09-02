@@ -15,6 +15,7 @@ interface SpellEditParams {
 	traditions?: string[];
 	castAction: string | undefined;
 	castActionOther: string | undefined;
+	castTrigger: string | undefined;
 	castCost: {
 		somatic: boolean;
 		material: boolean;
@@ -91,6 +92,7 @@ export default async function spellEdit(
 		traits: fields.traits || [],
 		traditions: fields.traditions || [],
 		castAction: castAction ?? "",
+		castTrigger: fields.castTrigger ?? "",
 		castCost: castCost,
 		range: fields.range ?? "",
 		area: fields.area ?? "",

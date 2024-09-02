@@ -40,7 +40,7 @@ export default function HeightenedEffectsField({
 
 		setHeightenedEffects([
 			...heightenedEffects,
-			{ id: maxId + 1, select: "0", effect: "" },
+			{ id: maxId + 1, select: "+1", effect: "" },
 		]);
 	};
 

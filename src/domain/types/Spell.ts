@@ -5,6 +5,7 @@ export default interface Spell {
 	traits: string[];
 	traditions: string[];
 	castAction: string;
+	castTrigger: string;
 	castCost: {
 		somatic: boolean;
 		material: boolean;
