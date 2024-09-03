@@ -9,26 +9,26 @@ interface SpellEditError {
 }
 
 interface SpellEditParams {
-	name: string | undefined;
-	level: string | undefined;
+	name?: string;
+	level?: string;
 	traits?: string[];
 	traditions?: string[];
-	castAction: string | undefined;
-	castActionOther: string | undefined;
-	castTrigger: string | undefined;
-	castCost: {
+	castAction?: string;
+	castActionOther?: string;
+	castTrigger?: string;
+	castCost?: {
 		somatic: boolean;
 		material: boolean;
 		verbal: boolean;
 		otherCheckbox: boolean;
 		other?: string;
 	};
-	range: string | undefined;
-	area: string | undefined;
-	targets: string | undefined;
-	savingThrow: string | undefined;
-	duration: string | undefined;
-	description: string | undefined;
+	range?: string;
+	area?: string;
+	targets?: string;
+	savingThrow?: string;
+	duration?: string;
+	description?: string;
 	heightenedEffects?: {
 		add: number;
 		level: number;
@@ -66,10 +66,10 @@ export default async function spellEdit(
 	}
 
 	const castCost = {
-		somatic: fields.castCost.somatic,
-		material: fields.castCost.material,
-		verbal: fields.castCost.verbal,
-		other: (fields.castCost.otherCheckbox ? fields.castCost.other : "") ?? "",
+		somatic: fields.castCost?.somatic ?? false,
+		material: fields.castCost?.material ?? false,
+		verbal: fields.castCost?.verbal ?? false,
+		other: (fields.castCost?.otherCheckbox ? fields.castCost.other : "") ?? "",
 	};
 
 	// Check for duplicate name

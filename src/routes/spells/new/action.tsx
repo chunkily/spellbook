@@ -1,3 +1,4 @@
+import { SpellFormFields } from "@/components/SpellForm";
 import spellCreate from "@/domain/actions/spellCreate";
 import getFormStringArray from "@/utils/getFormStringArray";
 import getFormStringValue from "@/utils/getFormStringValue";
@@ -12,12 +13,11 @@ export default async function action({ request }: ActionFunctionArgs) {
 		"heightenedEffects",
 	);
 
-	const fields = {
+	const fields: SpellFormFields = {
 		name: getFormStringValue(formData, "name"),
 		level: getFormStringValue(formData, "level"),
 		traditions: getFormStringArray(formData, "traditions"),
 		traits: getFormStringArray(formData, "traits"),
-		source: getFormStringValue(formData, "source"),
 		castAction: getFormStringValue(formData, "castAction"),
 		castActionOther: getFormStringValue(formData, "castActionOther"),
 		castTrigger: getFormStringValue(formData, "castTrigger"),
