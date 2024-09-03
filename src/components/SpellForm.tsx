@@ -16,6 +16,8 @@ import useTextField from "@/components/ui/useTextField";
 import { HeightenedEffect } from "@/domain/types/Spell";
 import { Pencil, Plus } from "lucide-react";
 import { Form } from "react-router-dom";
+import SearchableMultiSelectField from "./ui/SearchableMultiSelectField";
+import { useSearchableMultiSelectField } from "./ui/useSearchableMultiSelectField";
 
 export interface SpellFormFields {
 	name?: string;
@@ -141,11 +143,15 @@ export default function SpellForm({
 					<option value="9">Spell 9</option>
 					<option value="10">Spell 10</option>
 				</SelectField>
-				<MultiSelectField
+				<SearchableMultiSelectField
 					label="Traits"
 					name="traits"
-					{...useMultiSelectField({
-						items: traits.map((trait) => ({ value: trait, label: trait })),
+					{...useSearchableMultiSelectField({
+						items: traits.map((trait) => ({
+							value: trait,
+							label: trait,
+							text: trait,
+						})),
 						serverValues: fields?.traits,
 						serverErrors: errors?.traits,
 					})}
@@ -311,3 +317,4 @@ export default function SpellForm({
 		</div>
 	);
 }
+
