@@ -23,7 +23,7 @@ export default function SpellbooksIndex() {
 				))}
 			</ul>
 			<ButtonLink to="/spellbooks/new">
-				<Plus className="h-4 w-4 mr-2" />
+				<Plus className="w-4 h-4 mr-2" />
 				New Spellbook
 			</ButtonLink>
 		</div>

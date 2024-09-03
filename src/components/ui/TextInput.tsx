@@ -13,7 +13,8 @@ export default function TextInput({
 	required,
 	...rest
 }: TextInputProps) {
-	let baseClassName = "w-full px-3 py-2 border rounded-md";
+	let baseClassName =
+		"border text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5";
 
 	if (isInvalid) {
 		baseClassName += " border-red-500";
@@ -23,6 +24,8 @@ export default function TextInput({
 
 	if (disabled) {
 		baseClassName += " bg-gray-100";
+	} else {
+		baseClassName += " bg-gray-50";
 	}
 
 	const className = twMerge(baseClassName, propsClassName);

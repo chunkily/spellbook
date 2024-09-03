@@ -19,11 +19,11 @@ export default function SpellbookPage() {
 			<div className="flex justify-between gap-2">
 				<h1 className="text-xl mr-auto">{spellbook.name}'s Spellbook</h1>
 				<ButtonLink to={`/spellbooks/${spellbook.id}/edit`} variant="success">
-					<Pen className="h-4 w-4 mr-2" />
+					<Pen className="w-4 h-4 mr-2" />
 					Edit Spellbook
 				</ButtonLink>
 				<ButtonLink to={`/spellbooks/${spellbook.id}/delete`} variant="danger">
-					<Trash className="h-4 w-4 mr-2" />
+					<Trash className="w-4 h-4 mr-2" />
 					Delete Spellbook
 				</ButtonLink>
 				<ButtonLink to={`/spellbooks/`} variant="warning">

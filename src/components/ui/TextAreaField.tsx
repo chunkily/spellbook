@@ -52,7 +52,10 @@ export default function TextAreaField({
 	return (
 		<div className={className}>
 			<div className="flex flex-row justify-between">
-				<label className="block" htmlFor={id}>
+				<label
+					className="block mb-1 text-sm font-medium text-gray-900"
+					htmlFor={id}
+				>
 					{label} {required ? <span title="Required">*</span> : null}
 				</label>
 				{charCount !== undefined && maxLength ? (

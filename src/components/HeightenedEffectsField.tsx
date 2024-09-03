@@ -82,7 +82,7 @@ export default function HeightenedEffectsField({
 					setErrors([]);
 				}}
 			>
-				<legend>Heightened Effects</legend>
+				<legend className="text-sm mb-1">Heightened Effects</legend>
 				{heightenedEffects.map((h) => (
 					<div className="flex mb-2 gap-1">
 						<Select
@@ -114,7 +114,7 @@ export default function HeightenedEffectsField({
 							onChange={(e) => handleEffectChange(h.id, e.target.value)}
 						></TextInput>
 						<Button
-							className="w-1/12"
+							className="px-3"
 							type="button"
 							variant="danger"
 							onClick={() => handleRemove(h.id)}

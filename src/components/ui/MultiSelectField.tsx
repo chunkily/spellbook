@@ -37,32 +37,30 @@ export default function MultiSelectField({
 	return (
 		<div className="mb-3 max-w-lg">
 			<div className="flex flex-col gap-1">
-				<label className="w-fit" {...getLabelProps()}>
+				<label className="w-fit text-sm" {...getLabelProps()}>
 					{label}
 				</label>
-				<div className="w-full px-3 py-2 border rounded-md bg-white inline-flex gap-2 items-center flex-wrap p-1.5 focus-within:border-gray-400">
+				<div className="w-full py-1 px-2 border rounded-lg bg-white inline-flex gap-2 items-center flex-wrap focus-within:border-gray-400">
 					{selectedItems.map(
 						function renderSelectedItem(selectedItemForRender, index) {
 							return (
-								<span
-									className="bg-primary-300 rounded-md pl-2 focus:bg-red-300"
+								<div
+									className="bg-primary-300 rounded-md py-0.5 px-2 focus:bg-red-300 inline gap-1"
 									key={`selected-item-${index}`}
 									{...getSelectedItemProps({
 										selectedItem: selectedItemForRender,
 										index,
 									})}
 								>
-									{selectedItemForRender.label}
-									<span
-										className="px-1 cursor-pointer"
+									<span className="text-sm">{selectedItemForRender.label}</span>
+									<X
+										className="inline-block w-4 h-4 cursor-pointer"
 										onClick={(e) => {
 											e.stopPropagation();
 											removeSelectedItem(selectedItemForRender);
 										}}
-									>
-										<X className="inline-block w-4 h-4 relative bottom-[.1rem]" />
-									</span>
-								</span>
+									/>
+								</div>
 							);
 						},
 					)}
@@ -73,7 +71,7 @@ export default function MultiSelectField({
 						)}
 					>
 						<span>Add</span>
-						<Plus className="inline-block w-4 h-4 relative bottom-[.1rem]" />
+						<Plus className="inline-block ml-1 w-4 h-4" />
 					</div>
 				</div>
 			</div>

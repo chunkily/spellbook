@@ -34,7 +34,7 @@ export default function SpellsPage() {
 			</Form>
 			<div className="fixed bottom-5 right-5">
 				<ButtonLink to="/spells/new">
-					<Plus className="h-4 w-4 mr-2" />
+					<Plus className="w-4 h-4 mr-2" />
 					Add New Spell
 				</ButtonLink>
 			</div>

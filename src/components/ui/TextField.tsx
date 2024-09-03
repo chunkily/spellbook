@@ -44,7 +44,10 @@ export default function TextField({
 
 	return (
 		<div className={className}>
-			<label className="block" htmlFor={id}>
+			<label
+				className="block mb-1 text-sm font-medium text-gray-900"
+				htmlFor={id}
+			>
 				{label} {required ? <span title="Required">*</span> : null}
 			</label>
 			<TextInput

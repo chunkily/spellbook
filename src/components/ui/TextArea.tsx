@@ -14,7 +14,8 @@ export default function TextArea({
 	required,
 	...rest
 }: TextAreaProps) {
-	let baseClassName = "w-full px-3 py-2 border rounded-md";
+	let baseClassName =
+		"block p-2.5 w-full text-sm text-gray-900 rounded-lg border focus:ring-blue-500 focus:border-blue-500";
 
 	if (isInvalid) {
 		baseClassName += " border-red-500";
@@ -24,6 +25,8 @@ export default function TextArea({
 
 	if (disabled) {
 		baseClassName += " bg-gray-100";
+	} else {
+		baseClassName += " bg-gray-50";
 	}
 
 	const className = twMerge(baseClassName, propsClassName);

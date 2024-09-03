@@ -45,6 +45,7 @@ export default function Checkbox({
 	return (
 		<div className={className}>
 			<input
+				className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2 "
 				id={id}
 				type="checkbox"
 				name={name}
@@ -55,7 +56,7 @@ export default function Checkbox({
 			{!checked ? (
 				<input type="hidden" name={name} value={valueIfFalse} />
 			) : null}
-			<label className="ml-1" htmlFor={id}>
+			<label className="ms-2 text-sm font-medium text-gray-900" htmlFor={id}>
 				{children}
 				{label}
 			</label>
