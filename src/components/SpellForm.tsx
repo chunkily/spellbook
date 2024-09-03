@@ -14,6 +14,7 @@ import useSelectField from "@/components/ui/useSelectField";
 import useTextAreaField from "@/components/ui/useTextAreaField";
 import useTextField from "@/components/ui/useTextField";
 import { HeightenedEffect } from "@/domain/types/Spell";
+import { Pencil, Plus } from "lucide-react";
 import { Form } from "react-router-dom";
 
 export interface SpellFormFields {
@@ -286,7 +287,10 @@ export default function SpellForm({
 
 				{mode === "create" ? (
 					<div className="flex flex-row-reverse gap-2 max-w-lg lg:col-start-2 lg:col-end-2">
-						<Button type="submit">Add Spell To Global List</Button>
+						<Button type="submit">
+							<Plus className="w-4 h-4 mr-2" />
+							Add Spell To Global List
+						</Button>
 						<ButtonLink to={`/spells/`} variant="secondary">
 							Cancel
 						</ButtonLink>
@@ -294,7 +298,10 @@ export default function SpellForm({
 				) : null}
 				{mode === "edit" ? (
 					<div className="flex flex-row-reverse gap-2 max-w-lg lg:col-start-2 lg:col-end-2">
-						<Button type="submit">Edit</Button>
+						<Button type="submit">
+							<Pencil className="w-4 h-4 mr-2" />
+							Edit
+						</Button>
 						<ButtonLink to={`/spells/${id}`} variant="secondary">
 							Cancel
 						</ButtonLink>

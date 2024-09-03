@@ -22,7 +22,7 @@ export default function SpellbookDeletePage() {
 					<Button type="submit" variant="danger">
 						Yes, I'm sure
 					</Button>
-					<ButtonLink to={`/spellbooks/${spell.id}`} variant="secondary">
+					<ButtonLink to={`/spells/${spell.id}`} variant="secondary">
 						Wait I've changed my mind
 					</ButtonLink>
 				</div>

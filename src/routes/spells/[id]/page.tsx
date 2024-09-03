@@ -1,6 +1,7 @@
 import SpellDisplay from "@/components/SpellDisplay";
 import ButtonLink from "@/components/ui/ButtonLink";
 import Spell from "@/domain/types/Spell";
+import { Pencil, Trash } from "lucide-react";
 import { useLoaderData } from "react-router-dom";
 
 export default function SpellPage() {
@@ -19,9 +20,11 @@ export default function SpellPage() {
 					Back
 				</ButtonLink>
 				<ButtonLink to={`/spells/${spell.id}/delete`} variant="danger">
+					<Trash className="w-4 h-4 mr-2" />
 					Delete
 				</ButtonLink>
 				<ButtonLink to={`/spells/${spell.id}/edit`} variant="success">
+					<Pencil className="w-4 h-4 mr-2" />
 					Edit
 				</ButtonLink>
 			</div>

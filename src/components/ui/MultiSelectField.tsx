@@ -3,7 +3,7 @@ import {
 	UseSelectReturnValue,
 } from "downshift";
 import Option from "./Option";
-import { Plus, X } from "lucide-react";
+import { PlusCircle, XCircle } from "lucide-react";
 
 interface MultiSelectFieldProps
 	extends UseMultipleSelectionReturnValue<Option>,
@@ -35,9 +35,9 @@ export default function MultiSelectField({
 	getItemProps,
 }: MultiSelectFieldProps) {
 	return (
-		<div className="mb-3 max-w-lg">
+		<div className="mb-3 max-w-lg text-sm">
 			<div className="flex flex-col gap-1">
-				<label className="w-fit text-sm" {...getLabelProps()}>
+				<label className="w-fit" {...getLabelProps()}>
 					{label}
 				</label>
 				<div className="w-full py-1 px-2 border rounded-lg bg-white inline-flex gap-2 items-center flex-wrap focus-within:border-gray-400">
@@ -45,15 +45,17 @@ export default function MultiSelectField({
 						function renderSelectedItem(selectedItemForRender, index) {
 							return (
 								<div
-									className="bg-primary-300 rounded-md py-0.5 px-2 focus:bg-red-300 inline gap-1"
+									className="bg-primary-300 rounded-md py-0.5 px-2 focus:bg-red-300 inline-flex items-center  gap-1"
 									key={`selected-item-${index}`}
 									{...getSelectedItemProps({
 										selectedItem: selectedItemForRender,
 										index,
 									})}
 								>
-									<span className="text-sm">{selectedItemForRender.label}</span>
-									<X
+									<span className="inline-block">
+										{selectedItemForRender.label}
+									</span>
+									<XCircle
 										className="inline-block w-4 h-4 cursor-pointer"
 										onClick={(e) => {
 											e.stopPropagation();
@@ -65,13 +67,13 @@ export default function MultiSelectField({
 						},
 					)}
 					<div
-						className="px-2 py-1 outline-2 outline-gray-400 cursor-pointer focus:bg-gray-200"
+						className="inline-flex items-center px-2 py-1 outline-2 outline-gray-400 cursor-pointer focus:bg-gray-200"
 						{...getToggleButtonProps(
 							getDropdownProps({ preventKeyAction: isOpen }),
 						)}
 					>
-						<span>Add</span>
-						<Plus className="inline-block ml-1 w-4 h-4" />
+						<span className="inline-block">Add</span>
+						<PlusCircle className="inline-block ml-1 w-3.5 h-3.5" />
 					</div>
 				</div>
 			</div>
