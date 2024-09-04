@@ -8,6 +8,7 @@ interface RadioFieldProps {
 	name: string;
 	label: React.ReactNode;
 	value?: string;
+	onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 	onValueChange: (value: string) => void;
 	variant?: "horizontal" | "vertical";
 	className?: string;
@@ -28,6 +29,7 @@ export default function RadioField({
 	fieldsetClassName: propsFieldsetClassName,
 	items,
 	value,
+	onChange,
 	onValueChange,
 	children,
 	errors,
@@ -50,6 +52,14 @@ export default function RadioField({
 		propsFieldsetClassName,
 	);
 
+	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		onValueChange(e.target.value);
+
+		if (onChange) {
+			onChange(e);
+		}
+	};
+
 	return (
 		<div className={className}>
 			<fieldset className={fieldsetClassName}>
@@ -64,8 +74,9 @@ export default function RadioField({
 							name={name}
 							value={item.value}
 							checked={item.value === value}
-							onChange={() => onValueChange(item.value)}
+							onChange={handleChange}
 							className={radioClassName}
+							required={required}
 						>
 							{item.label}
 						</Radio>

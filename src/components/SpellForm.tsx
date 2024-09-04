@@ -18,6 +18,7 @@ import { Pencil, Plus } from "lucide-react";
 import { Form } from "react-router-dom";
 import SearchableMultiSelectField from "./ui/SearchableMultiSelectField";
 import { useSearchableMultiSelectField } from "./ui/useSearchableMultiSelectField";
+import TRADITIONS from "@/domain/types/Traditions";
 
 export interface SpellFormFields {
 	name?: string;
@@ -43,12 +44,10 @@ export interface SpellFormFields {
 	heightenedEffects?: HeightenedEffect[];
 }
 
-const TRADITIONS = [
-	{ value: "Arcane", label: "Arcane" },
-	{ value: "Divine", label: "Divine" },
-	{ value: "Occult", label: "Occult" },
-	{ value: "Primal", label: "Primal" },
-];
+const TRADITION_OPTIONS = TRADITIONS.map((tradition) => ({
+	value: tradition,
+	label: tradition,
+}));
 
 const CAST_ACTIONS = [
 	{ value: "1", label: <span title="1 Action">◆</span> },
@@ -160,7 +159,7 @@ export default function SpellForm({
 					label="Traditions"
 					name="traditions"
 					{...useMultiSelectField({
-						items: TRADITIONS,
+						items: TRADITION_OPTIONS,
 						serverValues: fields?.traditions,
 						serverErrors: errors?.traditions,
 					})}
@@ -317,4 +316,3 @@ export default function SpellForm({
 		</div>
 	);
 }
-

@@ -7,6 +7,9 @@ export default async function action({ request }: LoaderFunctionArgs) {
 
 	const fields = {
 		name: getFormStringValue(formData, "name"),
+		clazz: getFormStringValue(formData, "clazz"),
+		tradition: getFormStringValue(formData, "tradition"),
+		kind: getFormStringValue(formData, "kind"),
 	};
 
 	const create = await spellbookCreate(fields);

@@ -3,19 +3,14 @@ import Spell from "./Spell";
 export default interface Spellbook {
 	id: number;
 	name: string;
+	tradition: string;
+	kind: "prepared" | "spontaneous";
 	learnedSpells: Spell[];
-	spellSlots: SpellSlots;
+	spellSlots: SpellSlot[];
 }
 
-interface SpellSlots {
-	"0": number;
-	"1": number;
-	"2": number;
-	"3": number;
-	"4": number;
-	"5": number;
-	"6": number;
-	"7": number;
-	"8": number;
-	"9": number;
+interface SpellSlot {
+	level: number;
+	preparedSpellId?: number;
+	special?: string;
 }
