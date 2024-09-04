@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useCallback, useContext } from "react";
 import { UserPrefsContext, UserPrefsSetContext, UserPrefs } from "./userPrefs";
 
 export function useUserPrefs() {
@@ -9,9 +9,13 @@ export function useUserPrefs() {
 		throw new Error("usePrefs must be used within a UserPrefsProvider");
 	}
 
-	const setUserPrefs = (newPrefs: Partial<UserPrefs>) => {
-		dispatch({ type: "set", payload: newPrefs });
-	};
+	// Memoize the function so that it can be used in useEffect dependencies
+	const setUserPrefs = useCallback(
+		(newPrefs: Partial<UserPrefs>) => {
+			dispatch({ type: "set", payload: newPrefs });
+		},
+		[dispatch],
+	);
 
 	return {
 		userPrefs,

@@ -1,11 +1,19 @@
 import ButtonLink from "@/components/ui/ButtonLink";
+import { useUserPrefs } from "@/useUserPrefs";
 import { Plus } from "lucide-react";
+import { useEffect } from "react";
 import { Link, useLoaderData } from "react-router-dom";
 
 export default function SpellbooksIndex() {
 	const { spellbooks } = useLoaderData() as {
 		spellbooks: { id: string; name: string }[];
 	};
+
+	const { setUserPrefs } = useUserPrefs();
+
+	useEffect(() => {
+		setUserPrefs({ activeCharacterId: null });
+	}, [setUserPrefs]);
 
 	return (
 		<div>
@@ -29,3 +37,4 @@ export default function SpellbooksIndex() {
 		</div>
 	);
 }
+
