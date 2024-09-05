@@ -7,6 +7,7 @@ import useSelectField from "@/components/ui/useSelectField";
 import useTextField from "@/components/ui/useTextField";
 import { Plus } from "lucide-react";
 import { Form, useActionData } from "react-router-dom";
+import { FormFields } from "./action";
 
 const CLASSES = [
 	{
@@ -46,7 +47,7 @@ export default function NewSpellbook() {
 		| {
 				error: string;
 				errors?: Record<string, string[]>;
-				fields: Record<string, string>;
+				fields: FormFields;
 		  }
 		| undefined;
 
@@ -126,6 +127,28 @@ export default function NewSpellbook() {
 					]}
 					{...traditionRadioField}
 				/>
+				<div className="mb-3">
+					<fieldset>
+						<legend>Spell slots</legend>
+						<p className="text-sm mb-2 text-gray-700">
+							Enter the number of spell slots you have for each spell level.
+						</p>
+						<div className="flex flex-wrap gap-1 max-w-lg">
+							<SpellSlotField
+								serverValue={actionData?.fields.spellslots[0] ?? "5"}
+								level={0}
+							/>
+							{[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((level) => (
+								<SpellSlotField
+									key={level}
+									serverValue={actionData?.fields.spellslots[level] ?? "0"}
+									serverErrors={actionData?.errors?.[`spellslots${level}`]}
+									level={level}
+								/>
+							))}
+						</div>
+					</fieldset>
+				</div>
 				{actionData?.error ? (
 					<div className="text-red-500">{actionData.error}</div>
 				) : null}
@@ -136,6 +159,35 @@ export default function NewSpellbook() {
 					</Button>
 				</div>
 			</Form>
+		</div>
+	);
+}
+
+function SpellSlotField({
+	serverValue,
+	serverErrors,
+	level,
+}: {
+	serverValue: string;
+	serverErrors?: string[];
+	level: number;
+}) {
+	const spellSlotField = useTextField({
+		serverValue,
+		serverErrors,
+	});
+
+	const isCantrip = level === 0;
+
+	return (
+		<div>
+			<TextField
+				className="w-24"
+				label={isCantrip ? "Cantrip" : `Spell ${level}`}
+				type="number"
+				name={`spellslots${level}`}
+				{...spellSlotField}
+			/>
 		</div>
 	);
 }
