@@ -15,8 +15,6 @@ export default function SpellbookPage() {
 		setUserPrefs({ activeCharacterId: spellbook.id });
 	}, [spellbook.id, setUserPrefs]);
 
-	console.log(spellbook);
-
 	return (
 		<div>
 			<div className="flex justify-between gap-2">
@@ -45,9 +43,9 @@ export default function SpellbookPage() {
 
 			<h2>Learned Spells</h2>
 			<ul>
-				<li>Spell 1</li>
-				<li>Spell 2</li>
-				<li>Spell 3</li>
+				{spellbook.learnedSpells.map((spell) => (
+					<li key={spell.id}>{spell.name}</li>
+				))}
 			</ul>
 			<ButtonLink to={`/spellbooks/${spellbook.id}/learn`} variant="primary">
 				<Plus className="h-4 w-4 mr-2" />
