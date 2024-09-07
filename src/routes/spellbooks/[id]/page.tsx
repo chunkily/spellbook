@@ -1,14 +1,23 @@
+import Button from "@/components/ui/Button";
 import ButtonLink from "@/components/ui/ButtonLink";
+import Modal, {
+	ModalBody,
+	ModalFooter,
+	ModalHeader,
+} from "@/components/ui/Modal";
+import Spell from "@/domain/types/Spell";
 import Spellbook, { SpellSlot } from "@/domain/types/Spellbook";
 import { useUserPrefs } from "@/useUserPrefs";
 import { Pen, Plus, Trash } from "lucide-react";
-import { useEffect } from "react";
-import { useLoaderData } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Form, useLoaderData } from "react-router-dom";
 
 export default function SpellbookPage() {
 	const { spellbook } = useLoaderData() as {
 		spellbook: Spellbook;
 	};
+	const [spellToRemove, setSpellToRemove] = useState<Spell | null>(null);
+
 	const { setUserPrefs } = useUserPrefs();
 
 	useEffect(() => {
@@ -44,13 +53,60 @@ export default function SpellbookPage() {
 			<h2>Learned Spells</h2>
 			<ul>
 				{spellbook.learnedSpells.map((spell) => (
-					<li key={spell.id}>{spell.name}</li>
+					<li key={spell.id}>
+						{spell.name}
+						<Button
+							className="ml-2"
+							title="remove"
+							variant="danger"
+							onClick={() => setSpellToRemove(spell)}
+						>
+							<Trash className="w-4 h-4" />
+						</Button>
+					</li>
 				))}
 			</ul>
 			<ButtonLink to={`/spellbooks/${spellbook.id}/learn`} variant="primary">
 				<Plus className="h-4 w-4 mr-2" />
 				Add a Spell to the Spellbook
 			</ButtonLink>
+			<Modal
+				isOpen={spellToRemove !== null}
+				onClose={() => setSpellToRemove(null)}
+			>
+				<ModalHeader>Remove Spell</ModalHeader>
+				<ModalBody>
+					<div className="p-4">
+						<h2>Are you sure you want to remove {spellToRemove?.name}?</h2>
+						<div className="flex justify-between gap-2"></div>
+					</div>
+				</ModalBody>
+				<ModalFooter>
+					<div className="flex gap-1">
+						<Form
+							method="post"
+							onSubmit={() => {
+								setSpellToRemove(null);
+							}}
+						>
+							<input type="hidden" name="spellId" value={spellToRemove?.id} />
+							<input type="hidden" name="action" value="remove" />
+							<Button type="submit" variant="danger">
+								Remove
+							</Button>
+						</Form>
+						<Button
+							className="ml-auto"
+							variant="secondary"
+							onClick={() => {
+								setSpellToRemove(null);
+							}}
+						>
+							Cancel
+						</Button>
+					</div>
+				</ModalFooter>
+			</Modal>
 		</div>
 	);
 }

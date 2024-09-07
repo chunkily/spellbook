@@ -1,7 +1,7 @@
 import db from "@/utils/db";
 import MaybeError, { ErrorResult, SuccessResult } from "../MaybeError";
 
-export default async function spellbookAddSpell(
+export default async function spellbookRemoveSpell(
 	spellbookId: number,
 	spellId: string | undefined,
 ): Promise<MaybeError<string>> {
@@ -21,22 +21,15 @@ export default async function spellbookAddSpell(
 		return ErrorResult("Invalid spell id");
 	}
 
-	const spell = await db.spells.get(spellIdNumber);
-
-	if (!spell) {
-		return ErrorResult("Spell not found");
+	if (!spellbook.learnedSpells.some((s) => s.id === spellIdNumber)) {
+		// Is this an error?
+		return SuccessResult();
 	}
-
-	if (spellbook.learnedSpells.some((s) => s.id === spellIdNumber)) {
-		return ErrorResult("Spell already learned");
-	}
-
-	const sortedLearnedSpells = [...spellbook.learnedSpells, spell].sort((a, b) =>
-		a.name.localeCompare(b.name),
-	);
 
 	await db.spellbooks.update(spellbookId, {
-		learnedSpells: sortedLearnedSpells,
+		learnedSpells: spellbook.learnedSpells.filter(
+			(s) => s.id !== spellIdNumber,
+		),
 	});
 
 	return SuccessResult();

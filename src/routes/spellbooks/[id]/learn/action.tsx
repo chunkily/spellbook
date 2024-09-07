@@ -1,6 +1,7 @@
 import spellbookAddSpell from "@/domain/actions/spellbookAddSpell";
 import getFormStringValue from "@/utils/getFormStringValue";
 import parseId from "@/utils/parseId";
+import { triggerSuccessToast } from "@/utils/toasts";
 import { ActionFunctionArgs, json, redirect } from "react-router-dom";
 
 export default async function action({ request, params }: ActionFunctionArgs) {
@@ -13,6 +14,7 @@ export default async function action({ request, params }: ActionFunctionArgs) {
 	const result = await spellbookAddSpell(spellbookId, spellId);
 
 	if (result.isSuccess) {
+		triggerSuccessToast("Spell added to spellbook");
 		return redirect(`/spellbooks/${spellbookId}`);
 	}
 

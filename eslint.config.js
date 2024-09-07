@@ -34,7 +34,8 @@ export default tseslint.config(
 					"varsIgnorePattern": "^_",
 					"ignoreRestSiblings": true
 				}
-			]
+			],
+			"react/jsx-no-leaked-render": "warn",
 		},
 	},
 );
