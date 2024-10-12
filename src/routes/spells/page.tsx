@@ -40,11 +40,24 @@ export default function SpellsPage() {
 			</div>
 			<ul>
 				{spells.map((spell) => (
-					<li key={spell.id}>
-						<Link to={`/spells/${spell.id}`}>{spell.name}</Link>
-					</li>
+					<SpellListItem spell={spell} />
 				))}
+				{spells.length === 0 && <li>No spells found</li>}
 			</ul>
 		</div>
+	);
+}
+
+function SpellListItem({ spell }: { spell: Spell }) {
+	const { id, name, level } = spell;
+
+	const levelText = level === 0 ? "Cantrip" : `Spell ${level}`;
+
+	return (
+		<li key={id}>
+			<Link to={`/spells/${id}`}>
+				<span className="font-bold">{name}</span> ({levelText})
+			</Link>
+		</li>
 	);
 }
