@@ -3,6 +3,7 @@ import RadioField from "@/components/ui/RadioField";
 import TextField from "@/components/ui/TextField";
 import useRadioField from "@/components/ui/useRadioField";
 import useTextField from "@/components/ui/useTextField";
+import { SpellSearchResponse } from "@/domain/actions/spellSearch";
 import Spell from "@/domain/types/Spell";
 import {
 	Plus,
@@ -14,11 +15,13 @@ import {
 import { Form, Link, useLoaderData, useSubmit } from "react-router-dom";
 
 export default function SpellsPage() {
-	const { spells, searchFields } = useLoaderData() as {
-		spells: Spell[];
+	const { response, searchFields } = useLoaderData() as {
+		response: SpellSearchResponse;
 		searchFields: { q: string | undefined; sort: string | undefined };
 	};
 	const submit = useSubmit();
+
+	const keys = Object.keys(response);
 
 	return (
 		<div>
@@ -63,10 +66,24 @@ export default function SpellsPage() {
 				</ButtonLink>
 			</div>
 			<ul>
-				{spells.map((spell) => (
-					<SpellListItem spell={spell} />
+				{keys.map((key) => (
+					<SpellList key={key} group={key} spells={response[key]} />
 				))}
-				{spells.length === 0 && <li>No spells found</li>}
+				{keys.length === 0 && <li>No spells found</li>}
+			</ul>
+		</div>
+	);
+}
+
+function SpellList({ spells, group }: { spells: Spell[]; group: string }) {
+	return (
+		<div className="max-w-lg">
+			<h2 className="text-lg font-bold mt-4">{group}</h2>
+			<hr className="mb-2 border-black" />
+			<ul>
+				{spells.map((spell) => (
+					<SpellListItem key={spell.id} spell={spell} />
+				))}
 			</ul>
 		</div>
 	);

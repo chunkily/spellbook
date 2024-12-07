@@ -6,10 +6,14 @@ interface SearchParams {
 	sort?: string;
 }
 
+export interface SpellSearchResponse {
+	[key: string]: Spell[];
+}
+
 export default async function spellSearch({
 	search,
 	sort,
-}: SearchParams): Promise<Spell[]> {
+}: SearchParams): Promise<SpellSearchResponse> {
 	let spells: Spell[];
 	if (!search) {
 		spells = await db.spells.toArray();
@@ -22,15 +26,50 @@ export default async function spellSearch({
 
 	spells = spells.sort((a, b) => a.name.localeCompare(b.name));
 
-	if (sort === "-name") {
-		spells = spells.reverse();
-	} else if (sort === "level") {
-		spells = spells.sort((a, b) => a.level - b.level);
-	} else if (sort === "-level") {
-		spells = spells.sort((a, b) => b.level - a.level);
+	if (!sort) {
+		sort = "name";
 	}
 
-	return spells;
+	if (sort === "name") {
+		return groupByFirstLetter(spells);
+	} else if (sort === "-name") {
+		return groupByFirstLetter(spells.reverse());
+	} else if (sort === "level") {
+		return groupByLevel(spells.sort((a, b) => a.level - b.level));
+	} else if (sort === "-level") {
+		return groupByLevel(spells.sort((a, b) => b.level - a.level));
+	} else {
+		throw new Error("Invalid sort parameter");
+	}
+}
+
+function groupByFirstLetter(spells: Spell[]): SpellSearchResponse {
+	return spells.reduce((acc: { [key: string]: Spell[] }, spell) => {
+		const key = spell.name[0].toUpperCase();
+		if (!acc[key]) {
+			acc[key] = [];
+		}
+		acc[key].push(spell);
+		return acc;
+	}, {});
+}
+
+function groupByLevel(spells: Spell[]): SpellSearchResponse {
+	return spells.reduce((acc: { [key: string]: Spell[] }, spell) => {
+		const key = spellLevelDisplay(spell.level);
+		if (!acc[key]) {
+			acc[key] = [];
+		}
+		acc[key].push(spell);
+		return acc;
+	}, {});
+}
+
+function spellLevelDisplay(level: number): string {
+	if (level === 0) {
+		return "Cantrip";
+	}
+	return `Level ${level}`;
 }
 
 function safeRegex(value: string): string {
