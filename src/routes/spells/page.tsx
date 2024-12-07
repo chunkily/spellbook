@@ -1,14 +1,22 @@
 import ButtonLink from "@/components/ui/ButtonLink";
+import RadioField from "@/components/ui/RadioField";
 import TextField from "@/components/ui/TextField";
+import useRadioField from "@/components/ui/useRadioField";
 import useTextField from "@/components/ui/useTextField";
 import Spell from "@/domain/types/Spell";
-import { Plus } from "lucide-react";
+import {
+	Plus,
+	ArrowDownAZ,
+	ArrowDownZA,
+	ArrowDown01,
+	ArrowDown10,
+} from "lucide-react";
 import { Form, Link, useLoaderData, useSubmit } from "react-router-dom";
 
 export default function SpellsPage() {
 	const { spells, searchFields } = useLoaderData() as {
 		spells: Spell[];
-		searchFields: { q: string | undefined };
+		searchFields: { q: string | undefined; sort: string | undefined };
 	};
 	const submit = useSubmit();
 
@@ -29,6 +37,22 @@ export default function SpellsPage() {
 					type="search"
 					{...useTextField({
 						serverValue: searchFields.q,
+					})}
+				/>
+				<RadioField
+					name={"sort"}
+					label={"Sort"}
+					items={[
+						{ label: <ArrowDownAZ className="inline-block" />, value: "name" },
+						{ label: <ArrowDownZA className="inline-block" />, value: "-name" },
+						{ label: <ArrowDown01 className="inline-block" />, value: "level" },
+						{
+							label: <ArrowDown10 className="inline-block" />,
+							value: "-level",
+						},
+					]}
+					{...useRadioField({
+						serverValue: searchFields.sort,
 					})}
 				/>
 			</Form>

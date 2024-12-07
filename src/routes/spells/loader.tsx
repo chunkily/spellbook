@@ -5,15 +5,18 @@ import { json, LoaderFunctionArgs } from "react-router-dom";
 export default async function loader({ request }: LoaderFunctionArgs) {
 	const url = new URL(request.url);
 	const q = url.searchParams.get("q") ?? undefined;
+	const sort = url.searchParams.get("sort") ?? "name";
 
 	const spells: Spell[] = await spellSearch({
 		search: q,
+		sort,
 	});
 
 	return json({
 		spells,
 		searchFields: {
 			q,
+			sort,
 		},
 	});
 }

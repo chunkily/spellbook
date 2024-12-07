@@ -3,10 +3,12 @@ import Spell from "../types/Spell";
 
 interface SearchParams {
 	search?: string;
+	sort?: string;
 }
 
 export default async function spellSearch({
 	search,
+	sort,
 }: SearchParams): Promise<Spell[]> {
 	let spells: Spell[];
 	if (!search) {
@@ -18,7 +20,17 @@ export default async function spellSearch({
 			.toArray();
 	}
 
-	return spells.sort((a, b) => a.name.localeCompare(b.name));
+	spells = spells.sort((a, b) => a.name.localeCompare(b.name));
+
+	if (sort === "-name") {
+		spells = spells.reverse();
+	} else if (sort === "level") {
+		spells = spells.sort((a, b) => a.level - b.level);
+	} else if (sort === "-level") {
+		spells = spells.sort((a, b) => b.level - a.level);
+	}
+
+	return spells;
 }
 
 function safeRegex(value: string): string {
