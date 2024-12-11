@@ -2,7 +2,7 @@ import { useId } from "react";
 import { twMerge } from "tailwind-merge";
 import ErrorList from "./ErrorList";
 import TextInput from "./TextInput";
-import { useFormField } from "./Form";
+import useFormField from "../form/useFormField";
 
 interface TextFieldProps
 	extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "defaultValue"> {
@@ -40,6 +40,8 @@ export default function TextField({
 
 		if (required && !e.target.value) {
 			field.setErrors(["This field is required"]);
+		} else {
+			field.setErrors([]);
 		}
 
 		if (propsOnChange) {

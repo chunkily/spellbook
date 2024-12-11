@@ -2,7 +2,7 @@ import { useCombobox } from "downshift";
 import { SearchableOption } from "./Option";
 import React, { useMemo, useState } from "react";
 import Button from "./Button";
-import { useFormField } from "./Form";
+import useFormField from "../form/useFormField";
 import ErrorList from "./ErrorList";
 
 interface SearchableSelectFieldProps

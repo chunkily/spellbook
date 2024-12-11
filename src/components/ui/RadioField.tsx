@@ -3,7 +3,7 @@ import { twMerge } from "tailwind-merge";
 import Option from "./Option";
 import Radio from "./Radio";
 import ErrorList from "./ErrorList";
-import { useFormField } from "./Form";
+import useFormField from "../form/useFormField";
 
 interface RadioFieldProps {
 	name: string;

@@ -1,6 +1,6 @@
 import { useId } from "react";
 import { twMerge } from "tailwind-merge";
-import { useFormField } from "./Form";
+import { useBooleanFormField } from "../form/useFormField";
 
 interface CheckboxProps
 	extends Omit<
@@ -10,15 +10,11 @@ interface CheckboxProps
 	name: string;
 	label?: React.ReactNode;
 	children?: React.ReactNode;
-	valueIfTrue?: string;
-	valueIfFalse?: string;
 }
 
 export default function Checkbox({
 	id,
 	name,
-	valueIfTrue = "true",
-	valueIfFalse = "false",
 	onChange: propsOnChange,
 	className: propsClassName,
 	label,
@@ -28,12 +24,12 @@ export default function Checkbox({
 	const fallbackId = useId();
 	id = id || fallbackId;
 
-	const field = useFormField(name);
+	const field = useBooleanFormField(name);
 
-	const checked = field.value === valueIfTrue;
+	const checked = field.value;
 
 	const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		field.onValueChange(e.target.checked ? valueIfTrue : valueIfFalse);
+		field.onValueChange(e.target.checked);
 
 		if (propsOnChange) {
 			propsOnChange(e);
@@ -50,13 +46,11 @@ export default function Checkbox({
 				id={id}
 				type="checkbox"
 				name={name}
-				value={valueIfTrue}
+				value="true"
 				onChange={onChange}
 				{...rest}
 			/>
-			{!checked ? (
-				<input type="hidden" name={name} value={valueIfFalse} />
-			) : null}
+			{!checked ? <input type="hidden" name={name} value="false" /> : null}
 			<label className="ms-2 text-sm font-medium text-gray-900" htmlFor={id}>
 				{children}
 				{label}
@@ -64,4 +58,3 @@ export default function Checkbox({
 		</div>
 	);
 }
-

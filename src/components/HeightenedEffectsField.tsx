@@ -4,7 +4,7 @@ import Button from "./ui/Button";
 import Select from "./ui/Select";
 import TextInput from "./ui/TextInput";
 import { X } from "lucide-react";
-import { useFormField } from "./ui/Form";
+import useFormField from "./form/useFormField";
 
 interface HeightenedEffectsFieldProps {
 	name: string;
@@ -85,7 +85,7 @@ export default function HeightenedEffectsField({
 			>
 				<legend className="text-sm mb-1">Heightened Effects</legend>
 				{heightenedEffects.map((h) => (
-					<div className="flex mb-2 gap-1">
+					<div className="flex mb-2 gap-1" key={h.id}>
 						<Select
 							className="w-2/12"
 							value={h.select}

@@ -1,7 +1,7 @@
 import { useCombobox, useMultipleSelection } from "downshift";
 import { SearchableOption } from "./Option";
 import { XCircle } from "lucide-react";
-import { useFormField } from "./Form";
+import { useStringArrayFormField } from "../form/useFormField";
 import { useMemo, useState } from "react";
 import ErrorList from "./ErrorList";
 
@@ -21,11 +21,11 @@ export default function SearchableMultiSelectField({
 	name,
 	items,
 }: SearchableMultiSelectFieldProps) {
-	const field = useFormField(name);
+	const field = useStringArrayFormField(name);
 
 	const [inputValue, setInputValue] = useState("");
 
-	const selectedItemIds = JSON.parse(field.value) ?? [];
+	const selectedItemIds = field.value;
 	const errors = field.errors;
 
 	const hasErrors = errors && errors.length > 0;
@@ -42,9 +42,7 @@ export default function SearchableMultiSelectField({
 	) => {
 		if (!newSelectedItems) return;
 
-		field.onValueChange(
-			JSON.stringify(newSelectedItems.map((item) => item.value)),
-		);
+		field.onValueChange(newSelectedItems.map((item) => item.value));
 		field.setErrors([]);
 	};
 
@@ -182,12 +180,12 @@ export default function SearchableMultiSelectField({
 			</div>
 			<ul
 				className={`absolute w-inherit bg-white mt-1 shadow-md max-h-80 overflow-scroll p-0 z-10 ${
-					!(isOpen && items.length) && "hidden"
+					!(isOpen && filteredItems.length) && "hidden"
 				}`}
 				{...getMenuProps()}
 			>
 				{isOpen &&
-					items.map((item, index) => (
+					filteredItems.map((item, index) => (
 						<li
 							className={cx(
 								highlightedIndex === index && "bg-blue-300",

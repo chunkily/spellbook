@@ -11,7 +11,8 @@ import { Pencil, Plus } from "lucide-react";
 import { Form } from "react-router-dom";
 import SearchableMultiSelectField from "./ui/SearchableMultiSelectField";
 import TRADITIONS from "@/domain/types/Traditions";
-import { FormContextProvider, useFormContext } from "./ui/Form";
+import useFormContext from "@/components/form/useFormContext";
+import FormContextProvider from "@/components/form/FormContextProvider";
 
 export interface SpellFormFields {
 	name?: string;
@@ -64,36 +65,6 @@ interface SpellFormProps {
 	id?: number;
 }
 
-function transformFields(
-	fields: SpellFormFields | undefined,
-): Record<string, string> {
-	return {
-		name: fields?.name || "",
-		level: fields?.level || "",
-		traditions: fields?.traditions ? JSON.stringify(fields.traditions) : "[]",
-		traits: fields?.traits ? JSON.stringify(fields.traits) : "[]",
-		castAction: fields?.castAction || "",
-		castActionOther: fields?.castActionOther || "",
-		castTrigger: fields?.castTrigger || "",
-		"castCost.somatic": fields?.castCost?.somatic ? "true" : "false",
-		"castCost.material": fields?.castCost?.material ? "true" : "false",
-		"castCost.verbal": fields?.castCost?.verbal ? "true" : "false",
-		"castCost.otherCheckbox": fields?.castCost?.otherCheckbox
-			? "true"
-			: "false",
-		"castCost.other": fields?.castCost?.other || "",
-		range: fields?.range || "",
-		area: fields?.area || "",
-		targets: fields?.targets || "",
-		savingThrow: fields?.savingThrow || "",
-		duration: fields?.duration || "",
-		description: fields?.description || "",
-		heightenedEffects: fields?.heightenedEffects
-			? JSON.stringify(fields.heightenedEffects)
-			: "[]",
-	};
-}
-
 export default function SpellForm({
 	fields,
 	errors,
@@ -102,16 +73,22 @@ export default function SpellForm({
 	id,
 }: SpellFormProps) {
 	const formContext = useFormContext({
-		serverFields: transformFields(fields),
+		serverValues: {
+			...fields,
+			heightenedEffects: fields?.heightenedEffects
+				? JSON.stringify(fields.heightenedEffects)
+				: "[]",
+		},
 		serverErrors: errors,
 	});
 
-	const isOtherCastAction = formContext.state.fields["castAction"] === "other";
+	const isOtherCastAction = formContext.getField("castAction") === "other";
 
-	const isReactionCastAction = formContext.state.fields["castAction"] === "R";
+	const isReactionCastAction = formContext.getField("castAction") === "R";
 
-	const isCastCostOtherCheckboxChecked =
-		formContext.state.fields["castCost.otherCheckbox"] === "true";
+	const isCastCostOtherCheckboxChecked = formContext.getBooleanField(
+		"castCost.otherCheckbox",
+	);
 
 	return (
 		<div>
@@ -184,7 +161,12 @@ export default function SpellForm({
 						</SelectField>
 						<TextField className="flex-1" label="Duration" name="duration" />
 					</div>
-					<TextAreaField label="Description" name="description" rows={8} />
+					<TextAreaField
+						label="Description"
+						name="description"
+						rows={8}
+						required
+					/>
 					<HeightenedEffectsField name="heightenedEffects" />
 					<div className="lg:col-span-2"></div>
 

@@ -5,7 +5,8 @@ import TextField from "@/components/ui/TextField";
 import { Plus } from "lucide-react";
 import { Form, useActionData } from "react-router-dom";
 import { FormFields } from "./action";
-import { useFormContext } from "@/components/ui/Form";
+import useFormContext from "@/components/form/useFormContext";
+import FormContextProvider from "@/components/form/FormContextProvider";
 
 const CLASSES = [
 	{
@@ -67,26 +68,9 @@ export default function NewSpellbook() {
 		| undefined;
 
 	const formContext = useFormContext({
-		serverFields: transformFields(actionData?.fields),
+		serverValues: transformFields(actionData?.fields),
 		serverErrors: actionData?.errors ?? {},
 	});
-
-	// const classSelectField = useSelectField({
-	// 	serverValue: actionData?.fields.clazz,
-	// 	serverErrors: actionData?.errors?.clazz,
-	// });
-
-	// const kindRadioField = useRadioField({
-	// 	serverValue: actionData?.fields.kind,
-	// 	serverErrors: actionData?.errors?.kind,
-	// 	required: true,
-	// });
-
-	// const traditionRadioField = useRadioField({
-	// 	serverValue: actionData?.fields.tradition,
-	// 	serverErrors: actionData?.errors?.tradition,
-	// 	required: true,
-	// });
 
 	const classOnChange = (value: string) => {
 		const selectedClass = CLASSES.find((c) => c.name === value);
@@ -112,70 +96,70 @@ export default function NewSpellbook() {
 	return (
 		<div>
 			<h1 className="text-xl">New Spellbook</h1>
-			<Form method="post" className="max-w-lg">
-				<TextField
-					label="Name"
-					type="text"
-					name="name"
-					placeholder="Enter the name of your character"
-					required
-				/>
+			<FormContextProvider formContext={formContext}>
+				<Form method="post" className="max-w-lg">
+					<TextField
+						label="Name"
+						type="text"
+						name="name"
+						placeholder="Enter the name of your character"
+						required
+					/>
 
-				<SelectField
-					label="Class"
-					name="clazz"
-					items={CLASSES.map((c) => ({
-						value: c.name,
-						label: c.name,
-					}))}
-					onChange={(e) => classOnChange(e.target.value)}
-				>
-					<option value="">Select a class</option>
-				</SelectField>
-				<RadioField
-					label="Kind"
-					name="kind"
-					onChange={() => classOnChange("Custom")}
-					items={[
-						{ value: "prepared", label: "Prepared" },
-						{ value: "spontaneous", label: "Spontaneous" },
-					]}
-				/>
-				<RadioField
-					label="Tradition"
-					name="tradition"
-					onChange={() => classOnChange("Custom")}
-					items={[
-						{ value: "Arcane", label: "Arcane" },
-						{ value: "Divine", label: "Divine" },
-						{ value: "Occult", label: "Occult" },
-						{ value: "Primal", label: "Primal" },
-					]}
-				/>
-				<div className="mb-3">
-					<fieldset>
-						<legend>Spell slots</legend>
-						<p className="text-sm mb-2 text-gray-700">
-							Enter the number of spell slots you have for each spell level.
-						</p>
-						<div className="flex flex-wrap gap-1 max-w-lg">
-							<SpellSlotField level={0} />
-							{[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((level) => (
-								<SpellSlotField key={level} level={level} />
-							))}
-						</div>
-					</fieldset>
-				</div>
-				{actionData?.error ? (
-					<div className="text-red-500">{actionData.error}</div>
-				) : null}
-				<div className="flex justify-end">
-					<Button type="submit">
-						<Plus className="w-4 h-4 mr-2" />
-						Create
-					</Button>
-				</div>
-			</Form>
+					<SelectField
+						label="Class"
+						name="clazz"
+						items={CLASSES.map((c) => ({
+							value: c.name,
+							label: c.name,
+						}))}
+						onChange={(e) => classOnChange(e.target.value)}
+					>
+						<option value="">Select a class</option>
+					</SelectField>
+					<RadioField
+						label="Kind"
+						name="kind"
+						items={[
+							{ value: "prepared", label: "Prepared" },
+							{ value: "spontaneous", label: "Spontaneous" },
+						]}
+					/>
+					<RadioField
+						label="Tradition"
+						name="tradition"
+						items={[
+							{ value: "Arcane", label: "Arcane" },
+							{ value: "Divine", label: "Divine" },
+							{ value: "Occult", label: "Occult" },
+							{ value: "Primal", label: "Primal" },
+						]}
+					/>
+					<div className="mb-3">
+						<fieldset>
+							<legend>Spell slots</legend>
+							<p className="text-sm mb-2 text-gray-700">
+								Enter the number of spell slots you have for each spell level.
+							</p>
+							<div className="flex flex-wrap gap-1 max-w-lg">
+								<SpellSlotField level={0} />
+								{[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((level) => (
+									<SpellSlotField key={level} level={level} />
+								))}
+							</div>
+						</fieldset>
+					</div>
+					{actionData?.error ? (
+						<div className="text-red-500">{actionData.error}</div>
+					) : null}
+					<div className="flex justify-end">
+						<Button type="submit">
+							<Plus className="w-4 h-4 mr-2" />
+							Create
+						</Button>
+					</div>
+				</Form>
+			</FormContextProvider>
 		</div>
 	);
 }

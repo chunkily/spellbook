@@ -2,7 +2,7 @@ import { useId } from "react";
 import { twMerge } from "tailwind-merge";
 import ErrorList from "./ErrorList";
 import TextArea from "./TextArea";
-import { useFormField } from "./Form";
+import useFormField from "../form/useFormField";
 
 interface TextAreaFieldProps
 	extends Omit<
@@ -46,6 +46,8 @@ export default function TextAreaField({
 
 		if (required && !e.target.value) {
 			field.setErrors(["This field is required"]);
+		} else {
+			field.setErrors([]);
 		}
 
 		if (propsOnChange) {

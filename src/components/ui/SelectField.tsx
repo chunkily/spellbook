@@ -3,7 +3,7 @@ import ErrorList from "./ErrorList";
 import { twMerge } from "tailwind-merge";
 import Option, { OptionGroup } from "./Option";
 import Select from "./Select";
-import { useFormField } from "./Form";
+import useFormField from "../form/useFormField";
 
 interface SelectFieldProps
 	extends React.SelectHTMLAttributes<HTMLSelectElement> {
