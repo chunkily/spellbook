@@ -37,6 +37,8 @@ export default async function action({ request }: ActionFunctionArgs) {
 		heightenedEffects: JSON.parse(heightenedEffectsValue ?? "[]"),
 	};
 
+	console.log("action fields", fields);
+
 	const cmd = await spellCreate(fields);
 
 	if (cmd.isSuccess) {
@@ -54,3 +56,4 @@ export default async function action({ request }: ActionFunctionArgs) {
 		400,
 	);
 }
+

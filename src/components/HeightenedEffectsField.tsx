@@ -1,15 +1,13 @@
 import { HeightenedEffect } from "@/domain/types/Spell";
-import { useServerStateArray } from "@/utils/useServerState";
 import ErrorList from "./ui/ErrorList";
 import Button from "./ui/Button";
 import Select from "./ui/Select";
 import TextInput from "./ui/TextInput";
 import { X } from "lucide-react";
+import { useFormField } from "./ui/Form";
 
 interface HeightenedEffectsFieldProps {
 	name: string;
-	serverValues?: HeightenedEffect[];
-	serverErrors?: string[];
 }
 
 interface HeightenedEffectState {
@@ -19,20 +17,23 @@ interface HeightenedEffectState {
 }
 
 export default function HeightenedEffectsField({
-	serverValues,
-	serverErrors,
 	name,
 }: HeightenedEffectsFieldProps) {
-	const [heightenedEffects, setHeightenedEffects] =
-		useServerStateArray<HeightenedEffectState>(
-			serverValues?.map((h, idx) => ({
-				id: idx,
-				select: h.add ? `+${h.add}` : h.level.toString(),
-				effect: h.effect,
-			})) ?? [],
-		);
-	const [errors, setErrors] = useServerStateArray(serverErrors ?? []);
+	const field = useFormField(name);
 
+	const value = JSON.parse(field.value) as HeightenedEffect[];
+
+	const heightenedEffects = value.map((h, i) => ({
+		id: i,
+		select: h.add ? `+${h.add}` : h.level.toString(),
+		effect: h.effect,
+	}));
+
+	const setHeightenedEffects = (value: HeightenedEffectState[]) => {
+		field.onValueChange(JSON.stringify(value));
+	};
+
+	const errors = field.errors;
 	const hasErrors = errors.length > 0;
 
 	const handleAdd = () => {
@@ -79,7 +80,7 @@ export default function HeightenedEffectsField({
 		<div className="max-w-lg mb-3">
 			<fieldset
 				onChange={() => {
-					setErrors([]);
+					field.setErrors([]);
 				}}
 			>
 				<legend className="text-sm mb-1">Heightened Effects</legend>

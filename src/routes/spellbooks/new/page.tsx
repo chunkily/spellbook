@@ -2,12 +2,10 @@ import Button from "@/components/ui/Button";
 import RadioField from "@/components/ui/RadioField";
 import SelectField from "@/components/ui/SelectField";
 import TextField from "@/components/ui/TextField";
-import useRadioField from "@/components/ui/useRadioField";
-import useSelectField from "@/components/ui/useSelectField";
-import useTextField from "@/components/ui/useTextField";
 import { Plus } from "lucide-react";
 import { Form, useActionData } from "react-router-dom";
 import { FormFields } from "./action";
+import { useFormContext } from "@/components/ui/Form";
 
 const CLASSES = [
 	{
@@ -42,6 +40,23 @@ const CLASSES = [
 	},
 ];
 
+function transformFields(fields?: FormFields): Record<string, string> {
+	if (!fields) return {};
+
+	return {
+		name: fields.name ?? "",
+		clazz: fields.clazz ?? "",
+		tradition: fields.tradition ?? "",
+		kind: fields.kind ?? "",
+		...Object.fromEntries(
+			Object.entries(fields.spellslots).map(([level, value]) => [
+				`spellslots${level}`,
+				value ?? "",
+			]),
+		),
+	};
+}
+
 export default function NewSpellbook() {
 	const actionData = useActionData() as
 		| {
@@ -51,29 +66,46 @@ export default function NewSpellbook() {
 		  }
 		| undefined;
 
-	const classSelectField = useSelectField({
-		serverValue: actionData?.fields.clazz,
-		serverErrors: actionData?.errors?.clazz,
+	const formContext = useFormContext({
+		serverFields: transformFields(actionData?.fields),
+		serverErrors: actionData?.errors ?? {},
 	});
 
-	const kindRadioField = useRadioField({
-		serverValue: actionData?.fields.kind,
-		serverErrors: actionData?.errors?.kind,
-		required: true,
-	});
+	// const classSelectField = useSelectField({
+	// 	serverValue: actionData?.fields.clazz,
+	// 	serverErrors: actionData?.errors?.clazz,
+	// });
 
-	const traditionRadioField = useRadioField({
-		serverValue: actionData?.fields.tradition,
-		serverErrors: actionData?.errors?.tradition,
-		required: true,
-	});
+	// const kindRadioField = useRadioField({
+	// 	serverValue: actionData?.fields.kind,
+	// 	serverErrors: actionData?.errors?.kind,
+	// 	required: true,
+	// });
+
+	// const traditionRadioField = useRadioField({
+	// 	serverValue: actionData?.fields.tradition,
+	// 	serverErrors: actionData?.errors?.tradition,
+	// 	required: true,
+	// });
 
 	const classOnChange = (value: string) => {
 		const selectedClass = CLASSES.find((c) => c.name === value);
 		if (selectedClass) {
-			classSelectField.onValueChange(value);
-			kindRadioField.onValueChange(selectedClass.kind);
-			traditionRadioField.onValueChange(selectedClass.tradition);
+			formContext.dispatch({
+				type: "SET_FIELD",
+				fieldName: "clazz",
+				value: selectedClass.name,
+			});
+			formContext.dispatch({
+				type: "SET_FIELD",
+				fieldName: "kind",
+				value: selectedClass.kind,
+			});
+			formContext.dispatch({
+				type: "SET_FIELD",
+				fieldName: "tradition",
+				value: selectedClass.tradition,
+			});
 		}
 	};
 
@@ -86,11 +118,7 @@ export default function NewSpellbook() {
 					type="text"
 					name="name"
 					placeholder="Enter the name of your character"
-					{...useTextField({
-						serverValue: actionData?.fields.name,
-						serverErrors: actionData?.errors?.name,
-						required: true,
-					})}
+					required
 				/>
 
 				<SelectField
@@ -100,32 +128,29 @@ export default function NewSpellbook() {
 						value: c.name,
 						label: c.name,
 					}))}
-					{...classSelectField}
-					onValueChange={classOnChange} // Overriding the default onValueChange
+					onChange={(e) => classOnChange(e.target.value)}
 				>
 					<option value="">Select a class</option>
 				</SelectField>
 				<RadioField
 					label="Kind"
 					name="kind"
-					onChange={() => classSelectField.onValueChange("Custom")}
+					onChange={() => classOnChange("Custom")}
 					items={[
 						{ value: "prepared", label: "Prepared" },
 						{ value: "spontaneous", label: "Spontaneous" },
 					]}
-					{...kindRadioField}
 				/>
 				<RadioField
 					label="Tradition"
 					name="tradition"
-					onChange={() => classSelectField.onValueChange("Custom")}
+					onChange={() => classOnChange("Custom")}
 					items={[
 						{ value: "Arcane", label: "Arcane" },
 						{ value: "Divine", label: "Divine" },
 						{ value: "Occult", label: "Occult" },
 						{ value: "Primal", label: "Primal" },
 					]}
-					{...traditionRadioField}
 				/>
 				<div className="mb-3">
 					<fieldset>
@@ -134,17 +159,9 @@ export default function NewSpellbook() {
 							Enter the number of spell slots you have for each spell level.
 						</p>
 						<div className="flex flex-wrap gap-1 max-w-lg">
-							<SpellSlotField
-								serverValue={actionData?.fields.spellslots[0] ?? "5"}
-								level={0}
-							/>
+							<SpellSlotField level={0} />
 							{[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((level) => (
-								<SpellSlotField
-									key={level}
-									serverValue={actionData?.fields.spellslots[level] ?? "0"}
-									serverErrors={actionData?.errors?.[`spellslots${level}`]}
-									level={level}
-								/>
+								<SpellSlotField key={level} level={level} />
 							))}
 						</div>
 					</fieldset>
@@ -163,20 +180,7 @@ export default function NewSpellbook() {
 	);
 }
 
-function SpellSlotField({
-	serverValue,
-	serverErrors,
-	level,
-}: {
-	serverValue: string;
-	serverErrors?: string[];
-	level: number;
-}) {
-	const spellSlotField = useTextField({
-		serverValue,
-		serverErrors,
-	});
-
+function SpellSlotField({ level }: { level: number }) {
 	const isCantrip = level === 0;
 
 	return (
@@ -186,7 +190,6 @@ function SpellSlotField({
 				label={isCantrip ? "Cantrip" : `Spell ${level}`}
 				type="number"
 				name={`spellslots${level}`}
-				{...spellSlotField}
 			/>
 		</div>
 	);

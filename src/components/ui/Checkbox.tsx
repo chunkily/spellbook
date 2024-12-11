@@ -1,5 +1,6 @@
 import { useId } from "react";
 import { twMerge } from "tailwind-merge";
+import { useFormField } from "./Form";
 
 interface CheckboxProps
 	extends Omit<
@@ -9,8 +10,6 @@ interface CheckboxProps
 	name: string;
 	label?: React.ReactNode;
 	children?: React.ReactNode;
-	checked: boolean;
-	onCheckedChange: (checked: boolean) => void;
 	valueIfTrue?: string;
 	valueIfFalse?: string;
 }
@@ -20,8 +19,6 @@ export default function Checkbox({
 	name,
 	valueIfTrue = "true",
 	valueIfFalse = "false",
-	checked,
-	onCheckedChange,
 	onChange: propsOnChange,
 	className: propsClassName,
 	label,
@@ -31,8 +28,12 @@ export default function Checkbox({
 	const fallbackId = useId();
 	id = id || fallbackId;
 
+	const field = useFormField(name);
+
+	const checked = field.value === valueIfTrue;
+
 	const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		onCheckedChange(e.target.checked);
+		field.onValueChange(e.target.checked ? valueIfTrue : valueIfFalse);
 
 		if (propsOnChange) {
 			propsOnChange(e);
@@ -63,3 +64,4 @@ export default function Checkbox({
 		</div>
 	);
 }
+

@@ -2,14 +2,12 @@ import { useId } from "react";
 import { twMerge } from "tailwind-merge";
 import ErrorList from "./ErrorList";
 import TextInput from "./TextInput";
+import { useFormField } from "./Form";
 
 interface TextFieldProps
 	extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "defaultValue"> {
 	name: string;
-	value: string;
-	onValueChange: (value: string) => void;
 	label: React.ReactNode;
-	errors?: string[];
 	inputClassName?: string;
 }
 
@@ -18,14 +16,17 @@ export default function TextField({
 	inputClassName,
 	label,
 	id,
-	errors,
+	name,
 	required,
 	onChange: propsOnChange,
-	onValueChange,
 	...rest
 }: TextFieldProps) {
 	const fallbackId = useId();
 	id = id || fallbackId;
+
+	const field = useFormField(name);
+
+	const errors = field.errors;
 
 	const hasErrors = errors && errors.length > 0;
 	const errorId = `${id}-error`;
@@ -35,7 +36,11 @@ export default function TextField({
 	const className = twMerge(baseClassName, propClassName);
 
 	const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		onValueChange(e.target.value);
+		field.onValueChange(e.target.value);
+
+		if (required && !e.target.value) {
+			field.setErrors(["This field is required"]);
+		}
 
 		if (propsOnChange) {
 			propsOnChange(e);
@@ -52,15 +57,16 @@ export default function TextField({
 			</label>
 			<TextInput
 				id={id}
+				name={name}
 				className={inputClassName}
 				required={required}
 				onChange={onChange}
 				isInvalid={hasErrors}
 				errorId={errorId}
+				value={field.value}
 				{...rest}
 			/>
 			{hasErrors ? <ErrorList id={errorId} errors={errors} /> : null}
 		</div>
 	);
 }
-

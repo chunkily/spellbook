@@ -3,7 +3,7 @@ import { twMerge } from "tailwind-merge";
 
 interface TextInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
 	isInvalid?: boolean;
-	errorId?: string;
+	errorId?: string; // The ID of the error message for this input if any
 }
 
 const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
@@ -50,3 +50,4 @@ const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
 );
 
 export default TextInput;
+

@@ -3,19 +3,17 @@ import { twMerge } from "tailwind-merge";
 import Option from "./Option";
 import Radio from "./Radio";
 import ErrorList from "./ErrorList";
+import { useFormField } from "./Form";
 
 interface RadioFieldProps {
 	name: string;
 	label: React.ReactNode;
-	value?: string;
 	onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
-	onValueChange: (value: string) => void;
 	variant?: "horizontal" | "vertical";
 	className?: string;
 	radioClassName?: string;
 	fieldsetClassName?: string;
 	items?: Option[];
-	errors?: string[];
 	children?: React.ReactNode;
 	required?: boolean;
 }
@@ -28,15 +26,16 @@ export default function RadioField({
 	radioClassName,
 	fieldsetClassName: propsFieldsetClassName,
 	items,
-	value,
 	onChange,
-	onValueChange,
 	children,
-	errors,
 }: RadioFieldProps) {
 	const baseClassName = "mb-3 max-w-lg";
 
 	const className = twMerge(baseClassName, propClassName);
+
+	const field = useFormField(name);
+
+	const errors = field.errors;
 
 	const hasErrors = errors && errors.length > 0;
 
@@ -53,7 +52,7 @@ export default function RadioField({
 	);
 
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		onValueChange(e.target.value);
+		field.onValueChange(e.target.value);
 
 		if (onChange) {
 			onChange(e);
@@ -73,7 +72,7 @@ export default function RadioField({
 							key={item.value}
 							name={name}
 							value={item.value}
-							checked={item.value === value}
+							checked={item.value === field.value}
 							onChange={handleChange}
 							className={radioClassName}
 							required={required}

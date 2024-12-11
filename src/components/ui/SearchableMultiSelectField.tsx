@@ -1,17 +1,15 @@
-import {
-	UseComboboxReturnValue,
-	UseMultipleSelectionReturnValue,
-} from "downshift";
+import { useCombobox, useMultipleSelection } from "downshift";
 import { SearchableOption } from "./Option";
 import { XCircle } from "lucide-react";
+import { useFormField } from "./Form";
+import { useMemo, useState } from "react";
+import ErrorList from "./ErrorList";
 
 interface SearchableMultiSelectFieldProps
-	extends UseMultipleSelectionReturnValue<SearchableOption>,
-		UseComboboxReturnValue<SearchableOption>,
-		Omit<
-			React.SelectHTMLAttributes<HTMLSelectElement>,
-			"value" | "defaultValue"
-		> {
+	extends Omit<
+		React.SelectHTMLAttributes<HTMLSelectElement>,
+		"value" | "defaultValue"
+	> {
 	label: React.ReactNode;
 	name: string;
 	errors?: string[];
@@ -21,27 +19,126 @@ interface SearchableMultiSelectFieldProps
 export default function SearchableMultiSelectField({
 	label,
 	name,
-	selectedItems,
-	highlightedIndex,
-	selectedItem,
 	items,
-	isOpen,
-	getLabelProps,
-	getSelectedItemProps,
-	removeSelectedItem,
-	getToggleButtonProps,
-	getDropdownProps,
-	getMenuProps,
-	getItemProps,
-	getInputProps,
 }: SearchableMultiSelectFieldProps) {
+	const field = useFormField(name);
+
+	const [inputValue, setInputValue] = useState("");
+
+	const selectedItemIds = JSON.parse(field.value) ?? [];
+	const errors = field.errors;
+
+	const hasErrors = errors && errors.length > 0;
+
+	let baseInputClassName =
+		"w-full py-1 px-2 border rounded-lg bg-white inline-flex gap-2 items-center flex-wrap focus-within:border-gray-400";
+
+	if (hasErrors) {
+		baseInputClassName += " border-red-500";
+	}
+
+	const setSelectedItems = (
+		newSelectedItems: SearchableOption[] | undefined,
+	) => {
+		if (!newSelectedItems) return;
+
+		field.onValueChange(
+			JSON.stringify(newSelectedItems.map((item) => item.value)),
+		);
+		field.setErrors([]);
+	};
+
+	const selectedItems: SearchableOption[] = useMemo(() => {
+		return items.filter((item) => selectedItemIds.includes(item.value));
+	}, [items, selectedItemIds]);
+
+	const filteredItems = useMemo(() => {
+		const lowerCaseInputValue = inputValue.toLowerCase();
+		return items.filter((item) =>
+			item.text.toLowerCase().includes(lowerCaseInputValue),
+		);
+	}, [items, inputValue]);
+
+	const { getDropdownProps, getSelectedItemProps, removeSelectedItem } =
+		useMultipleSelection({
+			selectedItems,
+			onStateChange({ selectedItems: newSelectedItems, type }) {
+				switch (type) {
+					case useMultipleSelection.stateChangeTypes
+						.SelectedItemKeyDownBackspace:
+					case useMultipleSelection.stateChangeTypes.SelectedItemKeyDownDelete:
+					case useMultipleSelection.stateChangeTypes.DropdownKeyDownBackspace:
+					case useMultipleSelection.stateChangeTypes.FunctionRemoveSelectedItem:
+						setSelectedItems(newSelectedItems);
+						break;
+					default:
+						break;
+				}
+			},
+		});
+
+	const {
+		getInputProps,
+		getItemProps,
+		getLabelProps,
+		getMenuProps,
+		getToggleButtonProps,
+		highlightedIndex,
+		isOpen,
+		selectedItem,
+	} = useCombobox({
+		items: filteredItems,
+		itemToString(item) {
+			return item ? item.text : "";
+		},
+		defaultHighlightedIndex: 0, // after selection, highlight the first item.
+		selectedItem: null,
+		inputValue,
+		stateReducer(_state, actionAndChanges) {
+			const { changes, type } = actionAndChanges;
+
+			switch (type) {
+				case useCombobox.stateChangeTypes.InputKeyDownEnter:
+				case useCombobox.stateChangeTypes.ItemClick:
+					return {
+						...changes,
+						isOpen: true, // keep the menu open after selection.
+						highlightedIndex: 0, // with the first option highlighted.
+					};
+				default:
+					return changes;
+			}
+		},
+		onStateChange({
+			inputValue: newInputValue,
+			type,
+			selectedItem: newSelectedItem,
+		}) {
+			switch (type) {
+				case useCombobox.stateChangeTypes.InputKeyDownEnter:
+				case useCombobox.stateChangeTypes.ItemClick:
+				case useCombobox.stateChangeTypes.InputBlur:
+					if (newSelectedItem) {
+						setSelectedItems([...selectedItems, newSelectedItem]);
+						setInputValue("");
+					}
+					break;
+				case useCombobox.stateChangeTypes.InputChange:
+					setInputValue(newInputValue ?? "");
+					break;
+				default:
+					break;
+			}
+		},
+	});
+
 	return (
 		<div className="mb-3 max-w-lg text-sm">
 			<div className="flex flex-col gap-1">
 				<label className="w-fit" {...getLabelProps()}>
 					{label}
 				</label>
-				<div className="w-full py-1 px-2 border rounded-lg bg-white inline-flex gap-2 items-center flex-wrap focus-within:border-gray-400">
+				<div className={baseInputClassName}>
 					{selectedItems.map(
 						function renderSelectedItem(selectedItemForRender, index) {
 							return (
@@ -104,11 +201,8 @@ export default function SearchableMultiSelectField({
 						</li>
 					))}
 			</ul>
-			<input
-				type="hidden"
-				name={name}
-				value={selectedItems.map((item) => item.value).join(",")}
-			/>
+			<input type="hidden" name={name} value={field.value} />
+			<ErrorList id={`${name}-error`} errors={errors} />
 		</div>
 	);
 }

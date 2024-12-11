@@ -1,8 +1,6 @@
 import ButtonLink from "@/components/ui/ButtonLink";
 import RadioField from "@/components/ui/RadioField";
 import TextField from "@/components/ui/TextField";
-import useRadioField from "@/components/ui/useRadioField";
-import useTextField from "@/components/ui/useTextField";
 import { SpellSearchResponse } from "@/domain/actions/spellSearch";
 import Spell from "@/domain/types/Spell";
 import {
@@ -21,44 +19,49 @@ export default function SpellsPage() {
 	};
 	const submit = useSubmit();
 
+	const formContext = useFormContext({
+		serverValues: searchFields,
+	});
+
 	const keys = Object.keys(response);
 
 	return (
 		<div>
 			<h1 className="text-xl">Spell List</h1>
-			<Form
-				method="get"
-				onChange={(e) => {
-					submit(e.currentTarget, {
-						replace: true,
-					});
-				}}
-			>
-				<TextField
-					label="Search"
-					name="q"
-					type="search"
-					{...useTextField({
-						serverValue: searchFields.q,
-					})}
-				/>
-				<RadioField
-					name={"sort"}
-					label={"Sort"}
-					items={[
-						{ label: <ArrowDownAZ className="inline-block" />, value: "name" },
-						{ label: <ArrowDownZA className="inline-block" />, value: "-name" },
-						{ label: <ArrowDown01 className="inline-block" />, value: "level" },
-						{
-							label: <ArrowDown10 className="inline-block" />,
-							value: "-level",
-						},
-					]}
-					{...useRadioField({
-						serverValue: searchFields.sort,
-					})}
-				/>
-			</Form>
+			<FormContextProvider formContext={formContext}>
+				<Form
+					method="get"
+					onChange={(e) => {
+						submit(e.currentTarget, {
+							replace: true,
+						});
+					}}
+				>
+					<TextField label="Search" name="q" type="search" />
+					<RadioField
+						name={"sort"}
+						label={"Sort"}
+						items={[
+							{
+								label: <ArrowDownAZ className="inline-block" />,
+								value: "name",
+							},
+							{
+								label: <ArrowDownZA className="inline-block" />,
+								value: "-name",
+							},
+							{
+								label: <ArrowDown01 className="inline-block" />,
+								value: "level",
+							},
+							{
+								label: <ArrowDown10 className="inline-block" />,
+								value: "-level",
+							},
+						]}
+					/>
+				</Form>
+			</FormContextProvider>
 			<div className="fixed bottom-5 right-5">
 				<ButtonLink to="/spells/new">
 					<Plus className="w-4 h-4 mr-2" />

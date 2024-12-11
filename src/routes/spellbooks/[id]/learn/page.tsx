@@ -1,7 +1,6 @@
 import Button from "@/components/ui/Button";
 import ButtonLink from "@/components/ui/ButtonLink";
 import SearchableSelectField from "@/components/ui/SearchableSelectField";
-import useSearchableSelectField from "@/components/ui/useSearchableSelectField";
 import { Form, useActionData, useLoaderData } from "react-router-dom";
 
 export default function SpellbookLearnPage() {
@@ -18,14 +17,7 @@ export default function SpellbookLearnPage() {
 	return (
 		<div>
 			<Form className="max-w-lg" method="post">
-				<SearchableSelectField
-					label="Spell"
-					name="spell"
-					{...useSearchableSelectField({
-						items: options,
-						serverValue: "",
-					})}
-				/>
+				<SearchableSelectField label="Spell" name="spell" items={options} />
 				{actionData?.error && (
 					<p className="text-red-500 text-sm">{actionData.error}</p>
 				)}
