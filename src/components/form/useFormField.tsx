@@ -12,57 +12,75 @@ export default function useFormField(fieldName: string) {
 	const errors = formContext.getErrors(fieldName);
 
 	const onValueChange = (value: string) => {
-		formContext.dispatch({ type: "SET_FIELD", fieldName, value });
+		formContext.setField(fieldName, value);
 	};
 
 	const setErrors = (errors: string[]) => {
-		formContext.dispatch({ type: "SET_ERROR", fieldName, errors });
+		formContext.setErrors(fieldName, errors);
 	};
 
 	return { value, errors, onValueChange, setErrors };
 }
 
 export function useStringArrayFormField(fieldName: string) {
-	const { value, errors, onValueChange, setErrors } = useFormField(fieldName);
+	const formContext = React.useContext(FormContext);
 
-	const onValueChangeArray = (value: string[]) => {
-		onValueChange(JSON.stringify(value));
+	if (!formContext) {
+		throw new Error("useFormField must be used within a FormContextProvider");
+	}
+
+	const value = formContext.getStringArrayField(fieldName);
+	const errors = formContext.getErrors(fieldName);
+
+	const onValueChange = (value: string[]) => {
+		formContext.setStringArrayField(fieldName, value);
 	};
 
-	return {
-		value: value ? (JSON.parse(value) as string[]) : [],
-		errors,
-		onValueChange: onValueChangeArray,
-		setErrors,
+	const setErrors = (errors: string[]) => {
+		formContext.setErrors(fieldName, errors);
 	};
+
+	return { value, errors, onValueChange, setErrors };
 }
 
 export function useBooleanFormField(fieldName: string) {
-	const { value, errors, onValueChange, setErrors } = useFormField(fieldName);
+	const formContext = React.useContext(FormContext);
 
-	const onValueChangeBoolean = (value: boolean) => {
-		onValueChange(value.toString());
+	if (!formContext) {
+		throw new Error("useFormField must be used within a FormContextProvider");
+	}
+
+	const value = formContext.getBooleanField(fieldName);
+	const errors = formContext.getErrors(fieldName);
+
+	const onValueChange = (value: boolean) => {
+		formContext.setBooleanField(fieldName, value);
 	};
 
-	return {
-		value: value === "true",
-		errors,
-		onValueChange: onValueChangeBoolean,
-		setErrors,
+	const setErrors = (errors: string[]) => {
+		formContext.setErrors(fieldName, errors);
 	};
+
+	return { value, errors, onValueChange, setErrors };
 }
 
 export function useNumberFormField(fieldName: string) {
-	const { value, errors, onValueChange, setErrors } = useFormField(fieldName);
+	const formContext = React.useContext(FormContext);
 
-	const onValueChangeNumber = (value: number) => {
-		onValueChange(value.toString());
+	if (!formContext) {
+		throw new Error("useFormField must be used within a FormContextProvider");
+	}
+
+	const value = formContext.getNumberField(fieldName);
+	const errors = formContext.getErrors(fieldName);
+
+	const onValueChange = (value: number) => {
+		formContext.setNumberField(fieldName, value);
 	};
 
-	return {
-		value: parseFloat(value),
-		errors,
-		onValueChange: onValueChangeNumber,
-		setErrors,
+	const setErrors = (errors: string[]) => {
+		formContext.setErrors(fieldName, errors);
 	};
+
+	return { value, errors, onValueChange, setErrors };
 }

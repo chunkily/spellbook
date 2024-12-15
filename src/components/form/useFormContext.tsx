@@ -135,12 +135,57 @@ export default function useFormContext({
 		return formState.errors[fieldName] || [];
 	};
 
+	const setField = (fieldName: string, value: string) => {
+		formDispatch({
+			type: "SET_FIELD",
+			fieldName,
+			value,
+		});
+	};
+
+	const setStringArrayField = (fieldName: string, value: string[]) => {
+		formDispatch({
+			type: "SET_FIELD",
+			fieldName,
+			value: JSON.stringify(value),
+		});
+	};
+
+	const setBooleanField = (fieldName: string, value: boolean) => {
+		formDispatch({
+			type: "SET_FIELD",
+			fieldName,
+			value: value.toString(),
+		});
+	};
+
+	const setNumberField = (fieldName: string, value: number) => {
+		formDispatch({
+			type: "SET_FIELD",
+			fieldName,
+			value: value.toString(),
+		});
+	};
+
+	const setErrors = (fieldName: string, errors: string[]) => {
+		formDispatch({
+			type: "SET_ERROR",
+			fieldName,
+			errors,
+		});
+	};
+
 	return {
-		dispatch: formDispatch,
 		getField,
 		getStringArrayField,
 		getBooleanField,
 		getNumberField,
 		getErrors,
+		setField,
+		setStringArrayField,
+		setBooleanField,
+		setNumberField,
+		setErrors,
 	};
 }
+

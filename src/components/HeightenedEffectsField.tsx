@@ -16,18 +16,28 @@ interface HeightenedEffectState {
 	effect: string;
 }
 
+export function transformHeightenedEffectsToJson(
+	heightenedEffects?: HeightenedEffect[],
+) {
+	if (!heightenedEffects) {
+		return "[]";
+	}
+
+	const state: HeightenedEffectState[] = heightenedEffects.map((h, i) => ({
+		id: i,
+		select: h.add ? `+${h.add}` : h.level.toString(),
+		effect: h.effect,
+	}));
+
+	return JSON.stringify(state);
+}
+
 export default function HeightenedEffectsField({
 	name,
 }: HeightenedEffectsFieldProps) {
 	const field = useFormField(name);
 
-	const value = JSON.parse(field.value) as HeightenedEffect[];
-
-	const heightenedEffects = value.map((h, i) => ({
-		id: i,
-		select: h.add ? `+${h.add}` : h.level.toString(),
-		effect: h.effect,
-	}));
+	const heightenedEffects = JSON.parse(field.value) as HeightenedEffectState[];
 
 	const setHeightenedEffects = (value: HeightenedEffectState[]) => {
 		field.onValueChange(JSON.stringify(value));
@@ -60,21 +70,6 @@ export default function HeightenedEffectsField({
 			heightenedEffects.map((h) => (h.id === id ? { ...h, effect: value } : h)),
 		);
 	};
-
-	const jsonValues = JSON.stringify(
-		heightenedEffects.map((h) => {
-			const isAdd = h.select.startsWith("+");
-
-			const add = isAdd ? parseInt(h.select) : 0;
-			const level = isAdd ? 0 : parseInt(h.select);
-
-			return {
-				add,
-				level,
-				effect: h.effect,
-			};
-		}),
-	);
 
 	return (
 		<div className="max-w-lg mb-3">
@@ -128,7 +123,7 @@ export default function HeightenedEffectsField({
 					Add Heightened Effect
 				</Button>
 			</fieldset>
-			<input type="hidden" name={name} value={jsonValues} />
+			<input type="hidden" name={name} value={field.value} />
 			{hasErrors ? <ErrorList errors={errors} /> : null}
 		</div>
 	);

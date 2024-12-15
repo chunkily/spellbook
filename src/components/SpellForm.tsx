@@ -1,4 +1,6 @@
-import HeightenedEffectsField from "@/components/HeightenedEffectsField";
+import HeightenedEffectsField, {
+	transformHeightenedEffectsToJson,
+} from "@/components/HeightenedEffectsField";
 import Button from "@/components/ui/Button";
 import ButtonLink from "@/components/ui/ButtonLink";
 import Checkbox from "@/components/ui/Checkbox";
@@ -75,9 +77,9 @@ export default function SpellForm({
 	const formContext = useFormContext({
 		serverValues: {
 			...fields,
-			heightenedEffects: fields?.heightenedEffects
-				? JSON.stringify(fields.heightenedEffects)
-				: "[]",
+			heightenedEffects: transformHeightenedEffectsToJson(
+				fields?.heightenedEffects,
+			),
 		},
 		serverErrors: errors,
 	});
@@ -197,3 +199,4 @@ export default function SpellForm({
 		</div>
 	);
 }
+
