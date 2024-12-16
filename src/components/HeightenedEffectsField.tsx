@@ -1,4 +1,3 @@
-import HeightenedEffect from "@/domain/types/HeightenedEffect";
 import ErrorList from "./ui/ErrorList";
 import Button from "./ui/Button";
 import Select from "./ui/Select";
@@ -10,26 +9,10 @@ interface HeightenedEffectsFieldProps {
 	name: string;
 }
 
-interface HeightenedEffectState {
+export interface HeightenedEffectState {
 	id: number;
 	select: string;
 	effect: string;
-}
-
-export function transformHeightenedEffectsToJson(
-	heightenedEffects?: HeightenedEffect[],
-) {
-	if (!heightenedEffects) {
-		return "[]";
-	}
-
-	const state: HeightenedEffectState[] = heightenedEffects.map((h, i) => ({
-		id: i,
-		select: h.add ? `+${h.add}` : h.level.toString(),
-		effect: h.effect,
-	}));
-
-	return JSON.stringify(state);
 }
 
 function transformStateToHeightenedEffectsJson(state: HeightenedEffectState[]) {

@@ -1,4 +1,4 @@
-import { json, LoaderFunctionArgs, redirect } from "react-router-dom";
+import { LoaderFunctionArgs, redirect } from "react-router";
 import getFormStringValue from "../../../utils/getFormStringValue";
 import spellbookCreate from "../../../domain/actions/spellbookCreate";
 
@@ -41,10 +41,10 @@ export default async function action({ request }: LoaderFunctionArgs) {
 		const newId = create.getResult();
 		return redirect(`/spellbooks/${newId}`);
 	} else {
-		return json({
+		return {
 			fields,
 			error: create.getErrorDescription(),
 			errors: create.getError().errors,
-		});
+		};
 	}
 }

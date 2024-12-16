@@ -1,7 +1,7 @@
 import Page from "./page";
 import loader from "./loader";
 import action from "./action";
-import { RouteObject } from "react-router-dom";
+import { RouteObject } from "react-router";
 
 const routes: RouteObject[] = [
 	{

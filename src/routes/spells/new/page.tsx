@@ -1,4 +1,4 @@
-import { useActionData, useLoaderData } from "react-router-dom";
+import { useActionData, useLoaderData } from "react-router";
 import SpellForm, { SpellFormFields } from "@/components/SpellForm";
 
 export default function Page() {

@@ -1,7 +1,7 @@
 import spellGetById from "@/domain/actions/spellGetById";
 import traitGetAll from "@/domain/actions/traitGetAll";
 import parseId from "@/utils/parseId";
-import { LoaderFunctionArgs } from "react-router-dom";
+import { LoaderFunctionArgs } from "react-router";
 
 export default async function loader({ params }: LoaderFunctionArgs) {
 	const id = parseId(params.id);

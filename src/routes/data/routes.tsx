@@ -1,6 +1,6 @@
 import Layout from "./layout";
 import Page from "./page";
-import { RouteObject } from "react-router-dom";
+import { RouteObject } from "react-router";
 import exportRoutes from "./export/routes";
 import importRoutes from "./import/routes";
 

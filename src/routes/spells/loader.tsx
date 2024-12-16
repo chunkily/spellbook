@@ -1,5 +1,5 @@
 import spellSearch, { SpellSearchResponse } from "@/domain/actions/spellSearch";
-import { json, LoaderFunctionArgs } from "react-router-dom";
+import { LoaderFunctionArgs } from "react-router";
 
 export default async function loader({ request }: LoaderFunctionArgs) {
 	const url = new URL(request.url);
@@ -11,11 +11,11 @@ export default async function loader({ request }: LoaderFunctionArgs) {
 		sort,
 	});
 
-	return json({
+	return {
 		response,
 		searchFields: {
 			q,
 			sort,
 		},
-	});
+	};
 }

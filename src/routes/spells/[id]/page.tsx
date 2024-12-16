@@ -2,7 +2,7 @@ import SpellDisplay from "@/components/SpellDisplay";
 import ButtonLink from "@/components/ui/ButtonLink";
 import Spell from "@/domain/types/Spell";
 import { Pencil, Trash } from "lucide-react";
-import { useLoaderData } from "react-router-dom";
+import { useLoaderData } from "react-router";
 
 export default function SpellPage() {
 	const { spell } = useLoaderData() as { spell: Spell };

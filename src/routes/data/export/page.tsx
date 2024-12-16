@@ -6,11 +6,11 @@ import Checkbox from "@/components/ui/Checkbox";
 import TextArea from "@/components/ui/TextArea";
 import { triggerSuccessToast } from "@/utils/toasts";
 import { Clipboard } from "lucide-react";
-import { Form, useLoaderData, useSubmit } from "react-router-dom";
+import { Form, useLoaderData, useSubmit } from "react-router";
 
 export default function ExportPage() {
 	const { data, fields } = useLoaderData() as {
-		data: any;
+		data: unknown;
 		fields: {
 			includeSpells: boolean;
 			includeSpellbooks: boolean;

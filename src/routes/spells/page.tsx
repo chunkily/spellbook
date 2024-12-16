@@ -2,7 +2,6 @@ import ButtonLink from "@/components/ui/ButtonLink";
 import useFormContext from "@/components/form/useFormContext";
 import FormContextProvider from "@/components/form/FormContextProvider";
 import TextField from "@/components/ui/TextField";
-import { SpellSearchResponse } from "@/domain/actions/spellSearch";
 import Spell from "@/domain/types/Spell";
 import {
 	Plus,
@@ -11,14 +10,12 @@ import {
 	ArrowDown01,
 	ArrowDown10,
 } from "lucide-react";
-import { Form, Link, useLoaderData, useSubmit } from "react-router-dom";
+import { Form, Link, useLoaderData, useSubmit } from "react-router";
 import RadioField from "@/components/ui/RadioField";
+import loader from "./loader";
 
 export default function SpellsPage() {
-	const { response, searchFields } = useLoaderData() as {
-		response: SpellSearchResponse;
-		searchFields: { q: string | undefined; sort: string | undefined };
-	};
+	const { response, searchFields } = useLoaderData<typeof loader>();
 	const submit = useSubmit();
 
 	const formContext = useFormContext({

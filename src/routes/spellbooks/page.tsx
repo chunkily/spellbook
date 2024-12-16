@@ -2,7 +2,7 @@ import ButtonLink from "@/components/ui/ButtonLink";
 import { useUserPrefs } from "@/useUserPrefs";
 import { Plus } from "lucide-react";
 import { useEffect } from "react";
-import { Link, useLoaderData } from "react-router-dom";
+import { Link, useLoaderData } from "react-router";
 
 export default function SpellbooksIndex() {
 	const { spellbooks } = useLoaderData() as {
@@ -37,4 +37,3 @@ export default function SpellbooksIndex() {
 		</div>
 	);
 }
-

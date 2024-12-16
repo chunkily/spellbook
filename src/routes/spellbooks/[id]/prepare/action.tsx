@@ -2,7 +2,7 @@ import spellbookPrepare from "@/domain/actions/spellbookPrepare";
 import getFormStringValue from "@/utils/getFormStringValue";
 import parseId from "@/utils/parseId";
 import { triggerErrorToast, triggerSuccessToast } from "@/utils/toasts";
-import { ActionFunctionArgs, json } from "react-router-dom";
+import { ActionFunctionArgs } from "react-router";
 
 export default async function action({ request, params }: ActionFunctionArgs) {
 	const spellbookId = parseId(params.id);
@@ -20,5 +20,5 @@ export default async function action({ request, params }: ActionFunctionArgs) {
 		triggerErrorToast(result.getErrorDescription());
 	}
 
-	return json({});
+	return {};
 }

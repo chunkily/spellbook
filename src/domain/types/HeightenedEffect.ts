@@ -4,16 +4,21 @@ export default interface HeightenedEffect {
 	effect: string;
 }
 
-function isHeightenedEffect(obj: any): obj is HeightenedEffect {
+function isHeightenedEffect(obj: unknown): obj is HeightenedEffect {
 	return (
 		typeof obj === "object" &&
 		obj !== null &&
+		"add" in obj &&
 		typeof obj.add === "number" &&
+		"level" in obj &&
 		typeof obj.level === "number" &&
+		"effect" in obj &&
 		typeof obj.effect === "string"
 	);
 }
 
-export function isHeightenedEffectArray(obj: any): obj is HeightenedEffect[] {
+export function isHeightenedEffectArray(
+	obj: unknown,
+): obj is HeightenedEffect[] {
 	return Array.isArray(obj) && obj.every(isHeightenedEffect);
 }

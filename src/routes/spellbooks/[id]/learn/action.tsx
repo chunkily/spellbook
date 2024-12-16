@@ -2,7 +2,7 @@ import spellbookAddSpell from "@/domain/actions/spellbookAddSpell";
 import getFormStringValue from "@/utils/getFormStringValue";
 import parseId from "@/utils/parseId";
 import { triggerSuccessToast } from "@/utils/toasts";
-import { ActionFunctionArgs, json, redirect } from "react-router-dom";
+import { ActionFunctionArgs, redirect } from "react-router";
 
 export default async function action({ request, params }: ActionFunctionArgs) {
 	const spellbookId = parseId(params.id);
@@ -18,7 +18,7 @@ export default async function action({ request, params }: ActionFunctionArgs) {
 		return redirect(`/spellbooks/${spellbookId}`);
 	}
 
-	return json({
+	return {
 		error: result.getErrorDescription(),
-	});
+	};
 }

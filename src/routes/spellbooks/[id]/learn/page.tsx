@@ -3,7 +3,7 @@ import useFormContext from "@/components/form/useFormContext";
 import Button from "@/components/ui/Button";
 import ButtonLink from "@/components/ui/ButtonLink";
 import SearchableSelectField from "@/components/ui/SearchableSelectField";
-import { Form, useActionData, useLoaderData } from "react-router-dom";
+import { Form, useActionData, useLoaderData } from "react-router";
 
 export default function SpellbookLearnPage() {
 	const { id, options } = useLoaderData() as {

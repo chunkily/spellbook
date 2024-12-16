@@ -1,6 +1,5 @@
-import HeightenedEffectsField, {
-	transformHeightenedEffectsToJson,
-} from "@/components/HeightenedEffectsField";
+import HeightenedEffectsField from "@/components/HeightenedEffectsField";
+import { transformHeightenedEffectsToJson } from "./transformHeightenedEffectsToJson";
 import Button from "@/components/ui/Button";
 import ButtonLink from "@/components/ui/ButtonLink";
 import Checkbox from "@/components/ui/Checkbox";
@@ -10,7 +9,7 @@ import TextAreaField from "@/components/ui/TextAreaField";
 import TextField from "@/components/ui/TextField";
 import HeightenedEffect from "@/domain/types/HeightenedEffect";
 import { Pencil, Plus } from "lucide-react";
-import { Form } from "react-router-dom";
+import { Form } from "react-router";
 import SearchableMultiSelectField from "./ui/SearchableMultiSelectField";
 import TRADITIONS from "@/domain/types/Traditions";
 import useFormContext from "@/components/form/useFormContext";

@@ -1,4 +1,4 @@
-import { RouteObject } from "react-router-dom";
+import { RouteObject } from "react-router";
 import action from "./action";
 import loader from "./loader";
 import Page from "./page";

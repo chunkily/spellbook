@@ -1,4 +1,4 @@
-import { json, LoaderFunctionArgs } from "react-router-dom";
+import { LoaderFunctionArgs } from "react-router";
 import spellbookGetById from "@/domain/actions/spellbookGetById";
 import parseId from "@/utils/parseId";
 import spellGetAll from "@/domain/actions/spellGetAll";
@@ -29,8 +29,8 @@ export default async function loader({ params }: LoaderFunctionArgs) {
 			};
 		});
 
-	return json({
+	return {
 		id: spellbook.id,
 		options,
-	});
+	};
 }

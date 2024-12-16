@@ -1,4 +1,4 @@
-import { json, LoaderFunctionArgs } from "react-router-dom";
+import { LoaderFunctionArgs } from "react-router";
 import spellGetById from "@/domain/actions/spellGetById";
 import parseId from "@/utils/parseId";
 
@@ -11,7 +11,7 @@ export default async function loader({ params }: LoaderFunctionArgs) {
 		throw new Error("Spell not found");
 	}
 
-	return json({
+	return {
 		spell,
-	});
+	};
 }

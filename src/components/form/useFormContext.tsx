@@ -1,5 +1,5 @@
 import { useReducer } from "react";
-import { useNavigation } from "react-router-dom";
+import { useNavigation } from "react-router";
 import FormAction from "./FormAction";
 import { FormContextType } from "./FormContext";
 import FormState from "./FormState";
@@ -12,7 +12,7 @@ function valuesToFields(
 		return {};
 	}
 
-	let serverFields: Record<string, string> = {};
+	const serverFields: Record<string, string> = {};
 
 	function processValue(key: string, value: unknown) {
 		if (typeof value === "string") {
@@ -33,13 +33,15 @@ function valuesToFields(
 					(value as Record<string, unknown>)[nestedKey],
 				);
 			}
+		} else if (value === undefined || value === null) {
+			serverFields[key] = "";
 		} else {
 			throw new Error(`Invalid value type key: ${key} value: ${value}`);
 		}
 	}
 
 	for (const key in values) {
-		if (values.hasOwnProperty(key)) {
+		if (Object.prototype.hasOwnProperty.call(values, key)) {
 			processValue(key, values[key]);
 		}
 	}
@@ -188,4 +190,3 @@ export default function useFormContext({
 		setErrors,
 	};
 }
-

@@ -1,5 +1,5 @@
 import { useUserPrefs } from "@/useUserPrefs";
-import { NavLink, NavLinkProps } from "react-router-dom";
+import { NavLink, NavLinkProps } from "react-router";
 
 export default function Navbar() {
 	const { userPrefs } = useUserPrefs();

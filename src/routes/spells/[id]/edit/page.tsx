@@ -1,6 +1,6 @@
 import SpellForm, { SpellFormFields } from "@/components/SpellForm";
 import Spell from "@/domain/types/Spell";
-import { useActionData, useLoaderData } from "react-router-dom";
+import { useActionData, useLoaderData } from "react-router";
 
 export default function SpellEditPage() {
 	const { spell, traits } = useLoaderData() as {

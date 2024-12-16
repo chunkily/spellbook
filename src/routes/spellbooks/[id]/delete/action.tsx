@@ -1,7 +1,7 @@
 import spellbookDelete from "@/domain/actions/spellbookDelete";
 import parseId from "@/utils/parseId";
 import { triggerSuccessToast } from "@/utils/toasts";
-import { ActionFunctionArgs, json, redirect } from "react-router-dom";
+import { ActionFunctionArgs, redirect } from "react-router";
 
 export default async function action({ params }: ActionFunctionArgs) {
 	const spellbookId = parseId(params.id);
@@ -12,7 +12,7 @@ export default async function action({ params }: ActionFunctionArgs) {
 		triggerSuccessToast("Spellbook deleted successfully.");
 		return redirect("/spellbooks");
 	} else {
-		return json(
+		return Response.json(
 			{
 				error: req.getErrorDescription(),
 			},

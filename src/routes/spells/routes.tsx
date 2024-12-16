@@ -1,6 +1,6 @@
 import Page from "./page";
 import loader from "./loader";
-import { RouteObject } from "react-router-dom";
+import { RouteObject } from "react-router";
 import Layout from "./layout";
 import idRoutes from "./[id]/routes";
 import newRoutes from "./new/routes";

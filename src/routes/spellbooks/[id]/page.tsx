@@ -10,7 +10,7 @@ import Spellbook, { SpellSlot } from "@/domain/types/Spellbook";
 import { useUserPrefs } from "@/useUserPrefs";
 import { Pen, Plus, Trash } from "lucide-react";
 import { useEffect, useState } from "react";
-import { Form, useLoaderData } from "react-router-dom";
+import { Form, useLoaderData } from "react-router";
 
 export default function SpellbookPage() {
 	const { spellbook } = useLoaderData() as {

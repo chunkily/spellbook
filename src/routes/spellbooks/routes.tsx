@@ -1,7 +1,7 @@
 import Page from "./page";
 import Layout from "./layout";
 import loader from "./loader";
-import { RouteObject } from "react-router-dom";
+import { RouteObject } from "react-router";
 import idroutes from "./[id]/routes";
 import newroutes from "./new/routes";
 

@@ -1,5 +1,5 @@
 import exportData from "@/domain/actions/exportData";
-import { LoaderFunctionArgs } from "react-router-dom";
+import { LoaderFunctionArgs } from "react-router";
 
 export default async function loader({ request }: LoaderFunctionArgs) {
 	const url = new URL(request.url);

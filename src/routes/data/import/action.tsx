@@ -3,7 +3,7 @@ import Spell from "@/domain/types/Spell";
 import Spellbook from "@/domain/types/Spellbook";
 import getFormStringValue from "@/utils/getFormStringValue";
 import { triggerSuccessToast } from "@/utils/toasts";
-import { ActionFunctionArgs, redirect } from "react-router-dom";
+import { ActionFunctionArgs, redirect } from "react-router";
 
 interface Data {
 	spells?: Spell[];

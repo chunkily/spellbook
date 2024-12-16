@@ -1,6 +1,6 @@
 import Button from "@/components/ui/Button";
 import ButtonLink from "@/components/ui/ButtonLink";
-import { Form, useActionData, useLoaderData } from "react-router-dom";
+import { Form, useActionData, useLoaderData } from "react-router";
 
 export default function SpellbookDeletePage() {
 	const { spell } = useLoaderData() as {
