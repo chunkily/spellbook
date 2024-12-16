@@ -2,9 +2,9 @@
 
 - [ ] Spell Slots features
 - [ ] Advanced spell search (by class, level, school, etc.)
-- [ ] Change to use spell name slugs instead of numeric IDs
+- [ ] Make spellbook refer to spells by id instead of storing entire object.
 - [ ] Error Handling
-- [ ] Data Import / Export
+- [ ] Migrate to react-router v7 components.
 - [ ] Vitest
 - [ ] Playwright
 - [ ] User guide / Help section
