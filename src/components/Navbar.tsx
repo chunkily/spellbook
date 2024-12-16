@@ -11,10 +11,11 @@ export default function Navbar() {
 
 	return (
 		<nav className="container mx-auto h-full">
-			<ul className="flex flex-row items-center h-full gap-3">
+			<ul className="flex flex-row items-center h-full gap-3 mx-2">
 				<NavbarItem to="/">Home</NavbarItem>
 				<NavbarItem to={spellbookTo}>Spellbook</NavbarItem>
 				<NavbarItem to="/spells">Spell List</NavbarItem>
+				<NavbarItem to="/data">Import&nbsp;/ Export</NavbarItem>
 			</ul>
 		</nav>
 	);

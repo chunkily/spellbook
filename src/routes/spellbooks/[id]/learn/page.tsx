@@ -1,4 +1,5 @@
 import FormContextProvider from "@/components/form/FormContextProvider";
+import useFormContext from "@/components/form/useFormContext";
 import Button from "@/components/ui/Button";
 import ButtonLink from "@/components/ui/ButtonLink";
 import SearchableSelectField from "@/components/ui/SearchableSelectField";
@@ -15,9 +16,13 @@ export default function SpellbookLearnPage() {
 		  }
 		| undefined;
 
+	const formContext = useFormContext({
+		serverErrors: actionData?.error ? { spell: [actionData.error] } : undefined,
+	});
+
 	return (
 		<div>
-			<FormContextProvider>
+			<FormContextProvider formContext={formContext}>
 				<Form className="max-w-lg" method="post">
 					<SearchableSelectField label="Spell" name="spell" items={options} />
 					{actionData?.error && (

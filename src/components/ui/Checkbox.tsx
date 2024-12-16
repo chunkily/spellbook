@@ -48,9 +48,9 @@ export default function Checkbox({
 				name={name}
 				value="true"
 				onChange={onChange}
+				checked={checked}
 				{...rest}
 			/>
-			{!checked ? <input type="hidden" name={name} value="false" /> : null}
 			<label className="ms-2 text-sm font-medium text-gray-900" htmlFor={id}>
 				{children}
 				{label}

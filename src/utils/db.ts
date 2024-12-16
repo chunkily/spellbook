@@ -6,7 +6,7 @@ import Dexie, { EntityTable } from "dexie";
 const db = new Dexie("app") as Dexie & {
 	spells: EntityTable<Spell, "id">;
 	spellbooks: EntityTable<Spellbook, "id">;
-	traits: EntityTable<{ id: number; name: string }, "id">;
+	traits: EntityTable<{ name: string }, "name">;
 };
 
 db.version(2).stores({

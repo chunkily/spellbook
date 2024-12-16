@@ -1,6 +1,7 @@
 import { RouteObject } from "react-router-dom";
 import SpellbooksRoutes from "./spellbooks/routes";
 import SpellsRoutes from "./spells/routes";
+import DataRoutes from "./data/routes";
 import Page from "./page";
 
 const routes: RouteObject[] = [
@@ -10,6 +11,7 @@ const routes: RouteObject[] = [
 	},
 	...SpellbooksRoutes,
 	...SpellsRoutes,
+	...DataRoutes,
 ];
 
 export default routes;
