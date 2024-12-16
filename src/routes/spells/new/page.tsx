@@ -1,15 +1,13 @@
 import { useActionData, useLoaderData } from "react-router";
 import SpellForm, { SpellFormFields } from "@/components/SpellForm";
+import loader from "./loader";
 
 export default function Page() {
-	const { traits } = useLoaderData() as { traits: string[] };
-	const actionData = useActionData() as
-		| {
-				error: string;
-				errors?: Record<string, string[]>;
-				fields: SpellFormFields;
-		  }
-		| undefined;
+	const { traits } = useLoaderData<typeof loader>();
+	const actionData = useActionData<{
+		fields: SpellFormFields;
+		errors: Record<string, string[]>;
+	}>();
 
 	return (
 		<div>

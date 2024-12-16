@@ -5,7 +5,7 @@ import getFormStringArray from "@/utils/getFormStringArray";
 import getFormStringValue from "@/utils/getFormStringValue";
 import parseId from "@/utils/parseId";
 import { triggerSuccessToast } from "@/utils/toasts";
-import { ActionFunctionArgs, redirect } from "react-router";
+import { ActionFunctionArgs, data, redirect } from "react-router";
 
 export default async function action({ request, params }: ActionFunctionArgs) {
 	const id = parseId(params.id);
@@ -19,7 +19,7 @@ export default async function action({ request, params }: ActionFunctionArgs) {
 
 	const heightenedEffects = JSON.parse(heightenedEffectsValue ?? "[]");
 	if (!isHeightenedEffectArray(heightenedEffects)) {
-		return Response.json(
+		return data(
 			{
 				error: "Invalid heightened effects.",
 				errors: {
@@ -64,7 +64,7 @@ export default async function action({ request, params }: ActionFunctionArgs) {
 		return redirect(`/spells/${newId}`);
 	}
 
-	return Response.json(
+	return data(
 		{
 			error: cmd.getErrorDescription(),
 			errors: cmd.getError().errors,

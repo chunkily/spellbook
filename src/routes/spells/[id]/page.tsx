@@ -1,11 +1,11 @@
 import SpellDisplay from "@/components/SpellDisplay";
 import ButtonLink from "@/components/ui/ButtonLink";
-import Spell from "@/domain/types/Spell";
 import { Pencil, Trash } from "lucide-react";
 import { useLoaderData } from "react-router";
+import loader from "./loader";
 
 export default function SpellPage() {
-	const { spell } = useLoaderData() as { spell: Spell };
+	const { spell } = useLoaderData<typeof loader>();
 
 	return (
 		<div className="flex flex-col max-w-xl">

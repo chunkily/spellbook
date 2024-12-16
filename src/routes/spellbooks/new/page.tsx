@@ -59,13 +59,11 @@ function transformFields(fields?: FormFields): Record<string, string> {
 }
 
 export default function NewSpellbook() {
-	const actionData = useActionData() as
-		| {
-				error: string;
-				errors?: Record<string, string[]>;
-				fields: FormFields;
-		  }
-		| undefined;
+	const actionData = useActionData<{
+		error: string;
+		errors?: Record<string, string[]>;
+		fields: FormFields;
+	}>();
 
 	const formContext = useFormContext({
 		serverValues: transformFields(actionData?.fields),

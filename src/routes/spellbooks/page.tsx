@@ -3,11 +3,10 @@ import { useUserPrefs } from "@/useUserPrefs";
 import { Plus } from "lucide-react";
 import { useEffect } from "react";
 import { Link, useLoaderData } from "react-router";
+import loader from "./loader";
 
 export default function SpellbooksIndex() {
-	const { spellbooks } = useLoaderData() as {
-		spellbooks: { id: string; name: string }[];
-	};
+	const { spellbooks } = useLoaderData<typeof loader>();
 
 	const { setUserPrefs } = useUserPrefs();
 

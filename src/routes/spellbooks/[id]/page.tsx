@@ -6,16 +6,15 @@ import Modal, {
 	ModalHeader,
 } from "@/components/ui/Modal";
 import Spell from "@/domain/types/Spell";
-import Spellbook, { SpellSlot } from "@/domain/types/Spellbook";
+import { SpellSlot } from "@/domain/types/Spellbook";
 import { useUserPrefs } from "@/useUserPrefs";
 import { Pen, Plus, Trash } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Form, useLoaderData } from "react-router";
+import loader from "./loader";
 
 export default function SpellbookPage() {
-	const { spellbook } = useLoaderData() as {
-		spellbook: Spellbook;
-	};
+	const { spellbook } = useLoaderData<typeof loader>();
 	const [spellToRemove, setSpellToRemove] = useState<Spell | null>(null);
 
 	const { setUserPrefs } = useUserPrefs();

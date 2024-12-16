@@ -7,16 +7,10 @@ import TextArea from "@/components/ui/TextArea";
 import { triggerSuccessToast } from "@/utils/toasts";
 import { Clipboard } from "lucide-react";
 import { Form, useLoaderData, useSubmit } from "react-router";
+import loader from "./loader";
 
 export default function ExportPage() {
-	const { data, fields } = useLoaderData() as {
-		data: unknown;
-		fields: {
-			includeSpells: boolean;
-			includeSpellbooks: boolean;
-			includeTraits: boolean;
-		};
-	};
+	const { data, fields } = useLoaderData<typeof loader>();
 
 	const formContext = useFormContext({
 		serverValues: fields,

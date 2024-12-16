@@ -4,17 +4,13 @@ import Button from "@/components/ui/Button";
 import ButtonLink from "@/components/ui/ButtonLink";
 import SearchableSelectField from "@/components/ui/SearchableSelectField";
 import { Form, useActionData, useLoaderData } from "react-router";
+import loader from "./loader";
 
 export default function SpellbookLearnPage() {
-	const { id, options } = useLoaderData() as {
-		id: number;
-		options: { label: string; text: string; value: string }[];
-	};
-	const actionData = useActionData() as
-		| {
-				error: string;
-		  }
-		| undefined;
+	const { id, options } = useLoaderData<typeof loader>();
+	const actionData = useActionData<{
+		error: string;
+	}>();
 
 	const formContext = useFormContext({
 		serverErrors: actionData?.error ? { spell: [actionData.error] } : undefined,

@@ -1,19 +1,14 @@
 import SpellForm, { SpellFormFields } from "@/components/SpellForm";
-import Spell from "@/domain/types/Spell";
 import { useActionData, useLoaderData } from "react-router";
+import loader from "./loader";
 
 export default function SpellEditPage() {
-	const { spell, traits } = useLoaderData() as {
-		spell: Spell;
-		traits: string[];
-	};
-	const actionData = useActionData() as
-		| {
-				error: string;
-				errors?: Record<string, string[]>;
-				fields: SpellFormFields;
-		  }
-		| undefined;
+	const { spell, traits } = useLoaderData<typeof loader>();
+	const actionData = useActionData<{
+		error: string;
+		errors?: Record<string, string[]>;
+		fields: SpellFormFields;
+	}>();
 
 	const submittedFields = actionData?.fields;
 

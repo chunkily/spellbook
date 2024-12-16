@@ -7,9 +7,7 @@ import TextAreaField from "@/components/ui/TextAreaField";
 import { Form, useActionData } from "react-router";
 
 export default function ImportPage() {
-	const actionData = useActionData() as
-		| { errors: Record<string, string[]> }
-		| undefined;
+	const actionData = useActionData<{ errors: Record<string, string[]> }>();
 
 	const formContext = useFormContext({
 		serverErrors: actionData?.errors,
