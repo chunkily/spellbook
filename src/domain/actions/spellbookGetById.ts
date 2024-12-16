@@ -2,7 +2,7 @@ import db from "@/utils/db";
 import Spellbook from "../types/Spellbook";
 
 export default async function spellbookGetById(
-	id: number,
+	id: string,
 ): Promise<Spellbook | null> {
 	const spellbook = await db.spellbooks.get(id);
 
@@ -12,3 +12,4 @@ export default async function spellbookGetById(
 
 	return spellbook;
 }
+

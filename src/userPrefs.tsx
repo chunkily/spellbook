@@ -1,7 +1,7 @@
 import { createContext, useEffect, useReducer } from "react";
 
 export interface UserPrefs {
-	activeCharacterId: number | null;
+	activeCharacterId: string | null;
 }
 
 const DEFAULT_USER_PREFS: UserPrefs = {
@@ -38,11 +38,13 @@ export function UserPrefsProvider({ children }: { children: React.ReactNode }) {
 	);
 
 	useEffect(() => {
-		const storedPrefs = localStorage.getItem("userPrefs");
-		if (storedPrefs) {
+		const storedPrefsJson = localStorage.getItem("userPrefs");
+		const storedPrefs = storedPrefsJson && JSON.parse(storedPrefsJson);
+
+		if (areStoredPrefsValid(storedPrefs)) {
 			dispatch({
 				type: "init",
-				payload: JSON.parse(storedPrefs),
+				payload: storedPrefs,
 			});
 		}
 	}, []);
@@ -54,4 +56,23 @@ export function UserPrefsProvider({ children }: { children: React.ReactNode }) {
 			</UserPrefsSetContext.Provider>
 		</UserPrefsContext.Provider>
 	);
+}
+
+function areStoredPrefsValid(prefs: unknown): prefs is UserPrefs {
+	if (typeof prefs !== "object" || prefs === null || prefs === undefined) {
+		return false;
+	}
+
+	if (!("activeCharacterId" in prefs)) {
+		return false;
+	}
+
+	if (
+		prefs.activeCharacterId !== null &&
+		typeof prefs.activeCharacterId !== "string"
+	) {
+		return false;
+	}
+
+	return true;
 }

@@ -1,7 +1,7 @@
 import Spell from "./Spell";
 
 export default interface Spellbook {
-	id: number;
+	id: string;
 	name: string;
 	tradition: string;
 	kind: "prepared" | "spontaneous";
@@ -26,6 +26,6 @@ export type SpellSlots = [
 export interface SpellSlot {
 	id: string;
 	level: number;
-	preparedSpellId?: number;
+	preparedSpellId?: string;
 	special?: string;
 }

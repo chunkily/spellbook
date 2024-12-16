@@ -1,4 +1,4 @@
-import { HeightenedEffect } from "@/domain/types/Spell";
+import HeightenedEffect from "@/domain/types/HeightenedEffect";
 import ErrorList from "./ui/ErrorList";
 import Button from "./ui/Button";
 import Select from "./ui/Select";
@@ -30,6 +30,16 @@ export function transformHeightenedEffectsToJson(
 	}));
 
 	return JSON.stringify(state);
+}
+
+function transformStateToHeightenedEffectsJson(state: HeightenedEffectState[]) {
+	const values = state.map((h) => ({
+		add: parseInt(h.select.replace("+", ""), 10),
+		level: parseInt(h.select, 10) || 0,
+		effect: h.effect,
+	}));
+
+	return JSON.stringify(values);
 }
 
 export default function HeightenedEffectsField({
@@ -123,7 +133,11 @@ export default function HeightenedEffectsField({
 					Add Heightened Effect
 				</Button>
 			</fieldset>
-			<input type="hidden" name={name} value={field.value} />
+			<input
+				type="hidden"
+				name={name}
+				value={transformStateToHeightenedEffectsJson(heightenedEffects)}
+			/>
 			{hasErrors ? <ErrorList errors={errors} /> : null}
 		</div>
 	);

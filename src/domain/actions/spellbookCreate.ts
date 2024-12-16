@@ -1,4 +1,5 @@
 import db from "@/utils/db";
+import slugifyName from "../../utils/slugifyName";
 import ResultOrError, { ErrorResult, SuccessResult } from "../ResultOrError";
 import Spellbook, { SpellSlot, SpellSlots } from "../types/Spellbook";
 
@@ -18,11 +19,15 @@ interface SpellbookCreateErrors {
 
 export default async function spellbookCreate(
 	fields: SpellbookCreate,
-): Promise<ResultOrError<number, SpellbookCreateErrors>> {
+): Promise<ResultOrError<string, SpellbookCreateErrors>> {
 	const errors: Record<string, string[]> = {};
+
+	let newId: string = "";
 
 	if (!fields.name) {
 		errors.name = ["Name is required"];
+	} else {
+		newId = slugifyName(fields.name);
 	}
 
 	let kind: "prepared" | "spontaneous" = "prepared";
@@ -59,7 +64,8 @@ export default async function spellbookCreate(
 		});
 	}
 
-	const spellbook: Omit<Spellbook, "id"> = {
+	const spellbook: Spellbook = {
+		id: newId,
 		name: fields.name?.trim() ?? "",
 		kind,
 		tradition: fields.tradition ?? "",
@@ -67,9 +73,8 @@ export default async function spellbookCreate(
 		spellSlots,
 	};
 
-	let newId: number;
 	try {
-		newId = await db.spellbooks.add(spellbook);
+		await db.spellbooks.add(spellbook);
 	} catch (error) {
 		console.error(error);
 		return ErrorResult({

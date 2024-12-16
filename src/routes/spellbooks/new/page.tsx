@@ -75,21 +75,9 @@ export default function NewSpellbook() {
 	const classOnChange = (value: string) => {
 		const selectedClass = CLASSES.find((c) => c.name === value);
 		if (selectedClass) {
-			formContext.dispatch({
-				type: "SET_FIELD",
-				fieldName: "clazz",
-				value: selectedClass.name,
-			});
-			formContext.dispatch({
-				type: "SET_FIELD",
-				fieldName: "kind",
-				value: selectedClass.kind,
-			});
-			formContext.dispatch({
-				type: "SET_FIELD",
-				fieldName: "tradition",
-				value: selectedClass.tradition,
-			});
+			formContext.setField("clazz", selectedClass.name);
+			formContext.setField("kind", selectedClass.kind);
+			formContext.setField("tradition", selectedClass.tradition);
 		}
 	};
 
@@ -178,3 +166,4 @@ function SpellSlotField({ level }: { level: number }) {
 		</div>
 	);
 }
+

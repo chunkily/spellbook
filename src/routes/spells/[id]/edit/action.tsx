@@ -1,5 +1,6 @@
 import { SpellFormFields } from "@/components/SpellForm";
 import spellEdit from "@/domain/actions/spellEdit";
+import { isHeightenedEffectArray } from "@/domain/types/HeightenedEffect";
 import getFormStringArray from "@/utils/getFormStringArray";
 import getFormStringValue from "@/utils/getFormStringValue";
 import parseId from "@/utils/parseId";
@@ -15,6 +16,19 @@ export default async function action({ request, params }: ActionFunctionArgs) {
 		formData,
 		"heightenedEffects",
 	);
+
+	const heightenedEffects = JSON.parse(heightenedEffectsValue ?? "[]");
+	if (!isHeightenedEffectArray(heightenedEffects)) {
+		return json(
+			{
+				error: "Invalid heightened effects.",
+				errors: {
+					heightenedEffects: ["Invalid heightened effects."],
+				},
+			},
+			400,
+		);
+	}
 
 	const fields: SpellFormFields = {
 		name: getFormStringValue(formData, "name"),
@@ -37,14 +51,15 @@ export default async function action({ request, params }: ActionFunctionArgs) {
 		savingThrow: getFormStringValue(formData, "savingThrow"),
 		duration: getFormStringValue(formData, "duration"),
 		description: getFormStringValue(formData, "description"),
-		heightenedEffects: JSON.parse(heightenedEffectsValue ?? "[]"),
+		heightenedEffects: heightenedEffects,
 	};
 
 	const cmd = await spellEdit(id, fields);
 
 	if (cmd.isSuccess) {
 		triggerSuccessToast("Spell edited successfully.");
-		return redirect(`/spells/${id}`);
+		const newId = cmd.getResult();
+		return redirect(`/spells/${newId}`);
 	}
 
 	return json(

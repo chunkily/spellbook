@@ -1,5 +1,6 @@
 import { SpellFormFields } from "@/components/SpellForm";
 import spellCreate from "@/domain/actions/spellCreate";
+import { isHeightenedEffectArray } from "@/domain/types/HeightenedEffect";
 import getFormStringArray from "@/utils/getFormStringArray";
 import getFormStringValue from "@/utils/getFormStringValue";
 import { triggerSuccessToast } from "@/utils/toasts";
@@ -12,6 +13,19 @@ export default async function action({ request }: ActionFunctionArgs) {
 		formData,
 		"heightenedEffects",
 	);
+
+	const heightenedEffects = JSON.parse(heightenedEffectsValue ?? "[]");
+	if (!isHeightenedEffectArray(heightenedEffects)) {
+		return json(
+			{
+				error: "Invalid heightened effects.",
+				errors: {
+					heightenedEffects: ["Invalid heightened effects."],
+				},
+			},
+			400,
+		);
+	}
 
 	const fields: SpellFormFields = {
 		name: getFormStringValue(formData, "name"),
@@ -34,7 +48,7 @@ export default async function action({ request }: ActionFunctionArgs) {
 		savingThrow: getFormStringValue(formData, "savingThrow"),
 		duration: getFormStringValue(formData, "duration"),
 		description: getFormStringValue(formData, "description"),
-		heightenedEffects: JSON.parse(heightenedEffectsValue ?? "[]"),
+		heightenedEffects: heightenedEffects,
 	};
 
 	const cmd = await spellCreate(fields);
@@ -54,3 +68,4 @@ export default async function action({ request }: ActionFunctionArgs) {
 		400,
 	);
 }
+

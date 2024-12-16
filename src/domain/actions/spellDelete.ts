@@ -2,7 +2,7 @@ import db from "@/utils/db";
 import MaybeError, { ErrorResult, SuccessResult } from "../MaybeError";
 
 export default async function spellbookDelete(
-	id: number,
+	id: string,
 ): Promise<MaybeError<string>> {
 	try {
 		await db.spells.delete(id);
@@ -13,3 +13,4 @@ export default async function spellbookDelete(
 
 	return SuccessResult();
 }
+

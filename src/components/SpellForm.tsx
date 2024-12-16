@@ -8,7 +8,7 @@ import RadioField from "@/components/ui/RadioField";
 import SelectField from "@/components/ui/SelectField";
 import TextAreaField from "@/components/ui/TextAreaField";
 import TextField from "@/components/ui/TextField";
-import { HeightenedEffect } from "@/domain/types/Spell";
+import HeightenedEffect from "@/domain/types/HeightenedEffect";
 import { Pencil, Plus } from "lucide-react";
 import { Form } from "react-router-dom";
 import SearchableMultiSelectField from "./ui/SearchableMultiSelectField";
@@ -64,7 +64,7 @@ interface SpellFormProps {
 	errors: Record<string, string[]> | undefined;
 	traits: string[];
 	mode: "create" | "edit";
-	id?: number;
+	id?: string;
 }
 
 export default function SpellForm({
@@ -199,4 +199,3 @@ export default function SpellForm({
 		</div>
 	);
 }
-

@@ -1,7 +1,8 @@
 import db from "@/utils/db";
+import slugifyName from "../../utils/slugifyName";
 import ResultOrError, { ErrorResult, SuccessResult } from "../ResultOrError";
 import Spell from "../types/Spell";
-import spellGetByName from "./spellGetByName";
+import spellGetById from "./spellGetById";
 
 interface SpellCreateError {
 	errors?: Record<string, string[]>;
@@ -38,11 +39,16 @@ interface SpellCreateParams {
 
 export default async function spellCreate(
 	fields: SpellCreateParams,
-): Promise<ResultOrError<number, SpellCreateError>> {
+): Promise<ResultOrError<string, SpellCreateError>> {
 	const errors: Record<string, string[]> = {};
+
+	let newId: string = "";
 	if (!fields.name) {
 		errors.name = ["Name is required"];
+	} else {
+		newId = slugifyName(fields.name);
 	}
+
 	if (!fields.description) {
 		errors.description = ["Description is required"];
 	}
@@ -72,7 +78,7 @@ export default async function spellCreate(
 	};
 
 	// Check for duplicate name
-	const duplicateSpell = await spellGetByName(fields.name);
+	const duplicateSpell = await spellGetById(newId);
 	if (duplicateSpell) {
 		errors.name = ["Spell with this name already exists"];
 	}
@@ -84,7 +90,8 @@ export default async function spellCreate(
 		});
 	}
 
-	const newSpell: Omit<Spell, "id"> = {
+	const newSpell: Spell = {
+		id: newId,
 		name: fields.name ?? "",
 		level,
 		traits: fields.traits || [],
@@ -102,7 +109,6 @@ export default async function spellCreate(
 		source: "",
 	};
 
-	let newId;
 	try {
 		newId = await db.spells.add(newSpell);
 	} catch (error) {

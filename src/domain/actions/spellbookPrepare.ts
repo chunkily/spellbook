@@ -2,8 +2,8 @@ import db from "@/utils/db";
 import MaybeError, { ErrorResult, SuccessResult } from "../MaybeError";
 
 export default async function spellbookPrepare(
-	spellbookId: number,
-	spellId: number,
+	spellbookId: string,
+	spellId: string,
 	spellslotId: string | undefined,
 ): Promise<MaybeError<string>> {
 	if (!spellslotId) {

@@ -1,7 +1,8 @@
 import db from "@/utils/db";
-import MaybeError, { ErrorResult, SuccessResult } from "../MaybeError";
+import slugifyName from "../../utils/slugifyName";
+import ResultOrError, { ErrorResult, SuccessResult } from "../ResultOrError";
 import Spell from "../types/Spell";
-import spellGetByName from "./spellGetByName";
+import spellGetById from "./spellGetById";
 
 interface SpellEditError {
 	errors?: Record<string, string[]>;
@@ -37,13 +38,19 @@ interface SpellEditParams {
 }
 
 export default async function spellEdit(
-	id: number,
+	id: string,
 	fields: SpellEditParams,
-): Promise<MaybeError<SpellEditError>> {
+): Promise<ResultOrError<string, SpellEditError>> {
 	const errors: Record<string, string[]> = {};
+
+	let newId: string = "";
+
 	if (!fields.name) {
 		errors.name = ["Name is required"];
+	} else {
+		newId = slugifyName(fields.name);
 	}
+
 	if (!fields.description) {
 		errors.description = ["Description is required"];
 	}
@@ -73,7 +80,7 @@ export default async function spellEdit(
 	};
 
 	// Check for duplicate name
-	const duplicateSpell = await spellGetByName(fields.name);
+	const duplicateSpell = await spellGetById(newId);
 	if (duplicateSpell && duplicateSpell.id !== id) {
 		errors.name = ["Spell with this name already exists"];
 	}
@@ -85,8 +92,10 @@ export default async function spellEdit(
 		});
 	}
 
+	const isNameChanged = newId !== id;
+
 	const updatedSpell: Spell = {
-		id,
+		id: newId,
 		name: fields.name ?? "",
 		level,
 		traits: fields.traits || [],
@@ -105,7 +114,12 @@ export default async function spellEdit(
 	};
 
 	try {
-		await db.spells.put(updatedSpell);
+		if (isNameChanged) {
+			await db.spells.delete(id);
+			await db.spells.add(updatedSpell);
+		} else {
+			await db.spells.put(updatedSpell);
+		}
 	} catch (error) {
 		console.error(error);
 		return ErrorResult({
@@ -113,5 +127,5 @@ export default async function spellEdit(
 		});
 	}
 
-	return SuccessResult();
+	return SuccessResult(newId);
 }

@@ -2,7 +2,7 @@ import db from "@/utils/db";
 import MaybeError, { ErrorResult, SuccessResult } from "../MaybeError";
 
 export default async function spellbookRemoveSpell(
-	spellbookId: number,
+	spellbookId: string,
 	spellId: string | undefined,
 ): Promise<MaybeError<string>> {
 	const spellbook = await db.spellbooks.get(spellbookId);
@@ -15,21 +15,13 @@ export default async function spellbookRemoveSpell(
 		return ErrorResult("Spell is required");
 	}
 
-	const spellIdNumber = parseInt(spellId, 10);
-
-	if (isNaN(spellIdNumber)) {
-		return ErrorResult("Invalid spell id");
-	}
-
-	if (!spellbook.learnedSpells.some((s) => s.id === spellIdNumber)) {
+	if (!spellbook.learnedSpells.some((s) => s.id === spellId)) {
 		// Is this an error?
 		return SuccessResult();
 	}
 
 	await db.spellbooks.update(spellbookId, {
-		learnedSpells: spellbook.learnedSpells.filter(
-			(s) => s.id !== spellIdNumber,
-		),
+		learnedSpells: spellbook.learnedSpells.filter((s) => s.id !== spellId),
 	});
 
 	return SuccessResult();

@@ -1,4 +1,4 @@
-export default function parseId(id: string | undefined): number {
+export default function parseId(id: string | undefined): string {
 	if (!id) {
 		throw new Response("ID is required", {
 			status: 400,
@@ -6,13 +6,6 @@ export default function parseId(id: string | undefined): number {
 		});
 	}
 
-	const parsedId = parseInt(id, 10);
-	if (isNaN(parsedId)) {
-		throw new Response("ID is invalid", {
-			status: 400,
-			statusText: "Bad Request",
-		});
-	}
-
-	return parsedId;
+	return id;
 }
+

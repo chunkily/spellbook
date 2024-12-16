@@ -1,5 +1,7 @@
+import HeightenedEffect from "./HeightenedEffect";
+
 export default interface Spell {
-	id: number;
+	id: string;
 	name: string;
 	level: number;
 	traits: string[];
@@ -20,10 +22,4 @@ export default interface Spell {
 	description: string;
 	heightenedEffects: HeightenedEffect[];
 	source: string;
-}
-
-export interface HeightenedEffect {
-	add: number; // +1, +2
-	level: number; // 3rd, 4th
-	effect: string;
 }
