@@ -1,11 +1,9 @@
-import Spell from "./Spell";
-
 export default interface Spellbook {
 	id: string;
 	name: string;
 	tradition: string;
 	kind: "prepared" | "spontaneous";
-	learnedSpells: Spell[];
+	learnedSpellIds: string[];
 	spellSlots: SpellSlots;
 }
 

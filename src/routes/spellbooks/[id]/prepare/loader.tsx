@@ -1,6 +1,7 @@
 import { LoaderFunctionArgs } from "react-router";
 import spellbookGetById from "@/domain/actions/spellbookGetById";
 import parseId from "@/utils/parseId";
+import spellsGetByIds from "@/domain/actions/spellsGetByIds";
 
 export default async function loader({ params }: LoaderFunctionArgs) {
 	const spellbookId = parseId(params.id);
@@ -11,7 +12,9 @@ export default async function loader({ params }: LoaderFunctionArgs) {
 		throw new Error("Spellbook not found");
 	}
 
-	const options = spellbook.learnedSpells.map((spell) => {
+	const spells = await spellsGetByIds(spellbook.learnedSpellIds);
+
+	const options = spells.map((spell) => {
 		return {
 			label: spell.name,
 			text: spell.name,

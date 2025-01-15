@@ -1,3 +1,4 @@
+import React from "react";
 import { twMerge } from "tailwind-merge";
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -5,43 +6,48 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 	type?: "button" | "submit" | "reset";
 }
 
-import React from "react";
+function variantColour(variant: ButtonProps["variant"]) {
+	switch (variant) {
+		case "primary":
+			return "primary";
+		case "secondary":
+			// Like bootstraps's muted colour, not the theme's secondary colour
+			return "slate";
+		case "success":
+			return "green";
+		case "danger":
+			return "red";
+		case "warning":
+			return "yellow";
+	}
+}
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 	(
-		{ className: propClassName, children, variant = "primary", ...props },
+		{
+			className: propClassName,
+			children,
+			disabled,
+			variant = "primary",
+			...props
+		},
 		ref,
 	) => {
 		let baseClassName =
 			"px-4 py-2.5 text-sm font-medium text-white inline-flex items-center rounded-lg text-center";
 
-		switch (variant) {
-			case "primary":
-				baseClassName +=
-					" bg-primary-500 text-white hover:bg-primary-600 active:bg-primary-700";
-				break;
-			case "secondary": // Like bootstraps's muted colour, not the theme's secondary colour
-				baseClassName +=
-					" bg-slate-500 text-white hover:bg-slate-600 active:bg-slate-700";
-				break;
-			case "success":
-				baseClassName +=
-					" bg-green-500 text-white hover:bg-green-600 active:bg-green-700";
-				break;
-			case "danger":
-				baseClassName +=
-					" bg-red-500 text-white hover:bg-red-600 active:bg-red-700";
-				break;
-			case "warning":
-				baseClassName +=
-					" bg-yellow-500 text-black hover:bg-yellow-600 active:bg-yellow-700";
-				break;
+		const colour = variantColour(variant);
+
+		if (disabled) {
+			baseClassName += ` bg-${colour}-400 cursor-not-allowed`;
+		} else {
+			baseClassName += ` bg-${colour}-500 hover:bg-${colour}-600 active:bg-${colour}-700`;
 		}
 
 		const className = twMerge(baseClassName, propClassName);
 
 		return (
-			<button ref={ref} className={className} {...props}>
+			<button ref={ref} className={className} disabled={disabled} {...props}>
 				{children}
 			</button>
 		);

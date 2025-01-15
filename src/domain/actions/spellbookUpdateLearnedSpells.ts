@@ -1,9 +1,9 @@
 import db from "@/utils/db";
 import MaybeError, { ErrorResult, SuccessResult } from "../MaybeError";
 
-export default async function spellbookAddSpell(
+export default async function spellbookUpdateLearnedSpells(
 	spellbookId: string,
-	spellId: string | undefined,
+	spellIds: string[],
 ): Promise<MaybeError<string>> {
 	const spellbook = await db.spellbooks.get(spellbookId);
 
@@ -11,23 +11,16 @@ export default async function spellbookAddSpell(
 		return ErrorResult("Spellbook not found");
 	}
 
-	if (!spellId) {
-		return ErrorResult("Spell is required");
-	}
+	const spells = await db.spells.where("id").anyOf(spellIds).toArray();
 
-	const spell = await db.spells.get(spellId);
-
-	if (!spell) {
+	if (spells.length !== spellIds.length) {
 		return ErrorResult("Spell not found");
 	}
 
-	if (spellbook.learnedSpellIds.some((id) => id === spellId)) {
-		return ErrorResult("Spell already learned");
-	}
-
 	await db.spellbooks.update(spellbookId, {
-		learnedSpellIds: [...spellbook.learnedSpellIds, spellId],
+		learnedSpellIds: spellIds,
 	});
 
 	return SuccessResult();
 }
+

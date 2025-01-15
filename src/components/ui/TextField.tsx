@@ -3,6 +3,7 @@ import { twMerge } from "tailwind-merge";
 import ErrorList from "./ErrorList";
 import TextInput from "./TextInput";
 import useFormField from "../form/useFormField";
+import Label from "./Label";
 
 interface TextFieldProps
 	extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "defaultValue"> {
@@ -51,12 +52,9 @@ export default function TextField({
 
 	return (
 		<div className={className}>
-			<label
-				className="block mb-1 text-sm font-medium text-gray-900"
-				htmlFor={id}
-			>
-				{label} {required ? <span title="Required">*</span> : null}
-			</label>
+			<Label htmlFor={id} required={required}>
+				{label}
+			</Label>
 			<TextInput
 				id={id}
 				name={name}

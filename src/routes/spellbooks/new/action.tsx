@@ -1,6 +1,7 @@
 import { LoaderFunctionArgs, redirect } from "react-router";
 import getFormStringValue from "../../../utils/getFormStringValue";
 import spellbookCreate from "../../../domain/actions/spellbookCreate";
+import { triggerSuccessToast } from "@/utils/toasts";
 
 export interface FormFields {
 	name?: string;
@@ -39,6 +40,7 @@ export default async function action({ request }: LoaderFunctionArgs) {
 
 	if (create.isSuccess) {
 		const newId = create.getResult();
+		triggerSuccessToast("Spellbook created!");
 		return redirect(`/spellbooks/${newId}`);
 	} else {
 		return {
@@ -48,3 +50,4 @@ export default async function action({ request }: LoaderFunctionArgs) {
 		};
 	}
 }
+

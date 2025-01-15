@@ -69,7 +69,7 @@ export default async function spellbookCreate(
 		name: fields.name?.trim() ?? "",
 		kind,
 		tradition: fields.tradition ?? "",
-		learnedSpells: [],
+		learnedSpellIds: [],
 		spellSlots,
 	};
 

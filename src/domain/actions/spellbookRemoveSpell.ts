@@ -15,13 +15,13 @@ export default async function spellbookRemoveSpell(
 		return ErrorResult("Spell is required");
 	}
 
-	if (!spellbook.learnedSpells.some((s) => s.id === spellId)) {
+	if (!spellbook.learnedSpellIds.some((id) => id === spellId)) {
 		// Is this an error?
 		return SuccessResult();
 	}
 
 	await db.spellbooks.update(spellbookId, {
-		learnedSpells: spellbook.learnedSpells.filter((s) => s.id !== spellId),
+		learnedSpellIds: spellbook.learnedSpellIds.filter((id) => id !== spellId),
 	});
 
 	return SuccessResult();

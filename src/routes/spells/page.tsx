@@ -13,6 +13,7 @@ import {
 import { Form, Link, useLoaderData, useSubmit } from "react-router";
 import RadioField from "@/components/ui/RadioField";
 import loader from "./loader";
+import { SrOnlyLabel } from "@/components/ui/Label";
 
 export default function SpellsPage() {
 	const { response, searchFields } = useLoaderData<typeof loader>();
@@ -36,25 +37,54 @@ export default function SpellsPage() {
 						});
 					}}
 				>
-					<TextField label="Search" name="q" type="search" />
+					<TextField
+						id="search"
+						label={<SrOnlyLabel htmlFor="search">Search</SrOnlyLabel>}
+						name="q"
+						type="search"
+					/>
 					<RadioField
 						name={"sort"}
 						label={"Sort"}
 						items={[
 							{
-								label: <ArrowDownAZ className="inline-block" />,
+								label: (
+									<>
+										<ArrowDownAZ
+											className="inline-block"
+											aria-label="Name ascending"
+										/>
+									</>
+								),
 								value: "name",
 							},
 							{
-								label: <ArrowDownZA className="inline-block" />,
+								label: (
+									<>
+										<ArrowDownZA
+											className="inline-block"
+											aria-label="Name descending"
+										/>
+									</>
+								),
 								value: "-name",
 							},
 							{
-								label: <ArrowDown01 className="inline-block" />,
+								label: (
+									<ArrowDown01
+										className="inline-block"
+										aria-label="Level ascending"
+									/>
+								),
 								value: "level",
 							},
 							{
-								label: <ArrowDown10 className="inline-block" />,
+								label: (
+									<ArrowDown10
+										className="inline-block"
+										aria-label="Level descending"
+									/>
+								),
 								value: "-level",
 							},
 						]}

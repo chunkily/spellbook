@@ -14,7 +14,7 @@ import { Form, useLoaderData } from "react-router";
 import loader from "./loader";
 
 export default function SpellbookPage() {
-	const { spellbook } = useLoaderData<typeof loader>();
+	const { spellbook, learnedSpells } = useLoaderData<typeof loader>();
 	const [spellToRemove, setSpellToRemove] = useState<Spell | null>(null);
 
 	const { setUserPrefs } = useUserPrefs();
@@ -51,7 +51,7 @@ export default function SpellbookPage() {
 
 			<h2>Learned Spells</h2>
 			<ul>
-				{spellbook.learnedSpells.map((spell) => (
+				{learnedSpells.map((spell) => (
 					<li key={spell.id}>
 						{spell.name}
 						<Button
@@ -139,3 +139,4 @@ function PreparedSpellSlots({
 		</div>
 	);
 }
+

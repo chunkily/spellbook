@@ -42,7 +42,19 @@ const CLASSES = [
 ];
 
 function transformFields(fields?: FormFields): Record<string, string> {
-	if (!fields) return {};
+	if (!fields)
+		return {
+			name: "",
+			clazz: "",
+			tradition: "",
+			kind: "",
+			...Object.fromEntries(
+				[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((level) => [
+					`spellslots${level}`,
+					"0",
+				]),
+			),
+		};
 
 	return {
 		name: fields.name ?? "",
@@ -52,7 +64,7 @@ function transformFields(fields?: FormFields): Record<string, string> {
 		...Object.fromEntries(
 			Object.entries(fields.spellslots).map(([level, value]) => [
 				`spellslots${level}`,
-				value ?? "",
+				value ?? "0",
 			]),
 		),
 	};

@@ -5,21 +5,18 @@ import Button from "./Button";
 import useFormField from "../form/useFormField";
 import ErrorList from "./ErrorList";
 
-interface SearchableSelectFieldProps
-	extends Omit<
-		React.SelectHTMLAttributes<HTMLSelectElement>,
-		"value" | "defaultValue"
-	> {
+interface SearchableSelectFieldProps {
 	label: React.ReactNode;
 	name: string;
-	errors?: string[];
 	items: SearchableOption[];
+	onSelectedItemChange?: (value: string) => void;
 }
 
 export default function SearchableSelectField({
 	label,
 	name,
 	items,
+	onSelectedItemChange: propsOnSelectedItemChange,
 }: SearchableSelectFieldProps) {
 	const field = useFormField(name);
 
@@ -77,6 +74,10 @@ export default function SearchableSelectField({
 		onSelectedItemChange: ({ selectedItem }) => {
 			field.onValueChange(selectedItem?.value ?? defaultItem.value);
 			field.setErrors([]);
+
+			if (propsOnSelectedItemChange) {
+				propsOnSelectedItemChange(selectedItem?.value ?? defaultItem.value);
+			}
 		},
 		stateReducer: (state, actionAndChanges) => {
 			const { changes, type } = actionAndChanges;
@@ -104,6 +105,7 @@ export default function SearchableSelectField({
 						return {
 							...changes,
 							inputValue: changes.selectedItem.text,
+							selectedItem: changes.selectedItem,
 						};
 					} else if (filteredItems.length > 0) {
 						const closestItem = filteredItems[0];

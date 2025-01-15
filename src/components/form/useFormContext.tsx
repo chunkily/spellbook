@@ -57,7 +57,7 @@ export default function useFormContext({
 	serverValues?: Record<string, unknown>;
 	serverErrors?: Record<string, string[]>;
 	stateReducer?: React.Reducer<FormState, FormAction>;
-}): FormContextType {
+} = {}): FormContextType {
 	const serverFields = valuesToFields(serverValues);
 
 	const [formState, formDispatch] = useReducer(
@@ -190,3 +190,4 @@ export default function useFormContext({
 		setErrors,
 	};
 }
+

@@ -1,17 +1,18 @@
 interface ErrorListProps {
 	id?: string;
-	errors: string[] | undefined;
+	errors: (string | undefined)[] | undefined;
 }
 
 export default function ErrorList({ id, errors }: ErrorListProps) {
-	if (!errors || errors.length === 0) {
+	const nonEmptyErrors = errors?.filter((error) => error);
+
+	if (!nonEmptyErrors || nonEmptyErrors.length === 0) {
 		return null;
 	}
 
 	return (
 		<ul className="text-red-500" id={id}>
-			{errors?.map((error) => <li key={error}>{error}</li>)}
+			{nonEmptyErrors?.map((error) => <li key={error}>{error}</li>)}
 		</ul>
 	);
 }
-

@@ -4,6 +4,7 @@ import { twMerge } from "tailwind-merge";
 import Option, { OptionGroup } from "./Option";
 import Select from "./Select";
 import useFormField from "../form/useFormField";
+import Label from "./Label";
 
 interface SelectFieldProps
 	extends React.SelectHTMLAttributes<HTMLSelectElement> {
@@ -49,12 +50,9 @@ export default function SelectField({
 
 	return (
 		<div className={className}>
-			<label
-				className="block mb-1 text-sm font-medium text-gray-900"
-				htmlFor={id}
-			>
-				{label} {required ? <span title="Required">*</span> : null}
-			</label>
+			<Label htmlFor={id} required={required}>
+				{label}
+			</Label>
 			<Select
 				id={id}
 				name={name}
@@ -71,3 +69,4 @@ export default function SelectField({
 		</div>
 	);
 }
+

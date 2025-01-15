@@ -3,6 +3,7 @@ import { twMerge } from "tailwind-merge";
 import ErrorList from "./ErrorList";
 import TextArea from "./TextArea";
 import useFormField from "../form/useFormField";
+import Label from "./Label";
 
 interface TextAreaFieldProps
 	extends Omit<
@@ -58,12 +59,9 @@ export default function TextAreaField({
 	return (
 		<div className={className}>
 			<div className="flex flex-row justify-between">
-				<label
-					className="block mb-1 text-sm font-medium text-gray-900"
-					htmlFor={id}
-				>
-					{label} {required ? <span title="Required">*</span> : null}
-				</label>
+				<Label htmlFor={id} required={required}>
+					{label}
+				</Label>
 				{charCount !== undefined && maxLength ? (
 					<div className="text-right">
 						<span className="text-gray-500 text-sm">
@@ -90,3 +88,4 @@ export default function TextAreaField({
 		</div>
 	);
 }
+
