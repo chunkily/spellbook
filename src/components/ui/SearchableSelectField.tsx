@@ -1,9 +1,9 @@
 import { useCombobox } from "downshift";
 import { SearchableOption } from "./Option";
 import React, { useMemo, useState } from "react";
-import Button from "./Button";
 import useFormField from "../form/useFormField";
 import ErrorList from "./ErrorList";
+import { ChevronDown } from "lucide-react";
 
 interface SearchableSelectFieldProps {
 	label: React.ReactNode;
@@ -20,28 +20,18 @@ export default function SearchableSelectField({
 }: SearchableSelectFieldProps) {
 	const field = useFormField(name);
 
-	const defaultItem = useMemo(
-		() =>
-			items.find((item) => item.value === field.value) ?? {
-				text: "",
-				label: "",
-				value: "",
-			},
-		[items, field.value],
-	);
+	if (items.length === 0) {
+		items = [{ value: "", text: "", label: "" }];
+	}
 
-	// TODO: Implement such that input text is not actually used for display, only search.
-	// Will make state handling easier.
-	const [inputValue, setInputValue] = useState(defaultItem?.text ?? "");
+	const [inputValue, setInputValue] = useState("");
 
-	const selectedItem = useMemo(() => {
-		return items.find((item) => item.value === field.value) ?? defaultItem;
-	}, [items, field.value, defaultItem]);
+	const selectedItem = items.find((item) => item.value === field.value) ?? null;
 
 	const filteredItems = useMemo(() => {
 		const lowerCaseInputValue = inputValue.toLowerCase();
 		return items.filter((item) =>
-			item.text.toLowerCase().includes(lowerCaseInputValue),
+			inputValue ? caseInsensitiveSearch(item, lowerCaseInputValue) : true,
 		);
 	}, [items, inputValue]);
 
@@ -49,10 +39,11 @@ export default function SearchableSelectField({
 
 	const hasErrors = errors && errors.length > 0;
 
-	let baseInputClassName = "flex shadow-sm bg-white gap-0.5 rounded-lg";
+	let baseButtonClassName =
+		"flex h-10 shadow-sm bg-white gap-0.5 rounded-lg text-left p-2.5 w-full border";
 
 	if (hasErrors) {
-		baseInputClassName += " border-red-500";
+		baseButtonClassName += " border-red-500";
 	}
 
 	const {
@@ -72,73 +63,35 @@ export default function SearchableSelectField({
 			setInputValue(inputValue);
 		},
 		onSelectedItemChange: ({ selectedItem }) => {
-			field.onValueChange(selectedItem?.value ?? defaultItem.value);
+			field.onValueChange(selectedItem?.value);
 			field.setErrors([]);
 
 			if (propsOnSelectedItemChange) {
-				propsOnSelectedItemChange(selectedItem?.value ?? defaultItem.value);
+				propsOnSelectedItemChange(selectedItem?.value);
 			}
 		},
-		stateReducer: (state, actionAndChanges) => {
+		stateReducer: (_state, actionAndChanges) => {
 			const { changes, type } = actionAndChanges;
 
-			const isOpening = !state.isOpen && changes.isOpen;
-			const isClosing = state.isOpen && !changes.isOpen;
-
-			if (isOpening) {
-				switch (type) {
-					case useCombobox.stateChangeTypes.ToggleButtonClick:
-						// Clear input value when menu is opening from toggle button
+			switch (type) {
+				case useCombobox.stateChangeTypes.ToggleButtonClick:
+					// Clear input value when menu is opening from toggle button
+					return {
+						...changes,
+						inputValue: "",
+					};
+				case useCombobox.stateChangeTypes.InputKeyDownEnter:
+					// Grab the first item in the list if the user presses enter
+					if (filteredItems.length > 0) {
 						return {
 							...changes,
-							inputValue: "",
-						};
-					default:
-						return changes;
-				}
-			}
-
-			// When menu is closing,
-			if (isClosing) {
-				if (!state.inputValue) {
-					if (changes.selectedItem) {
-						return {
-							...changes,
-							inputValue: changes.selectedItem.text,
-							selectedItem: changes.selectedItem,
-						};
-					} else if (filteredItems.length > 0) {
-						const closestItem = filteredItems[0];
-						return {
-							...changes,
-							inputValue: closestItem.text,
-							selectedItem: closestItem,
-						};
-					} else if (items.length > 0) {
-						const closestItem = items[0];
-						return {
-							...changes,
-							inputValue: closestItem.text,
-							selectedItem: closestItem,
+							selectedItem: filteredItems[0],
 						};
 					}
-				} else if (filteredItems.length > 0) {
-					const closestItem = filteredItems[0];
-					return {
-						...changes,
-						inputValue: closestItem.text,
-						selectedItem: closestItem,
-					};
-				} else if (items.length > 0) {
-					const closestItem = items[0];
-					return {
-						...changes,
-						inputValue: closestItem.text,
-						selectedItem: closestItem,
-					};
-				}
+					return changes;
+				default:
+					return changes;
 			}
-			return changes;
 		},
 	});
 
@@ -148,43 +101,48 @@ export default function SearchableSelectField({
 				<label className="w-fit" {...getLabelProps()}>
 					{label}
 				</label>
-				<div className={baseInputClassName}>
-					<input
-						placeholder="Start typing to search..."
-						className="w-full p-1.5 rounded-l-lg"
-						{...getInputProps()}
-					/>
-					<Button
-						aria-label="toggle menu"
-						className="rounded-l-none"
-						type="button"
+				<div className="relative">
+					<button
+						className={baseButtonClassName}
 						{...getToggleButtonProps()}
+						title={selectedItem?.text}
 					>
-						{isOpen ? <>&#8593;</> : <>&#8595;</>}
-					</Button>
+						<span className="truncate pr-5">{selectedItem?.label}</span>
+						<ChevronDown className="absolute right-2.5 top-2.5 size-5" />
+					</button>
 				</div>
 			</div>
-			<ul
-				className={`absolute w-72 bg-white mt-1 shadow-md max-h-80 overflow-scroll p-0 z-10 ${
-					!(isOpen && items.length) && "hidden"
-				}`}
-				{...getMenuProps()}
+
+			<div
+				className={cx(
+					"absolute bg-white w-full max-w-lg rounded-lg shadow-lg z-10",
+					isOpen && "block",
+					!isOpen && "hidden",
+				)}
 			>
-				{isOpen &&
-					items.map((item, index) => (
+				<input
+					{...getInputProps()}
+					placeholder="Start typing to search"
+					className="w-full rounded-lg p-2.5 mb-2"
+				/>
+				<ul {...getMenuProps()} className="overflow-y-auto max-h-60">
+					{filteredItems.map((item, index) => (
 						<li
+							title={item.text}
 							className={cx(
-								highlightedIndex === index && "bg-blue-300",
-								selectedItem === item && "font-bold",
-								"py-2 px-3 shadow-sm flex flex-col",
+								"p-2 cursor-pointer truncate",
+								selectedItem?.value === item.value && "bg-yellow-100",
+								highlightedIndex === index && "bg-gray-200",
 							)}
-							key={item.value}
+							key={`${item.value}`}
 							{...getItemProps({ item, index })}
 						>
 							{item.label}
 						</li>
 					))}
-			</ul>
+				</ul>
+			</div>
+
 			<input type="hidden" name={name} value={selectedItem?.value} />
 			<ErrorList id={`${name}-error`} errors={errors} />
 		</div>
@@ -193,4 +151,15 @@ export default function SearchableSelectField({
 
 function cx(...classes: (string | boolean | undefined)[]) {
 	return classes.filter(Boolean).join(" ");
+}
+
+function caseInsensitiveSearch(
+	item: SearchableOption,
+	inputValue: string,
+): boolean {
+	// Replace all non-alphanumeric, non-whitespace characters with an empty string
+	const strippedInput = inputValue.replace(/[^\w\s]/g, "");
+	const regex = new RegExp(strippedInput, "i");
+
+	return regex.test(item.text);
 }
