@@ -5,7 +5,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 function App() {
 	return (
-		<div className="grid grid-cols-1 grid-rows-[4rem_1fr_4rem] min-h-screen bg-secondary-200">
+		<div className="grid grid-cols-1 grid-rows-[4rem_1fr_5rem] min-h-screen bg-secondary-200">
 			<header className="bg-primary-700 w-full sticky top-0 text-white">
 				<Navbar />
 			</header>
@@ -13,7 +13,7 @@ function App() {
 				<Outlet />
 			</main>
 			<footer className="container bg-secondary-300 mx-auto px-2">
-				&copy; 2024 Lee Chengkai. This application uses trademarks and/or
+				&copy; 2024-2025 Lee Chengkai. This application uses trademarks and/or
 				copyrights owned by Paizo Inc., used under{" "}
 				<a
 					href="https://paizo.com/licenses/communityuse"
