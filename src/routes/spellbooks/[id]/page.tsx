@@ -1,19 +1,33 @@
 import ButtonLink from "@/components/ui/ButtonLink";
 import { SpellSlot } from "@/domain/types/Spellbook";
 import { useUserPrefs } from "@/useUserPrefs";
-import { Edit, Pen, Trash } from "lucide-react";
-import { useEffect } from "react";
+import { Pen, Trash, Wand } from "lucide-react";
+import { useEffect, useState } from "react";
 import { useLoaderData } from "react-router";
 import loader from "./loader";
+import Spell from "@/domain/types/Spell";
+import SpellDisplay from "@/components/SpellDisplay";
 
 export default function SpellbookPage() {
 	const { spellbook, learnedSpells } = useLoaderData<typeof loader>();
+	const [displayedSpell, setDisplayedSpell] = useState<Spell | null>(null);
 
 	const { setUserPrefs } = useUserPrefs();
 
 	useEffect(() => {
 		setUserPrefs({ activeCharacterId: spellbook.id });
 	}, [spellbook.id, setUserPrefs]);
+
+	function handlePreview(spellId?: string) {
+		if (spellId) {
+			const spell = learnedSpells.find((s) => s.id === spellId);
+			if (spell) {
+				setDisplayedSpell(spell);
+			}
+		} else {
+			setDisplayedSpell(null);
+		}
+	}
 
 	return (
 		<div>
@@ -32,25 +46,34 @@ export default function SpellbookPage() {
 				</ButtonLink>
 			</div>
 
-			<h2>Spell Slots</h2>
-			{[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((level) => (
-				<PreparedSpellSlots
-					key={level}
-					slots={spellbook.spellSlots[level]}
-					level={level}
-				/>
-			))}
-
-			<h2>Learned Spells</h2>
-			<ul>
-				{learnedSpells.map((spell) => (
-					<li key={spell.id}>{spell.name}</li>
-				))}
-			</ul>
-			<ButtonLink to={`/spellbooks/${spellbook.id}/learn`} variant="primary">
-				<Edit className="h-4 w-4 mr-2" />
-				Modify Learned Spells
-			</ButtonLink>
+			<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+				<div className="overflow-auto max-h-screen">
+					<h2>Spell Slots</h2>
+					{[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((level) => (
+						<PreparedSpellSlots
+							key={level}
+							slots={spellbook.spellSlots[level]}
+							level={level}
+							onPreview={handlePreview}
+							learnedSpells={learnedSpells}
+						/>
+					))}
+				</div>
+				<div>
+					{displayedSpell && (
+						<SpellDisplay spell={displayedSpell}></SpellDisplay>
+					)}
+				</div>
+			</div>
+			<div className="fixed bottom-5 right-5">
+				<ButtonLink
+					to={`/spellbooks/${spellbook.id}/prepare`}
+					variant="primary"
+				>
+					<Wand className="h-4 w-4 mr-2" />
+					Prepare Spells
+				</ButtonLink>
+			</div>
 		</div>
 	);
 }
@@ -58,9 +81,13 @@ export default function SpellbookPage() {
 function PreparedSpellSlots({
 	slots,
 	level,
+	onPreview,
+	learnedSpells,
 }: {
 	slots: SpellSlot[];
 	level: number;
+	onPreview: (spellId?: string) => void;
+	learnedSpells: Spell[];
 }) {
 	if (slots.length === 0) {
 		return null;
@@ -72,14 +99,21 @@ function PreparedSpellSlots({
 		<div>
 			<h3>{isCantrip ? "Cantrips" : `Level ${level}`} </h3>
 			<ul>
-				{slots.map((slot) => (
-					<li
-						key={slot.id}
-						className="w-72 h-9 border bg-secondary-400 border-secondary-600 my-1 rounded-md p-2"
-					>
-						{slot.preparedSpellId ?? "Empty"}
-					</li>
-				))}
+				{slots.map((slot) => {
+					const preparedSpell = learnedSpells.find(
+						(s) => s.id === slot.preparedSpellId,
+					);
+					return (
+						<li key={slot.id}>
+							<button
+								className="w-72 h-9 text-left border bg-secondary-400 border-secondary-600 my-1 rounded-md p-2"
+								onClick={() => onPreview(slot.preparedSpellId)}
+							>
+								{preparedSpell?.name ?? "Empty"}
+							</button>
+						</li>
+					);
+				})}
 			</ul>
 		</div>
 	);

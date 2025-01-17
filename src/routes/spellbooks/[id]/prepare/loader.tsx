@@ -12,18 +12,23 @@ export default async function loader({ params }: LoaderFunctionArgs) {
 		throw new Error("Spellbook not found");
 	}
 
-	const spells = await spellsGetByIds(spellbook.learnedSpellIds);
+	const learnedSpells = await spellsGetByIds(spellbook.learnedSpellIds);
 
-	const options = spells.map((spell) => {
-		return {
-			label: spell.name,
-			text: spell.name,
-			value: spell.id.toString(),
-		};
+	const slots = spellbook.spellSlots;
+
+	const slotCounts = slots.map((level) => level.length);
+
+	const fields: Record<string, string> = {};
+	slots.forEach((levelSlots) => {
+		levelSlots.forEach((slot) => {
+			fields[slot.id] = slot.preparedSpellId ?? "";
+		});
 	});
 
 	return {
 		id: spellbook.id,
-		options,
+		learnedSpells,
+		fields,
+		slotCounts,
 	};
 }

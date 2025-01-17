@@ -5,8 +5,8 @@ import "react-toastify/dist/ReactToastify.css";
 
 function App() {
 	return (
-		<div className="grid grid-cols-1 grid-rows-[4rem_1fr_5rem] min-h-screen bg-secondary-200">
-			<header className="bg-primary-700 w-full sticky top-0 text-white">
+		<div className="grid grid-cols-1 grid-rows-[4rem_1fr_fit-content(4rem)] min-h-screen bg-secondary-200">
+			<header className="bg-primary-700 w-full sticky top-0 text-white z-10">
 				<Navbar />
 			</header>
 			<main className="container mt-3 mx-auto p-3 bg-secondary-300 rounded">

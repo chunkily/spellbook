@@ -1,26 +1,34 @@
 import { useCombobox } from "downshift";
 import { SearchableOption } from "./Option";
-import React, { useState } from "react";
+import React, { useId, useState } from "react";
 import useFormField from "../form/useFormField";
 import ErrorList from "./ErrorList";
 import { ChevronDown } from "lucide-react";
 import { caseInsensitiveSearch } from "../../utils/caseInsensitiveSearch";
+import { twMerge } from "tailwind-merge";
 
 interface SearchableSelectFieldProps {
+	id?: string;
 	label: React.ReactNode;
 	name: string;
 	items: SearchableOption[];
 	onSelectedItemChange?: (value: string) => void;
+	className?: string;
 }
 
 const DEFAULT_ITEM: SearchableOption = { value: "", text: "", label: "" };
 
 export default function SearchableSelectField({
+	id,
 	label,
 	name,
 	items,
 	onSelectedItemChange: propsOnSelectedItemChange,
+	className: propClassName,
 }: SearchableSelectFieldProps) {
+	const fallbackId = useId();
+	id = id ?? fallbackId;
+
 	const field = useFormField(name);
 
 	const [inputValue, setInputValue] = useState("");
@@ -45,6 +53,9 @@ export default function SearchableSelectField({
 		baseButtonClassName += " border-red-500";
 	}
 
+	const baseClassName = "mb-3 w-full max-w-lg text-sm";
+	const className = twMerge(baseClassName, propClassName);
+
 	const {
 		getInputProps,
 		getItemProps,
@@ -54,6 +65,7 @@ export default function SearchableSelectField({
 		highlightedIndex,
 		isOpen,
 	} = useCombobox<SearchableOption>({
+		id,
 		items: filteredItems,
 		itemToString: (item) => (item ? item.text : ""),
 		inputValue,
@@ -95,13 +107,14 @@ export default function SearchableSelectField({
 	});
 
 	return (
-		<div className="mb-3 max-w-lg text-sm">
-			<div className="flex flex-col gap-1">
+		<div className={className}>
+			<div>
 				<label className="w-fit" {...getLabelProps()}>
 					{label}
 				</label>
 				<div className="relative">
 					<button
+						type="button"
 						className={baseButtonClassName}
 						{...getToggleButtonProps()}
 						title={selectedItem?.text}

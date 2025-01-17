@@ -1,9 +1,8 @@
 import FormContextProvider from "@/components/form/FormContextProvider";
 import useFormContext from "@/components/form/useFormContext";
 import Button from "@/components/ui/Button";
-import ButtonLink from "@/components/ui/ButtonLink";
 import SearchableSelectField from "@/components/ui/SearchableSelectField";
-import { Form, useActionData, useLoaderData } from "react-router";
+import { Form, useActionData, useLoaderData, useNavigate } from "react-router";
 import loader from "./loader";
 import ErrorList from "@/components/ui/ErrorList";
 import { useState } from "react";
@@ -16,6 +15,7 @@ export default function SpellbookLearnPage() {
 	const actionData = useActionData<{
 		error: string;
 	}>();
+	const navigate = useNavigate();
 	const formContext = useFormContext();
 
 	const [selectedSpell, setSelectedSpell] = useState<Spell | undefined>();
@@ -98,9 +98,13 @@ export default function SpellbookLearnPage() {
 							value={learnedSpells.map((s) => s.id)}
 						/>
 						<Button variant="success">Save</Button>
-						<ButtonLink to={`/spellbooks/${id}`} variant="warning">
+						<Button
+							type="button"
+							onClick={() => navigate(-1)}
+							variant="warning"
+						>
 							Cancel
-						</ButtonLink>
+						</Button>
 						<ErrorList errors={[actionData?.error]} />
 					</div>
 				</Form>
