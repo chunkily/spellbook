@@ -8,6 +8,7 @@ import loader from "./loader";
 import ErrorList from "@/components/ui/ErrorList";
 import { useEffect, useState } from "react";
 import Spell from "@/domain/types/Spell";
+import { SearchableOption } from "@/components/ui/Option";
 
 export default function SpellbookLearnPage() {
 	const { id, learnedSpells: initialLearnedSpells } =
@@ -16,8 +17,8 @@ export default function SpellbookLearnPage() {
 		error: string;
 	}>();
 
-	const optionsFetcher = useFetcher();
-	const spellFetcher = useFetcher();
+	const optionsFetcher = useFetcher<SearchableOption[]>();
+	const spellFetcher = useFetcher<{ spell: Spell }>();
 
 	const formContext = useFormContext();
 
@@ -25,26 +26,24 @@ export default function SpellbookLearnPage() {
 		useState<Spell[]>(initialLearnedSpells);
 
 	const selectedSpellId = formContext.getField("spell");
+	const selectedSpell = spellFetcher.data?.spell;
 
 	useEffect(() => {
 		if (optionsFetcher.state === "idle" && optionsFetcher.data === undefined) {
-			console.log("fetching options");
 			optionsFetcher.load(`/spellbooks/${id}/learn/options`);
 		}
 	}, [optionsFetcher, id]);
 
 	useEffect(() => {
-		if (selectedSpellId) {
+		if (spellFetcher.state === "idle" && selectedSpellId) {
 			spellFetcher.load(`/spells/${selectedSpellId}`);
 		}
-	}, [selectedSpellId, spellFetcher]);
-
-	const selectedSpell = spellFetcher.data;
+	}, [selectedSpellId, spellFetcher, selectedSpell]);
 
 	const handleAddSpell = () => {
 		if (selectedSpell) {
-			formContext.setField("spell", "");
 			setLearnedSpells([...learnedSpells, selectedSpell]);
+			formContext.setField("spell", "");
 		}
 	};
 
@@ -52,26 +51,24 @@ export default function SpellbookLearnPage() {
 		setLearnedSpells(learnedSpells.filter((s) => s.id !== spell.id));
 	};
 
+	const options = (optionsFetcher.data ?? []).filter(
+		(opt) => !learnedSpells.find((spell) => spell.id === opt.value),
+	);
+
 	return (
 		<div key={id}>
 			<FormContextProvider formContext={formContext}>
-				<SearchableSelectField
-					label="Spell"
-					name="spell"
-					items={optionsFetcher.data ?? []}
-				/>
+				<SearchableSelectField label="Spell" name="spell" items={options} />
 				<div>
 					<Button
 						variant="success"
-						disabled={selectedSpell === undefined}
+						disabled={selectedSpell === undefined || selectedSpellId === ""}
 						onClick={handleAddSpell}
 					>
 						Add spell
 					</Button>
 				</div>
 			</FormContextProvider>
-
-			<p>DEBUG: {selectedSpellId}</p>
 
 			<p>Learned spells:</p>
 			<ul>
@@ -92,6 +89,11 @@ export default function SpellbookLearnPage() {
 
 			<Form className="max-w-lg" method="post">
 				<div className="flex justify-between gap-2">
+					<input
+						type="hidden"
+						name="spells"
+						value={learnedSpells.map((s) => s.id)}
+					/>
 					<Button variant="success">Save</Button>
 					<ButtonLink to={`/spellbooks/${id}`} variant="warning">
 						Cancel

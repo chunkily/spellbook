@@ -1,6 +1,6 @@
 import { useCombobox } from "downshift";
 import { SearchableOption } from "./Option";
-import React, { useMemo, useState } from "react";
+import React, { useState } from "react";
 import useFormField from "../form/useFormField";
 import ErrorList from "./ErrorList";
 import { ChevronDown } from "lucide-react";
@@ -12,6 +12,8 @@ interface SearchableSelectFieldProps {
 	onSelectedItemChange?: (value: string) => void;
 }
 
+const DEFAULT_ITEM: SearchableOption = { value: "", text: "", label: "" };
+
 export default function SearchableSelectField({
 	label,
 	name,
@@ -20,20 +22,16 @@ export default function SearchableSelectField({
 }: SearchableSelectFieldProps) {
 	const field = useFormField(name);
 
-	if (items.length === 0) {
-		items = [{ value: "", text: "", label: "" }];
-	}
-
 	const [inputValue, setInputValue] = useState("");
 
-	const selectedItem = items.find((item) => item.value === field.value) ?? null;
+	const selectedItem: SearchableOption =
+		items.find((item) => item.value === field.value) ??
+		items[0] ??
+		DEFAULT_ITEM; // If no items are provided, we need to set to a non-undefined value
 
-	const filteredItems = useMemo(() => {
-		const lowerCaseInputValue = inputValue.toLowerCase();
-		return items.filter((item) =>
-			inputValue ? caseInsensitiveSearch(item, lowerCaseInputValue) : true,
-		);
-	}, [items, inputValue]);
+	const filteredItems = items.filter((item) =>
+		inputValue ? caseInsensitiveSearch(item, inputValue) : true,
+	);
 
 	const errors = field.errors;
 
@@ -57,8 +55,8 @@ export default function SearchableSelectField({
 	} = useCombobox<SearchableOption>({
 		items: filteredItems,
 		itemToString: (item) => (item ? item.text : ""),
-		selectedItem,
 		inputValue,
+		selectedItem,
 		onInputValueChange: ({ inputValue }) => {
 			setInputValue(inputValue);
 		},
@@ -115,7 +113,7 @@ export default function SearchableSelectField({
 
 			<div
 				className={cx(
-					"absolute bg-white w-full max-w-lg rounded-lg shadow-lg z-10",
+					"absolute bg-white w-full max-w-lg rounded-lg shadow-lg z-10 min-h-20",
 					isOpen && "block",
 					!isOpen && "hidden",
 				)}
@@ -128,13 +126,13 @@ export default function SearchableSelectField({
 				<ul {...getMenuProps()} className="overflow-y-auto max-h-60">
 					{filteredItems.map((item, index) => (
 						<li
+							key={`${item.value}`}
 							title={item.text}
 							className={cx(
 								"p-2 cursor-pointer truncate",
 								selectedItem?.value === item.value && "bg-yellow-100",
 								highlightedIndex === index && "bg-gray-200",
 							)}
-							key={`${item.value}`}
 							{...getItemProps({ item, index })}
 						>
 							{item.label}

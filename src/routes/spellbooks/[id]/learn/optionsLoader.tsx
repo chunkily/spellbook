@@ -25,5 +25,11 @@ export default async function optionsLoader({ request }: LoaderFunctionArgs) {
 			};
 		});
 
+	options.unshift({
+		label: "Select a spell",
+		text: "",
+		value: "",
+	});
+
 	return options;
 }

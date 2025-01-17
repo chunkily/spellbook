@@ -1,4 +1,4 @@
-import spellbookAddSpell from "@/domain/actions/spellbookAddSpell";
+import spellbookUpdateLearnedSpells from "@/domain/actions/spellbookUpdateLearnedSpells";
 import getFormStringValue from "@/utils/getFormStringValue";
 import parseId from "@/utils/parseId";
 import { triggerSuccessToast } from "@/utils/toasts";
@@ -9,9 +9,11 @@ export default async function action({ request, params }: ActionFunctionArgs) {
 
 	const formData = await request.formData();
 
-	const spellId = getFormStringValue(formData, "spell");
+	const spellIds = getFormStringValue(formData, "spells") ?? "";
 
-	const result = await spellbookAddSpell(spellbookId, spellId);
+	const spellList = spellIds.split(",");
+
+	const result = await spellbookUpdateLearnedSpells(spellbookId, spellList);
 
 	if (result.isSuccess) {
 		triggerSuccessToast("Spell added to spellbook");
