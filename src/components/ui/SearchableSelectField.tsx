@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import useFormField from "../form/useFormField";
 import ErrorList from "./ErrorList";
 import { ChevronDown } from "lucide-react";
+import { caseInsensitiveSearch } from "../../utils/caseInsensitiveSearch";
 
 interface SearchableSelectFieldProps {
 	label: React.ReactNode;
@@ -30,7 +31,7 @@ export default function SearchableSelectField({
 		DEFAULT_ITEM; // If no items are provided, we need to set to a non-undefined value
 
 	const filteredItems = items.filter((item) =>
-		inputValue ? caseInsensitiveSearch(item, inputValue) : true,
+		inputValue ? caseInsensitiveSearch(item.text, inputValue) : true,
 	);
 
 	const errors = field.errors;
@@ -149,15 +150,4 @@ export default function SearchableSelectField({
 
 function cx(...classes: (string | boolean | undefined)[]) {
 	return classes.filter(Boolean).join(" ");
-}
-
-function caseInsensitiveSearch(
-	item: SearchableOption,
-	inputValue: string,
-): boolean {
-	// Replace all non-alphanumeric, non-whitespace characters with an empty string
-	const strippedInput = inputValue.replace(/[^\w\s]/g, "");
-	const regex = new RegExp(strippedInput, "i");
-
-	return regex.test(item.text);
 }

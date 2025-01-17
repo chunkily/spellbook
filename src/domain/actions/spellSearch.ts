@@ -1,3 +1,4 @@
+import { caseInsensitiveSearch } from "@/utils/caseInsensitiveSearch";
 import db from "@/utils/db";
 import Spell from "../types/Spell";
 
@@ -18,9 +19,8 @@ export default async function spellSearch({
 	if (!search) {
 		spells = await db.spells.toArray();
 	} else {
-		const pattern = new RegExp(safeRegex(search), "i");
 		spells = await db.spells
-			.filter((spell) => pattern.test(spell.name))
+			.filter((spell) => caseInsensitiveSearch(spell.name, search))
 			.toArray();
 	}
 
@@ -70,9 +70,4 @@ function spellLevelDisplay(level: number): string {
 		return "Cantrip";
 	}
 	return `Level ${level}`;
-}
-
-function safeRegex(value: string): string {
-	// Remove all non-alphanumeric and whitespace characters
-	return value.replace(/[^\w\s]+/g, "");
 }
