@@ -1,6 +1,6 @@
 # TODO
 
-- [ ] Spell Slots features
+- [ ] Edit spellbook
 - [ ] Advanced spell search (by class, level, school, etc.)
 - [ ] Error Handling
 - [ ] Migrate to react-router v7 components.
