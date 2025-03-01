@@ -4,6 +4,7 @@ import { RouteObject } from "react-router";
 import deleteRoutes from "./delete/routes";
 import learnRoutes from "./learn/routes";
 import prepareRoutes from "./prepare/routes";
+import editRoutes from "./edit/routes";
 
 const routes: RouteObject[] = [
 	{
@@ -14,6 +15,7 @@ const routes: RouteObject[] = [
 	...deleteRoutes,
 	...learnRoutes,
 	...prepareRoutes,
+	...editRoutes,
 ];
 
 export default routes;

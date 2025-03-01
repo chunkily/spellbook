@@ -49,41 +49,45 @@ export default function SpellsPage() {
 						items={[
 							{
 								label: (
-									<>
+									<span title="Name ascending">
 										<ArrowDownAZ
-											className="inline-block"
+											className="inline-block mr-2"
 											aria-label="Name ascending"
 										/>
-									</>
+									</span>
 								),
 								value: "name",
 							},
 							{
 								label: (
-									<>
+									<span title="Name descending">
 										<ArrowDownZA
-											className="inline-block"
+											className="inline-block mr-2"
 											aria-label="Name descending"
 										/>
-									</>
+									</span>
 								),
 								value: "-name",
 							},
 							{
 								label: (
-									<ArrowDown01
-										className="inline-block"
-										aria-label="Level ascending"
-									/>
+									<span title="Level ascending">
+										<ArrowDown01
+											className="inline-block mr-2"
+											aria-label="Level ascending"
+										/>
+									</span>
 								),
 								value: "level",
 							},
 							{
 								label: (
-									<ArrowDown10
-										className="inline-block"
-										aria-label="Level descending"
-									/>
+									<span title="Level descending">
+										<ArrowDown10
+											className="inline-block mr-2"
+											aria-label="Level descending"
+										/>
+									</span>
 								),
 								value: "-level",
 							},
@@ -128,7 +132,10 @@ function SpellListItem({ spell }: { spell: Spell }) {
 
 	return (
 		<li key={id}>
-			<Link to={`/spells/${id}`}>
+			<Link
+				className="hover:bg-primary-500 block px-2 py-0.5 rounded"
+				to={`/spells/${id}`}
+			>
 				<span className="font-bold">{name}</span> ({levelText})
 			</Link>
 		</li>

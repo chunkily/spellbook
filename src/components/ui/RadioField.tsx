@@ -16,12 +16,16 @@ interface RadioFieldProps {
 	items?: Option[];
 	children?: React.ReactNode;
 	required?: boolean;
+	readOnly?: boolean;
+	disabled?: boolean;
 }
 
 export default function RadioField({
 	name,
 	label,
 	required,
+	readOnly,
+	disabled,
 	className: propClassName,
 	radioClassName,
 	fieldsetClassName: propsFieldsetClassName,
@@ -76,6 +80,8 @@ export default function RadioField({
 							onChange={handleChange}
 							className={radioClassName}
 							required={required}
+							readOnly={readOnly}
+							disabled={disabled}
 						>
 							{item.label}
 						</Radio>
