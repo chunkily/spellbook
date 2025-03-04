@@ -1,8 +1,8 @@
 import { useReducer } from "react";
 import { useNavigation } from "react-router";
-import FormAction from "./FormAction";
-import { FormContextType } from "./FormContext";
-import FormState from "./FormState";
+import { type FormAction } from "./FormAction";
+import { type FormContextType } from "./FormContext";
+import type FormState from "./FormState";
 import useDeepCompareEffect from "use-deep-compare-effect";
 
 function valuesToFields(
