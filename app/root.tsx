@@ -12,6 +12,7 @@ import "./app.css";
 import Navbar from "@/components/Navbar";
 import { ToastContainer } from "react-toastify";
 import { UserPrefsProvider } from "@/utils/userPrefs";
+import reactToastifyHref from "react-toastify/ReactToastify.min.css?url";
 
 export const links: Route.LinksFunction = () => [
 	{ rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -23,6 +24,10 @@ export const links: Route.LinksFunction = () => [
 	{
 		rel: "stylesheet",
 		href: "https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap",
+	},
+	{
+		rel: "stylesheet",
+		href: reactToastifyHref,
 	},
 ];
 
@@ -62,8 +67,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
 							</a>
 							.
 						</footer>
-						<ToastContainer />
 					</div>
+					<ToastContainer />
 					<ScrollRestoration />
 					<Scripts />
 				</body>
