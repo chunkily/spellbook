@@ -2,7 +2,7 @@ import db from "@/utils/db";
 import type MaybeError from "../MaybeError";
 import { ErrorResult, SuccessResult } from "../MaybeError";
 
-export default async function spellbookDelete(
+export default async function spellDelete(
 	id: string,
 ): Promise<MaybeError<string>> {
 	try {

@@ -19,18 +19,14 @@ interface SpellbookCreateErrors {
 	errorDescription: string;
 }
 
+const forbiddenNames = ["new"];
+
 export default async function spellbookCreate(
 	fields: SpellbookCreate,
 ): Promise<ResultOrError<string, SpellbookCreateErrors>> {
 	const errors: Record<string, string[]> = {};
 
-	let newId: string = "";
-
-	if (!fields.name) {
-		errors.name = ["Name is required"];
-	} else {
-		newId = slugifyName(fields.name);
-	}
+	const newId = await validateName(fields.name, errors);
 
 	let kind: "prepared" | "spontaneous" = "prepared";
 	if (!fields.kind) {
@@ -85,6 +81,31 @@ export default async function spellbookCreate(
 	}
 
 	return SuccessResult(newId);
+}
+
+async function validateName(
+	name: string | undefined,
+	errors: Record<string, string[]>,
+): Promise<string> {
+	if (!name) {
+		errors.name = ["Name is required"];
+		return "";
+	}
+
+	const newId = slugifyName(name);
+
+	if (forbiddenNames.includes(newId)) {
+		errors.name = ["That name is forbidden"];
+		return "";
+	}
+
+	const existing = await db.spellbooks.get(newId);
+	if (existing) {
+		errors.name = ["That name is already in use"];
+		return "";
+	}
+
+	return newId;
 }
 
 function buildSpellSlots(

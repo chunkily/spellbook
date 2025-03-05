@@ -3,10 +3,13 @@ import RadioField from "@/components/ui/RadioField";
 import SelectField from "@/components/ui/SelectField";
 import TextField from "@/components/ui/TextField";
 import { Plus } from "lucide-react";
-import { Form, useActionData } from "react-router";
-import { FormFields } from "./action";
+import { Form, redirect, useActionData } from "react-router";
 import useFormContext from "@/components/form/useFormContext";
 import FormContextProvider from "@/components/form/FormContextProvider";
+import type { Route } from "./+types/spellbooks.new";
+import spellbookCreate from "@/domain/actions/spellbookCreate";
+import getFormStringValue from "@/utils/getFormStringValue";
+import { triggerSuccessToast } from "@/utils/toasts";
 
 const CLASSES = [
 	{
@@ -41,33 +44,52 @@ const CLASSES = [
 	},
 ];
 
-function transformFields(fields?: FormFields): Record<string, string> {
-	if (!fields)
-		return {
-			name: "",
-			clazz: "",
-			tradition: "",
-			kind: "",
-			...Object.fromEntries(
-				[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((level) => [
-					`spellslots${level}`,
-					"0",
-				]),
-			),
-		};
-
-	return {
-		name: fields.name ?? "",
-		clazz: fields.clazz ?? "",
-		tradition: fields.tradition ?? "",
-		kind: fields.kind ?? "",
-		...Object.fromEntries(
-			Object.entries(fields.spellslots).map(([level, value]) => [
-				`spellslots${level}`,
-				value ?? "0",
-			]),
-		),
+interface FormFields {
+	name?: string;
+	clazz?: string;
+	tradition?: string;
+	kind?: string;
+	spellslots: {
+		[level: number]: string | undefined;
 	};
+}
+
+export async function clientAction({ request }: Route.ClientActionArgs) {
+	const formData = await request.formData();
+
+	const fields: FormFields = {
+		name: getFormStringValue(formData, "name"),
+		clazz: getFormStringValue(formData, "clazz"),
+		tradition: getFormStringValue(formData, "tradition"),
+		kind: getFormStringValue(formData, "kind"),
+		spellslots: {
+			0: getFormStringValue(formData, "spellslots0"),
+			1: getFormStringValue(formData, "spellslots1"),
+			2: getFormStringValue(formData, "spellslots2"),
+			3: getFormStringValue(formData, "spellslots3"),
+			4: getFormStringValue(formData, "spellslots4"),
+			5: getFormStringValue(formData, "spellslots5"),
+			6: getFormStringValue(formData, "spellslots6"),
+			7: getFormStringValue(formData, "spellslots7"),
+			8: getFormStringValue(formData, "spellslots8"),
+			9: getFormStringValue(formData, "spellslots9"),
+			10: getFormStringValue(formData, "spellslots10"),
+		},
+	};
+
+	const create = await spellbookCreate(fields);
+
+	if (create.isSuccess) {
+		const newId = create.getResult();
+		triggerSuccessToast("Spellbook created!");
+		return redirect(`/spellbooks/${newId}`);
+	} else {
+		return {
+			fields,
+			error: create.getErrorDescription(),
+			errors: create.getError().errors,
+		};
+	}
 }
 
 export default function NewSpellbook() {
@@ -160,6 +182,35 @@ export default function NewSpellbook() {
 			</FormContextProvider>
 		</div>
 	);
+}
+
+function transformFields(fields?: FormFields): Record<string, string> {
+	if (!fields)
+		return {
+			name: "",
+			clazz: "",
+			tradition: "",
+			kind: "",
+			...Object.fromEntries(
+				[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((level) => [
+					`spellslots${level}`,
+					"0",
+				]),
+			),
+		};
+
+	return {
+		name: fields.name ?? "",
+		clazz: fields.clazz ?? "",
+		tradition: fields.tradition ?? "",
+		kind: fields.kind ?? "",
+		...Object.fromEntries(
+			Object.entries(fields.spellslots).map(([level, value]) => [
+				`spellslots${level}`,
+				value ?? "0",
+			]),
+		),
+	};
 }
 
 function SpellSlotField({ level }: { level: number }) {

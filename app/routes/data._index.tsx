@@ -1,7 +1,7 @@
 import ButtonLink from "@/components/ui/ButtonLink";
-import { DownloadIcon, UploadIcon } from "lucide-react";
+import { UploadIcon, DownloadIcon } from "lucide-react";
 
-export default function DataPage() {
+export default function DataIndexPage() {
 	return (
 		<div className="flex mx-3 gap-2">
 			<ButtonLink to="/data/import">

@@ -6,11 +6,42 @@ import Checkbox from "@/components/ui/Checkbox";
 import TextArea from "@/components/ui/TextArea";
 import { triggerSuccessToast } from "@/utils/toasts";
 import { Clipboard } from "lucide-react";
-import { Form, useLoaderData, useSubmit } from "react-router";
-import loader from "./loader";
+import { Form, useSubmit } from "react-router";
+import type { Route } from "./+types/data.export._index";
+import exportData from "@/domain/actions/exportData";
 
-export default function ExportPage() {
-	const { data, fields } = useLoaderData<typeof loader>();
+export async function clientLoader({ request }: Route.ClientLoaderArgs) {
+	const url = new URL(request.url);
+
+	let includeSpells = url.searchParams.get("includeSpells") === "true";
+	let includeSpellbooks = url.searchParams.get("includeSpellbooks") === "true";
+	let includeTraits = url.searchParams.get("includeTraits") === "true";
+
+	// If all are not selected, set all to true
+	if (!includeSpells && !includeSpellbooks && !includeTraits) {
+		includeSpells = true;
+		includeSpellbooks = true;
+		includeTraits = true;
+	}
+
+	const data = await exportData({
+		includeSpells,
+		includeSpellbooks,
+		includeTraits,
+	});
+
+	return {
+		data: data,
+		fields: {
+			includeSpells,
+			includeSpellbooks,
+			includeTraits,
+		},
+	};
+}
+
+export default function ExportPage({ loaderData }: Route.ComponentProps) {
+	const { data, fields } = loaderData;
 
 	const formContext = useFormContext({
 		serverValues: fields,
@@ -71,3 +102,4 @@ function copyToClipboard(text: string) {
 		triggerSuccessToast("Copied to clipboard");
 	});
 }
+
