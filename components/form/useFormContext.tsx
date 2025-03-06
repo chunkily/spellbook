@@ -52,20 +52,16 @@ function valuesToFields(
 export default function useFormContext({
 	serverValues,
 	serverErrors = {},
-	stateReducer,
+	extraReducers = [],
 }: {
 	serverValues?: Record<string, unknown>;
 	serverErrors?: Record<string, string[]>;
-	stateReducer?: React.Reducer<FormState, FormAction>;
+	extraReducers?: React.Reducer<FormState, FormAction>[];
 } = {}): FormContextType {
 	const serverFields = valuesToFields(serverValues);
 
 	const [formState, formDispatch] = useReducer(
 		(state: FormState, action: FormAction) => {
-			if (stateReducer) {
-				return stateReducer(state, action);
-			}
-
 			let newState: FormState;
 			switch (action.type) {
 				case "SET_FIELD":
@@ -94,6 +90,10 @@ export default function useFormContext({
 					break;
 				default:
 					throw new Error("Invalid action type");
+			}
+
+			for (const extraReducer of extraReducers) {
+				newState = extraReducer(newState, action);
 			}
 
 			return newState;
