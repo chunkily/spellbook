@@ -45,4 +45,3 @@ export default function SpellbooksIndex({ loaderData }: Route.ComponentProps) {
 		</div>
 	);
 }
-

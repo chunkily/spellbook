@@ -102,4 +102,3 @@ function copyToClipboard(text: string) {
 		triggerSuccessToast("Copied to clipboard");
 	});
 }
-
