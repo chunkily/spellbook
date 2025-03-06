@@ -14,8 +14,9 @@ import spellbookGetById from "@/domain/actions/spellbookGetById";
 
 interface FormFields {
 	id: string;
-	name?: string;
-	kind?: string;
+	name: string;
+	kind: string;
+	tradition: string;
 	spellslots: {
 		[level: number]: string | undefined;
 	};
@@ -29,10 +30,11 @@ export async function clientLoader({ params }: Route.ClientLoaderArgs) {
 		throw new Error("Spellbook not found");
 	}
 
-	const result: FormFields = {
+	const fields: FormFields = {
 		id: spellbook.id,
 		name: spellbook.name,
 		kind: spellbook.kind,
+		tradition: spellbook.tradition,
 		spellslots: {
 			0: spellbook.spellSlots[0].length.toString(),
 			1: spellbook.spellSlots[1].length.toString(),
@@ -48,7 +50,9 @@ export async function clientLoader({ params }: Route.ClientLoaderArgs) {
 		},
 	};
 
-	return result;
+	return {
+		fields,
+	};
 }
 
 export async function clientAction({
@@ -61,6 +65,9 @@ export async function clientAction({
 
 	const fields: FormFields = {
 		id: spellbookId,
+		name: "",
+		kind: "",
+		tradition: "",
 		spellslots: {
 			0: getFormStringValue(formData, "spellslots0"),
 			1: getFormStringValue(formData, "spellslots1"),
@@ -94,7 +101,7 @@ export default function EditSpellbookPage({
 	actionData,
 }: Route.ComponentProps) {
 	const formContext = useFormContext({
-		serverValues: transformFields(loaderData, actionData?.fields),
+		serverValues: transformFields(loaderData.fields, actionData?.fields),
 	});
 
 	return (
@@ -172,6 +179,30 @@ function transformFields(
 	actionFields: FormFields | undefined,
 ): Record<string, string> {
 	return {
-		name: actionFields?.name ?? loaderFields.name ?? "",
+		name: loaderFields.name,
+		kind: loaderFields.kind,
+		tradition: loaderFields.tradition,
+		spellslots0:
+			actionFields?.spellslots[0] || loaderFields.spellslots[0] || "0",
+		spellslots1:
+			actionFields?.spellslots[1] || loaderFields.spellslots[1] || "0",
+		spellslots2:
+			actionFields?.spellslots[2] || loaderFields.spellslots[2] || "0",
+		spellslots3:
+			actionFields?.spellslots[3] || loaderFields.spellslots[3] || "0",
+		spellslots4:
+			actionFields?.spellslots[4] || loaderFields.spellslots[4] || "0",
+		spellslots5:
+			actionFields?.spellslots[5] || loaderFields.spellslots[5] || "0",
+		spellslots6:
+			actionFields?.spellslots[6] || loaderFields.spellslots[6] || "0",
+		spellslots7:
+			actionFields?.spellslots[7] || loaderFields.spellslots[7] || "0",
+		spellslots8:
+			actionFields?.spellslots[8] || loaderFields.spellslots[8] || "0",
+		spellslots9:
+			actionFields?.spellslots[9] || loaderFields.spellslots[9] || "0",
+		spellslots10:
+			actionFields?.spellslots[10] || loaderFields.spellslots[10] || "0",
 	};
 }

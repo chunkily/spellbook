@@ -2,19 +2,82 @@ import FormContextProvider from "@/components/form/FormContextProvider";
 import useFormContext from "@/components/form/useFormContext";
 import Button from "@/components/ui/Button";
 import SearchableSelectField from "@/components/ui/SearchableSelectField";
-import { Form, useActionData, useLoaderData, useNavigate } from "react-router";
-import loader from "./loader";
+import { Form, redirect, useNavigate } from "react-router";
 import ErrorList from "@/components/ui/ErrorList";
 import { useState } from "react";
-import Spell from "@/domain/types/Spell";
+import type Spell from "@/domain/types/Spell";
 import SpellDisplay from "@/components/SpellDisplay";
 
-export default function SpellbookLearnPage() {
-	const { id, allSpells, learnedSpellIds, options } =
-		useLoaderData<typeof loader>();
-	const actionData = useActionData<{
-		error: string;
-	}>();
+import type { Route } from "./+types/spellbooks.$spellbookId.learn";
+import spellbookGetById from "@/domain/actions/spellbookGetById";
+import spellsGetByTradition from "@/domain/actions/spellsGetByTradition";
+import spellbookUpdateLearnedSpells from "@/domain/actions/spellbookUpdateLearnedSpells";
+import getFormStringValue from "@/utils/getFormStringValue";
+import { triggerSuccessToast } from "@/utils/toasts";
+
+export async function clientLoader({ params }: Route.ClientLoaderArgs) {
+	const spellbookId = params.spellbookId;
+
+	const spellbook = await spellbookGetById(spellbookId);
+
+	if (!spellbook) {
+		throw new Error("Spellbook not found");
+	}
+
+	const allSpells = await spellsGetByTradition(spellbook.tradition);
+
+	const options = allSpells.map((spell) => {
+		return {
+			label: spell.name,
+			text: spell.name,
+			value: spell.id.toString(),
+		};
+	});
+
+	options.unshift({
+		label: "Select a spell",
+		text: "",
+		value: "",
+	});
+
+	return {
+		id: spellbook.id,
+		allSpells,
+		learnedSpellIds: spellbook.learnedSpellIds,
+		options,
+	};
+}
+
+export async function clientAction({
+	params,
+	request,
+}: Route.ClientActionArgs) {
+	const spellbookId = params.spellbookId;
+
+	const formData = await request.formData();
+
+	const spellIds = getFormStringValue(formData, "spells") ?? "";
+
+	const spellList = spellIds.split(",");
+
+	const result = await spellbookUpdateLearnedSpells(spellbookId, spellList);
+
+	if (result.isSuccess) {
+		triggerSuccessToast("Spell added to spellbook");
+		return redirect(`/spellbooks/${spellbookId}`);
+	}
+
+	return {
+		error: result.getErrorDescription(),
+	};
+}
+
+export default function SpellbookLearnPage({
+	loaderData,
+	actionData,
+}: Route.ComponentProps) {
+	const { id, allSpells, learnedSpellIds, options } = loaderData;
+
 	const navigate = useNavigate();
 	const formContext = useFormContext();
 
