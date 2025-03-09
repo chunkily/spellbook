@@ -29,9 +29,10 @@ export default function HomePage() {
 				</li>
 				<li>
 					Fully open source. View the code on{" "}
-					<a href="https://github.com/chunkily/spellbooks">GitHub</a>
+					<a href="https://github.com/chunkily/spellbook">GitHub</a>
 				</li>
 			</ul>
 		</div>
 	);
 }
+
