@@ -47,7 +47,7 @@ export default function SearchableSelectField({
 	const hasErrors = errors && errors.length > 0;
 
 	let baseButtonClassName =
-		"flex h-10 shadow-sm bg-white gap-0.5 rounded-lg text-left p-2.5 w-full border";
+		"flex h-10 shadow-xs bg-white gap-0.5 rounded-lg text-left p-2.5 w-full border";
 
 	if (hasErrors) {
 		baseButtonClassName += " border-red-500";

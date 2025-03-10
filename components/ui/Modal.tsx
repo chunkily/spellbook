@@ -92,7 +92,7 @@ export default function Modal({
 						className="relative p-4 w-full max-w-2xl max-h-full mx-auto"
 						ref={ref}
 					>
-						<div className="relative bg-white rounded-lg shadow">
+						<div className="relative bg-white rounded-lg shadow-sm">
 							{children}
 						</div>
 					</div>

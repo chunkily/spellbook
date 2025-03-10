@@ -154,7 +154,7 @@ function SpellListItem({ spell }: { spell: Spell }) {
 	return (
 		<li key={id}>
 			<Link
-				className="hover:bg-primary-500 block px-2 py-0.5 rounded"
+				className="hover:bg-primary-500 block px-2 py-0.5 rounded-sm"
 				to={`/spells/${id}`}
 			>
 				<span className="font-bold">{name}</span> ({levelText})

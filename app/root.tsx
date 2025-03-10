@@ -46,7 +46,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
 						<header className="bg-primary-700 w-full sticky top-0 text-white z-10">
 							<Navbar />
 						</header>
-						<main className="flex-grow container mx-auto p-3 bg-secondary-300 rounded">
+						<main className="grow container mx-auto p-3 bg-secondary-300 rounded-sm">
 							{children}
 						</main>
 						<footer className="container bg-secondary-300 mx-auto px-2">

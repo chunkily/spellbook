@@ -21,7 +21,7 @@ export default function SpellDisplay({ spell }: { spell: Spell }) {
 			<hr className="border-black mb-1" />
 			<div className="flex flex-wrap">
 				{spell.traits.map((trait) => (
-					<span key={trait} className="mx-1 px-2 bg-primary-400 rounded">
+					<span key={trait} className="mx-1 px-2 bg-primary-400 rounded-sm">
 						{trait}
 					</span>
 				))}
