@@ -1,8 +1,7 @@
 describe("Creating a spell", () => {
 	beforeEach(() => {
-		cy.visit("http://localhost:8080/");
-		cy.get('a[href="/spells"]').click(); // Navigate to the spells page
-		cy.get('a[href="/spells/new"]').click(); // Click the button to create a new spell
+		cy.clearIndexedDb("app");
+		cy.visit("http://localhost:8080/spells/new");
 	});
 
 	it("can create a spell", () => {
