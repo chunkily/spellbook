@@ -171,6 +171,7 @@ export default function SearchableMultiSelectField({
 							className="px-2"
 							type="button"
 							{...getToggleButtonProps()}
+							data-testid={`toggle-button-${name}`}
 						>
 							&#8595;
 						</button>

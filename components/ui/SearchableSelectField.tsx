@@ -118,6 +118,7 @@ export default function SearchableSelectField({
 						className={baseButtonClassName}
 						{...getToggleButtonProps()}
 						title={selectedItem?.text}
+						data-testid={`toggle-button-${name}`}
 					>
 						<span className="truncate pr-5">{selectedItem?.label}</span>
 						<ChevronDown className="absolute right-2.5 top-2.5 size-5" />
